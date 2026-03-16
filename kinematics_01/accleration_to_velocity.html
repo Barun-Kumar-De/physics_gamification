@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kinematics Graph Tool</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0d0f14;
+    --surface: #13161e;
+    --surface2: #1a1e2a;
+    --border: #252a38;
+    --border2: #2e3447;
+    --accent: #4fffb0;
+    --accent2: #ff6b6b;
+    --accent3: #ffd166;
+    --text: #e8eaf0;
+    --text2: #8890a4;
+    --text3: #4a5066;
+    --mono: 'Space Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .app {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 24px;
+  }
+  header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .logo-block h1 {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .logo-block p { font-size: 13px; color: var(--text2); font-weight: 300; }
+  .header-badge { font-family: var(--mono); font-size: 11px; color: var(--text3); letter-spacing: 1px; }
+  .formula-bar { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+  .formula-pill {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 7px 14px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text2);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .formula-pill .hl { color: var(--accent3); }
+  .formula-pill .sym { color: var(--accent); }
+  .controls-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .control-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 12px;
+  }
+  .control-group label { font-size: 12px; color: var(--text2); font-family: var(--mono); white-space: nowrap; }
+  .control-group input[type=number] {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    color: var(--accent3);
+    font-family: var(--mono);
+    font-size: 13px;
+    padding: 3px 8px;
+    width: 68px;
+    outline: none;
+  }
+  .control-group input[type=number]:focus { border-color: var(--accent); }
+  .control-group select {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 3px 8px;
+    outline: none;
+    cursor: pointer;
+  }
+  .btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    border: none;
+    transition: all .15s;
+  }
+  .btn-primary { background: var(--accent); color: #000; font-weight: 700; }
+  .btn-primary:hover { background: #6fffbc; }
+  .btn-ghost { background: transparent; border: 1px solid var(--border2); color: var(--text2); }
+  .btn-ghost:hover { border-color: var(--text2); color: var(--text); }
+  .btn-danger { background: transparent; border: 1px solid rgba(255,107,107,.3); color: var(--accent2); }
+  .btn-danger:hover { background: rgba(255,107,107,.08); }
+  .canvas-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 18px;
+  }
+  @media (max-width: 680px) { .canvas-grid { grid-template-columns: 1fr; } }
+  .graph-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .graph-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .graph-title { display: flex; align-items: center; gap: 10px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .graph-title h2 { font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+  .graph-title p { font-size: 11px; color: var(--text3); font-family: var(--mono); }
+  .hint-badge {
+    font-size: 10px;
+    font-family: var(--mono);
+    color: var(--text3);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 3px 8px;
+  }
+  .canvas-wrap {
+    padding: 10px 14px 12px;
+    user-select: none;
+  }
+  canvas {
+    display: block;
+    cursor: crosshair;
+    border-radius: 4px;
+    touch-action: none;
+  }
+  .readout-bar {
+    display: flex;
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+  }
+  .readout-item {
+    flex: 1;
+    padding: 8px 12px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .readout-item:last-child { border-right: none; }
+  .readout-label { color: var(--text3); font-size: 10px; letter-spacing: 1px; }
+  .readout-value { color: var(--accent3); font-size: 13px; font-weight: 700; }
+  .readout-value.green { color: var(--accent); }
+  .info-strip {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .info-item { display: flex; flex-direction: column; gap: 2px; min-width: 80px; }
+  .info-label { font-size: 10px; font-family: var(--mono); color: var(--text3); letter-spacing: 1px; text-transform: uppercase; }
+  .info-val { font-size: 18px; font-family: var(--mono); font-weight: 700; }
+  .info-sep { width: 1px; background: var(--border); align-self: stretch; }
+  .info-note { font-size: 12px; color: var(--text2); line-height: 1.6; flex: 1; min-width: 160px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="logo-block">
+      <h1>∫ Kinematics</h1>
+      <p>Draw acceleration → get velocity via numerical integration</p>
+    </div>
+    <div class="header-badge">CLASS XI · MOTION IN A STRAIGHT LINE</div>
+  </header>
+
+  <div class="formula-bar">
+    <div class="formula-pill">
+      <span class="sym">v(t)</span><span>=</span>
+      <span class="hl">v₀</span><span>+</span>
+      <span class="sym">∫ a(t) dt</span>
+    </div>
+    <div class="formula-pill">
+      <span>Euler:</span>
+      <span class="sym">vᵢ₊₁ = vᵢ + aᵢ · Δt</span>
+    </div>
+    <div class="formula-pill">
+      <span>Δt =</span><span class="hl">0.05 s</span>
+    </div>
+  </div>
+
+  <div class="controls-row">
+    <div class="control-group">
+      <label>v₀ (m/s)</label>
+      <input type="number" id="v0Input" value="0" step="1" min="-30" max="30">
+    </div>
+    <div class="control-group">
+      <label>T max</label>
+      <select id="tmaxSelect">
+        <option value="5">5 s</option>
+        <option value="10" selected>10 s</option>
+        <option value="20">20 s</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label>a range</label>
+      <select id="arangeSelect">
+        <option value="5">±5 m/s²</option>
+        <option value="10" selected>±10 m/s²</option>
+        <option value="20">±20 m/s²</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" id="integrateBtn">INTEGRATE →</button>
+    <button class="btn btn-ghost" id="exampleBtn">LOAD EXAMPLE</button>
+    <button class="btn btn-danger" id="clearBtn">CLEAR</button>
+  </div>
+
+  <div class="canvas-grid">
+    <div class="graph-card">
+      <div class="graph-header">
+        <div class="graph-title">
+          <div class="dot" style="background:#ff6b6b"></div>
+          <div><h2>Acceleration</h2><p>a(t) · click &amp; drag to draw</p></div>
+        </div>
+        <span class="hint-badge" id="drawHint">DRAW HERE</span>
+      </div>
+      <div class="canvas-wrap" id="accelWrap">
+        <canvas id="accelCanvas"></canvas>
+      </div>
+      <div class="readout-bar">
+        <div class="readout-item">
+          <span class="readout-label">TIME</span>
+          <span class="readout-value" id="curTime">—</span>
+        </div>
+        <div class="readout-item">
+          <span class="readout-label">ACCEL</span>
+          <span class="readout-value" id="curAccel">—</span>
+        </div>
+        <div class="readout-item">
+          <span class="readout-label">POINTS</span>
+          <span class="readout-value" id="pointCount">0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="graph-card">
+      <div class="graph-header">
+        <div class="graph-title">
+          <div class="dot" style="background:#4fffb0"></div>
+          <div><h2>Velocity</h2><p>v(t) · auto-computed</p></div>
+        </div>
+        <span class="hint-badge">AUTO-COMPUTED</span>
+      </div>
+      <div class="canvas-wrap" id="velWrap">
+        <canvas id="velCanvas"></canvas>
+      </div>
+      <div class="readout-bar">
+        <div class="readout-item">
+          <span class="readout-label">v₀</span>
+          <span class="readout-value green" id="v0Display">0.00 m/s</span>
+        </div>
+        <div class="readout-item">
+          <span class="readout-label">v MAX</span>
+          <span class="readout-value green" id="vmax">—</span>
+        </div>
+        <div class="readout-item">
+          <span class="readout-label">v FINAL</span>
+          <span class="readout-value green" id="vfinal">—</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-strip">
+    <div class="info-item">
+      <span class="info-label">Δv</span>
+      <span class="info-val" id="deltaV" style="color:var(--accent)">—</span>
+    </div>
+    <div class="info-sep"></div>
+    <div class="info-item">
+      <span class="info-label">impulse / m</span>
+      <span class="info-val" id="impulseVal" style="color:var(--accent3)">—</span>
+    </div>
+    <div class="info-sep"></div>
+    <div class="info-item">
+      <span class="info-label">v zero crossings</span>
+      <span class="info-val" id="zeroCross" style="color:var(--text2)">—</span>
+    </div>
+    <div class="info-sep"></div>
+    <p class="info-note" id="insight">
+      Draw the acceleration curve on the left by clicking and dragging. Press <strong>INTEGRATE →</strong> to compute velocity. Try <strong>LOAD EXAMPLE</strong> to see a sample.
+    </p>
+  </div>
+</div>
+
+<script>
+// ── Constants ────────────────────────────────────────────────
+const PAD = { top: 24, right: 18, bottom: 44, left: 54 };
+const CANVAS_ASPECT = 260 / 500; // height / width
+
+let tMax = 10, aRange = 10;
+let rawPoints = [];   // [{t, a}]  — data coordinates
+let velPoints = [];   // [{t, v}]
+let isDrawing = false;
+let lastCX = null;
+
+const accelCanvas = document.getElementById('accelCanvas');
+const velCanvas   = document.getElementById('velCanvas');
+const accelWrap   = document.getElementById('accelWrap');
+const velWrap     = document.getElementById('velWrap');
+const ac = accelCanvas.getContext('2d');
+const vc = velCanvas.getContext('2d');
+
+// ── Canvas sizing ────────────────────────────────────────────
+// Key fix: canvas.width/height must equal the PHYSICAL pixel dimensions
+// (displayWidth * devicePixelRatio). The CSS size is set separately.
+function sizeCanvas(canvas, wrap) {
+  const dpr  = window.devicePixelRatio || 1;
+  const padX = 28; // canvas-wrap has 14px padding each side
+  const cssW = wrap.clientWidth - padX;
+  const cssH = Math.round(cssW * CANVAS_ASPECT);
+  canvas.style.width  = cssW + 'px';
+  canvas.style.height = cssH + 'px';
+  canvas.width  = Math.round(cssW * dpr);
+  canvas.height = Math.round(cssH * dpr);
+}
+
+function sizeAll() {
+  sizeCanvas(accelCanvas, accelWrap);
+  sizeCanvas(velCanvas,   velWrap);
+}
+
+// ── Coordinate helpers (CSS-pixel space) ────────────────────
+function cssW(canvas) { return parseFloat(canvas.style.width)  || canvas.width; }
+function cssH(canvas) { return parseFloat(canvas.style.height) || canvas.height; }
+function plotW(canvas) { return cssW(canvas) - PAD.left - PAD.right; }
+function plotH(canvas) { return cssH(canvas) - PAD.top  - PAD.bottom; }
+
+function toPX(canvas, t)      { return PAD.left + (t / tMax) * plotW(canvas); }
+function toPY(canvas, v, rng) { return PAD.top  + (1 - (v + rng) / (2 * rng)) * plotH(canvas); }
+function toDataT(canvas, px)  { return Math.max(0, Math.min(tMax, (px - PAD.left) / plotW(canvas) * tMax)); }
+function toDataV(canvas, py, rng) {
+  return Math.max(-rng, Math.min(rng, rng - (py - PAD.top) / plotH(canvas) * 2 * rng));
+}
+
+// Convert a mouse/touch event to CSS-pixel coords on the canvas
+function evtPos(e, canvas) {
+  const rect = canvas.getBoundingClientRect();
+  const src  = e.touches ? e.touches[0] : e;
+  return {
+    cx: src.clientX - rect.left,
+    cy: src.clientY - rect.top
+  };
+}
+
+// ── Drawing context helper ───────────────────────────────────
+// Always reset the transform to dpr-scaled identity before drawing
+function setDPR(ctx, canvas) {
+  const dpr = window.devicePixelRatio || 1;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+// ── Grid ─────────────────────────────────────────────────────
+function drawGrid(ctx, canvas, range) {
+  setDPR(ctx, canvas);
+  const W = cssW(canvas), H = cssH(canvas);
+  const w = plotW(canvas), h = plotH(canvas);
+
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#0d0f14';
+  ctx.fillRect(0, 0, W, H);
+
+  const tStep = tMax <= 5 ? 0.5 : tMax <= 10 ? 1 : 2;
+  const aStep = range <= 5 ? 1 : range <= 10 ? 2 : 5;
+
+  // background grid
+  ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+  ctx.lineWidth = 1;
+  for (let t = 0; t <= tMax + 0.001; t += tStep) {
+    const x = toPX(canvas, t);
+    ctx.beginPath(); ctx.moveTo(x, PAD.top); ctx.lineTo(x, PAD.top + h); ctx.stroke();
+  }
+  for (let a = -range; a <= range + 0.001; a += aStep) {
+    const y = toPY(canvas, a, range);
+    ctx.beginPath(); ctx.moveTo(PAD.left, y); ctx.lineTo(PAD.left + w, y); ctx.stroke();
+  }
+
+  // plot border
+  ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(PAD.left, PAD.top, w, h);
+
+  // zero axis dashed line
+  const zy = toPY(canvas, 0, range);
+  ctx.strokeStyle = 'rgba(255,255,255,0.28)';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4, 4]);
+  ctx.beginPath(); ctx.moveTo(PAD.left, zy); ctx.lineTo(PAD.left + w, zy); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // x-axis labels
+  ctx.fillStyle = '#4a5066';
+  ctx.font = '11px "Space Mono", monospace';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  for (let t = 0; t <= tMax + 0.001; t += tStep) {
+    ctx.fillText(t % 1 === 0 ? t : t.toFixed(1), toPX(canvas, t), PAD.top + h + 6);
+  }
+  ctx.fillStyle = '#3a3f52';
+  ctx.fillText('time (s)', PAD.left + w / 2, PAD.top + h + 26);
+
+  // y-axis labels
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'middle';
+  for (let a = -range; a <= range + 0.001; a += aStep) {
+    ctx.fillStyle = '#4a5066';
+    ctx.fillText(a, PAD.left - 6, toPY(canvas, a, range));
+  }
+}
+
+// ── Accel curve ──────────────────────────────────────────────
+function drawAccelCurve() {
+  drawGrid(ac, accelCanvas, aRange);
+  if (rawPoints.length < 2) return;
+  setDPR(ac, accelCanvas);
+
+  ac.strokeStyle = '#ff6b6b';
+  ac.lineWidth = 2.5;
+  ac.lineJoin = 'round';
+  ac.lineCap  = 'round';
+  ac.shadowColor = 'rgba(255,107,107,0.5)';
+  ac.shadowBlur  = 10;
+  ac.beginPath();
+  rawPoints.forEach((p, i) => {
+    const x = toPX(accelCanvas, p.t);
+    const y = toPY(accelCanvas, p.a, aRange);
+    i === 0 ? ac.moveTo(x, y) : ac.lineTo(x, y);
+  });
+  ac.stroke();
+  ac.shadowBlur = 0;
+
+  ac.fillStyle = '#ff6b6b';
+  [rawPoints[0], rawPoints[rawPoints.length - 1]].forEach(p => {
+    ac.beginPath();
+    ac.arc(toPX(accelCanvas, p.t), toPY(accelCanvas, p.a, aRange), 4, 0, Math.PI * 2);
+    ac.fill();
+  });
+}
+
+// ── Velocity curve ───────────────────────────────────────────
+function drawVelCurve() {
+  if (!velPoints.length) { drawGrid(vc, velCanvas, aRange); return; }
+
+  const vVals    = velPoints.map(p => p.v);
+  const vAbsMax  = Math.max(Math.abs(Math.min(...vVals)), Math.abs(Math.max(...vVals)), 2);
+  const niceRange = Math.ceil(vAbsMax / 5) * 5 || 5;
+
+  drawGrid(vc, velCanvas, niceRange);
+  setDPR(vc, velCanvas);
+
+  // filled area
+  const zy = toPY(velCanvas, 0, niceRange);
+  vc.fillStyle = 'rgba(79,255,176,0.07)';
+  vc.beginPath();
+  vc.moveTo(toPX(velCanvas, velPoints[0].t), zy);
+  velPoints.forEach(p => vc.lineTo(toPX(velCanvas, p.t), toPY(velCanvas, p.v, niceRange)));
+  vc.lineTo(toPX(velCanvas, velPoints[velPoints.length - 1].t), zy);
+  vc.closePath();
+  vc.fill();
+
+  // line
+  vc.strokeStyle = '#4fffb0';
+  vc.lineWidth = 2.5;
+  vc.lineJoin = 'round';
+  vc.lineCap  = 'round';
+  vc.shadowColor = 'rgba(79,255,176,0.5)';
+  vc.shadowBlur  = 10;
+  vc.beginPath();
+  velPoints.forEach((p, i) => {
+    const x = toPX(velCanvas, p.t);
+    const y = toPY(velCanvas, p.v, niceRange);
+    i === 0 ? vc.moveTo(x, y) : vc.lineTo(x, y);
+  });
+  vc.stroke();
+  vc.shadowBlur = 0;
+}
+
+// ── Numerical integration ────────────────────────────────────
+function integrate() {
+  if (rawPoints.length < 2) { alert('Draw the acceleration curve first!'); return; }
+  const v0 = parseFloat(document.getElementById('v0Input').value) || 0;
+  const sorted = [...rawPoints].sort((a, b) => a.t - b.t);
+  const DT   = 0.05;
+  const tEnd = sorted[sorted.length - 1].t;
+  velPoints  = [];
+  let v = v0;
+
+  function interpA(t) {
+    if (t <= sorted[0].t) return sorted[0].a;
+    if (t >= tEnd)        return sorted[sorted.length - 1].a;
+    for (let i = 0; i < sorted.length - 1; i++) {
+      if (t >= sorted[i].t && t <= sorted[i + 1].t) {
+        const f = (t - sorted[i].t) / (sorted[i + 1].t - sorted[i].t);
+        return sorted[i].a + f * (sorted[i + 1].a - sorted[i].a);
+      }
+    }
+    return 0;
+  }
+
+  for (let t = 0; t <= tEnd + DT / 2; t += DT) {
+    velPoints.push({ t: +t.toFixed(4), v: +v.toFixed(4) });
+    v += interpA(t) * DT;
+  }
+
+  drawVelCurve();
+  updateStats();
+}
+
+// ── Stats ────────────────────────────────────────────────────
+function updateStats() {
+  if (!velPoints.length) return;
+  const v0   = velPoints[0].v;
+  const vf   = velPoints[velPoints.length - 1].v;
+  const vVals = velPoints.map(p => p.v);
+  const dv   = vf - v0;
+
+  document.getElementById('v0Display').textContent = v0.toFixed(2) + ' m/s';
+  document.getElementById('vmax').textContent      = Math.max(...vVals).toFixed(2) + ' m/s';
+  document.getElementById('vfinal').textContent    = vf.toFixed(2) + ' m/s';
+  document.getElementById('deltaV').textContent    = (dv >= 0 ? '+' : '') + dv.toFixed(2) + ' m/s';
+  document.getElementById('impulseVal').textContent = dv.toFixed(2) + ' N·s/kg';
+
+  let zc = 0;
+  for (let i = 1; i < velPoints.length; i++)
+    if (velPoints[i - 1].v * velPoints[i].v < 0) zc++;
+  document.getElementById('zeroCross').textContent = zc;
+
+  const ins = [];
+  if (dv >  0.5) ins.push('Net acceleration — object speeds up overall.');
+  if (dv < -0.5) ins.push('Net deceleration — object slows down overall.');
+  if (zc > 0)    ins.push(`Velocity crosses zero ${zc} time(s) — object reverses direction.`);
+  if (Math.abs(vf) < 0.5) ins.push('Object nearly at rest at the end.');
+  if (!ins.length) ins.push('Velocity computed successfully from ∫ a dt.');
+  document.getElementById('insight').textContent = ins.join(' ');
+}
+
+// ── Drawing events ───────────────────────────────────────────
+function startDraw(e) {
+  e.preventDefault();
+  isDrawing = true;
+  lastCX    = null;
+  rawPoints = [];
+  velPoints = [];
+  drawGrid(vc, velCanvas, aRange);
+  document.getElementById('drawHint').textContent     = 'DRAWING...';
+  document.getElementById('pointCount').textContent   = '0';
+  document.getElementById('vmax').textContent         = '—';
+  document.getElementById('vfinal').textContent       = '—';
+  document.getElementById('deltaV').textContent       = '—';
+  document.getElementById('impulseVal').textContent   = '—';
+  document.getElementById('zeroCross').textContent    = '—';
+  document.getElementById('insight').textContent      = 'Keep drawing, then press INTEGRATE →';
+  addPoint(e);
+}
+
+function moveDraw(e) {
+  if (!isDrawing) return;
+  e.preventDefault();
+  addPoint(e);
+}
+
+function endDraw() {
+  if (!isDrawing) return;
+  isDrawing = false;
+  document.getElementById('drawHint').textContent = rawPoints.length > 2 ? 'READY' : 'DRAW MORE';
+  if (rawPoints.length > 3) integrate();
+}
+
+function addPoint(e) {
+  const { cx, cy } = evtPos(e, accelCanvas);
+  // ignore if outside the plot area (with small margin)
+  if (cx < PAD.left - 8 || cx > cssW(accelCanvas) - PAD.right + 8) return;
+
+  // throttle by horizontal distance
+  if (lastCX !== null && Math.abs(cx - lastCX) < 2) return;
+  lastCX = cx;
+
+  const t = toDataT(accelCanvas, cx);
+  const a = toDataV(accelCanvas, cy, aRange);  // reuses the same math
+
+  // replace any existing point within a small t-window
+  const tol = tMax / plotW(accelCanvas) * 6;
+  const idx = rawPoints.findIndex(p => Math.abs(p.t - t) < tol);
+  if (idx >= 0) rawPoints.splice(idx, 1);
+  rawPoints.push({ t, a });
+  rawPoints.sort((a, b) => a.t - b.t);
+
+  document.getElementById('pointCount').textContent = rawPoints.length;
+  document.getElementById('curTime').textContent    = t.toFixed(2) + ' s';
+  document.getElementById('curAccel').textContent   = a.toFixed(2) + ' m/s²';
+
+  drawAccelCurve();
+}
+
+accelCanvas.addEventListener('mousedown', startDraw);
+accelCanvas.addEventListener('mousemove', moveDraw);
+window.addEventListener('mouseup', endDraw);
+accelCanvas.addEventListener('touchstart', startDraw, { passive: false });
+accelCanvas.addEventListener('touchmove',  moveDraw,  { passive: false });
+window.addEventListener('touchend', endDraw);
+
+// ── Buttons ──────────────────────────────────────────────────
+document.getElementById('integrateBtn').onclick = integrate;
+
+document.getElementById('clearBtn').onclick = () => {
+  rawPoints = []; velPoints = []; lastCX = null;
+  drawGrid(ac, accelCanvas, aRange);
+  drawGrid(vc, velCanvas,   aRange);
+  ['curTime','curAccel','vmax','vfinal','v0Display','deltaV','impulseVal','zeroCross']
+    .forEach(id => { document.getElementById(id).textContent = '—'; });
+  document.getElementById('pointCount').textContent = '0';
+  document.getElementById('drawHint').textContent   = 'DRAW HERE';
+  document.getElementById('insight').textContent    =
+    'Draw the acceleration curve on the left by clicking and dragging. Press INTEGRATE → to compute velocity.';
+};
+
+document.getElementById('exampleBtn').onclick = () => {
+  rawPoints = [
+    {t:0,a:0},{t:0.5,a:3},{t:1,a:5},{t:1.5,a:6},{t:2,a:6},
+    {t:2.5,a:5},{t:3,a:3},{t:3.5,a:0},{t:4,a:0},{t:4.5,a:-2},
+    {t:5,a:-5},{t:5.5,a:-7},{t:6,a:-7},{t:6.5,a:-5},{t:7,a:-3},
+    {t:7.5,a:-1},{t:8,a:0}
+  ];
+  document.getElementById('pointCount').textContent = rawPoints.length;
+  document.getElementById('drawHint').textContent   = 'EXAMPLE';
+  drawAccelCurve();
+  integrate();
+};
+
+document.getElementById('tmaxSelect').onchange = function () {
+  tMax = +this.value;
+  rawPoints = []; velPoints = [];
+  drawGrid(ac, accelCanvas, aRange);
+  drawGrid(vc, velCanvas,   aRange);
+  document.getElementById('pointCount').textContent = '0';
+};
+
+document.getElementById('arangeSelect').onchange = function () {
+  aRange = +this.value;
+  rawPoints = []; velPoints = [];
+  drawGrid(ac, accelCanvas, aRange);
+  drawGrid(vc, velCanvas,   aRange);
+};
+
+document.getElementById('v0Input').oninput = function () {
+  document.getElementById('v0Display').textContent = (+this.value || 0).toFixed(2) + ' m/s';
+  if (rawPoints.length > 2) integrate();
+};
+
+// ── Init ─────────────────────────────────────────────────────
+window.addEventListener('resize', () => {
+  sizeAll();
+  drawAccelCurve();
+  drawVelCurve();
+});
+
+// Use requestAnimationFrame so the layout has finished before we measure widths
+requestAnimationFrame(() => {
+  sizeAll();
+  drawGrid(ac, accelCanvas, aRange);
+  drawGrid(vc, velCanvas,   aRange);
+});
+</script>
+</body>
+</html>
