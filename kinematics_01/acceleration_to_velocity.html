@@ -208,12 +208,113 @@
     gap: 20px;
     align-items: center;
     flex-wrap: wrap;
+    margin-bottom: 18px;
   }
   .info-item { display: flex; flex-direction: column; gap: 2px; min-width: 80px; }
   .info-label { font-size: 10px; font-family: var(--mono); color: var(--text3); letter-spacing: 1px; text-transform: uppercase; }
   .info-val { font-size: 18px; font-family: var(--mono); font-weight: 700; }
   .info-sep { width: 1px; background: var(--border); align-self: stretch; }
   .info-note { font-size: 12px; color: var(--text2); line-height: 1.6; flex: 1; min-width: 160px; }
+
+  /* ── Section Analysis Panel ─────────────────────────────── */
+  .section-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0;
+    margin-bottom: 18px;
+    overflow: hidden;
+  }
+  .section-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+  }
+  .section-panel-header h2 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--text2);
+    text-transform: uppercase;
+  }
+  .section-tabs {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .section-tab {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-family: var(--mono);
+    font-size: 11px;
+    cursor: pointer;
+    border: 1px solid var(--border2);
+    background: transparent;
+    color: var(--text3);
+    transition: all .15s;
+    letter-spacing: 1px;
+  }
+  .section-tab.active {
+    color: #000;
+    font-weight: 700;
+  }
+  .section-body {
+    padding: 16px 18px;
+    display: none;
+  }
+  .section-body.active { display: block; }
+
+  .section-row {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 10px 16px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
+  }
+  .section-row:last-child { border-bottom: none; }
+  .section-row-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding-top: 1px;
+  }
+  .section-row-label.accel  { color: #ff6b6b; }
+  .section-row-label.vel    { color: #4fffb0; }
+  .section-row-label.disp   { color: #a78bfa; }
+  .section-row-text {
+    font-size: 12.5px;
+    color: var(--text);
+    line-height: 1.65;
+  }
+  .section-row-text b { color: var(--accent3); }
+  .section-time-badge {
+    display: inline-block;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text2);
+    margin-bottom: 8px;
+  }
+  .delta-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 1px 6px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
 </style>
 </head>
 <body>
@@ -221,7 +322,7 @@
   <header>
     <div class="logo-block">
       <h1>∫ Kinematics</h1>
-      <p>Draw acceleration → get velocity via numerical integration</p>
+      <p>Draw acceleration → get velocity &amp; displacement via numerical integration</p>
     </div>
     <div class="header-badge">CLASS XI · MOTION IN A STRAIGHT LINE</div>
   </header>
@@ -240,23 +341,8 @@
       <span>Δt =</span><span class="hl">0.05 s</span>
     </div>
   </div> -->
-<h1 style="margin-bottom: 12px; font-size: 13px; color: var(--text2);">Mention Initial Velocity</h1>
+<h1 style="margin-bottom: 12px; font-size: 13px; color: var(--text2);">Customize Axes</h1>
 <div class="controls-row">
-  <div class="control-group">
-    <label>v₀ (m/s)</label>
-    <input type="number" id="v0Input" value="0" step="1" min="-30" max="30">
-  </div>
-</div>
-
-<h1 style="margin-top: 20px; margin-bottom: 12px; font-size: 13px; color: var(--text2);">Customize Axes</h1>
-<div class="controls-row">
-  <div class="control-group">
-    <label>T max</label>
-    <select id="tmaxSelect">
-      <!-- options -->
-    </select>
-  </div>
-
    <div class="control-group">
       <label>T max</label>
       <select id="tmaxSelect">
@@ -273,10 +359,21 @@
         <option value="20">±20 m/s²</option>
       </select>
     </div>
+  </div>
+
+<div class="controls-row">
     <button class="btn btn-primary" id="integrateBtn">INTEGRATE →</button>
     <button class="btn btn-ghost" id="exampleBtn">LOAD EXAMPLE</button>
     <button class="btn btn-danger" id="clearBtn">CLEAR</button>
   </div>
+
+<h1 style="margin-top: 20px; margin-bottom: 12px; font-size: 13px; color: var(--text2);">Mention Initial Velocity</h1>
+<div class="controls-row">
+  <div class="control-group">
+    <label>v₀ (m/s)</label>
+    <input type="number" id="v0Input" value="0" step="1" min="-30" max="30">
+  </div>
+</div>
 
   <div class="canvas-grid">
     <div class="graph-card">
@@ -289,20 +386,6 @@
       </div>
       <div class="canvas-wrap" id="accelWrap">
         <canvas id="accelCanvas"></canvas>
-      </div>
-      <div class="readout-bar">
-        <div class="readout-item">
-          <span class="readout-label">TIME</span>
-          <span class="readout-value" id="curTime">—</span>
-        </div>
-        <div class="readout-item">
-          <span class="readout-label">ACCEL</span>
-          <span class="readout-value" id="curAccel">—</span>
-        </div>
-        <div class="readout-item">
-          <span class="readout-label">POINTS</span>
-          <span class="readout-value" id="pointCount">0</span>
-        </div>
       </div>
     </div>
 
@@ -317,44 +400,39 @@
       <div class="canvas-wrap" id="velWrap">
         <canvas id="velCanvas"></canvas>
       </div>
-      <div class="readout-bar">
-        <div class="readout-item">
-          <span class="readout-label">v₀</span>
-          <span class="readout-value green" id="v0Display">0.00 m/s</span>
-        </div>
-        <div class="readout-item">
-          <span class="readout-label">v MAX</span>
-          <span class="readout-value green" id="vmax">—</span>
-        </div>
-        <div class="readout-item">
-          <span class="readout-label">v FINAL</span>
-          <span class="readout-value green" id="vfinal">—</span>
-        </div>
-      </div>
     </div>
   </div>
 
-  <div class="info-strip">
-    <div class="info-item">
-      <span class="info-label">Δv</span>
-      <span class="info-val" id="deltaV" style="color:var(--accent)">—</span>
+  <div class="graph-card" style="margin-bottom:18px;">
+    <div class="graph-header">
+      <div class="graph-title">
+        <div class="dot" style="background:#a78bfa"></div>
+        <div><h2>Displacement</h2><p>x(t) · x₀ = 0 · auto-computed</p></div>
+      </div>
+      <span class="hint-badge">AUTO-COMPUTED</span>
     </div>
-    <div class="info-sep"></div>
-    <div class="info-item">
-      <span class="info-label">impulse / m</span>
-      <span class="info-val" id="impulseVal" style="color:var(--accent3)">—</span>
+    <div class="canvas-wrap" id="dispWrap">
+      <canvas id="dispCanvas"></canvas>
     </div>
-    <div class="info-sep"></div>
-    <div class="info-item">
-      <span class="info-label">v zero crossings</span>
-      <span class="info-val" id="zeroCross" style="color:var(--text2)">—</span>
+  </div>
+
+  <!-- ── Section Analysis Panel ─────────────────────────── -->
+  <div class="section-panel" id="sectionPanel" style="display:none;">
+    <div class="section-panel-header">
+      <h2>Section-by-Section Analysis</h2>
+      <div class="section-tabs" id="sectionTabs"></div>
     </div>
-    <div class="info-sep"></div>
-    <p class="info-note" id="insight">
+    <div id="sectionBodies"></div>
+  </div>
+
+  <!-- fallback hint when nothing drawn yet -->
+  <div class="info-strip" id="hintStrip">
+    <p class="info-note">
       Draw the acceleration curve on the left by clicking and dragging. Press <strong>INTEGRATE →</strong> to compute velocity. Try <strong>LOAD EXAMPLE</strong> to see a sample.
     </p>
   </div>
-</div>
+
+</div><!-- /.app -->
 
 <script>
 // ── Constants ────────────────────────────────────────────────
@@ -362,17 +440,23 @@ const PAD = { top: 24, right: 18, bottom: 44, left: 54 };
 const CANVAS_ASPECT = 260 / 500; // height / width
 
 let tMax = 10, aRange = 10;
-let rawPoints = [];   // [{t, a}]  — data coordinates
-let velPoints = [];   // [{t, v}]
+let rawPoints  = [];  // [{t, a}]  — data coordinates
+let velPoints  = [];  // [{t, v}]
+let dispPoints = [];  // [{t, x}]
 let isDrawing = false;
-let lastCX = null;
+let segStart   = null;  // {t,a} anchor of segment being drawn
+let segPreview = null;  // {t,a} live drag endpoint
+let sections   = [];  // [{t1,t2,a1,a2,label,color,lineColor}] — numbered sections
 
 const accelCanvas = document.getElementById('accelCanvas');
 const velCanvas   = document.getElementById('velCanvas');
+const dispCanvas  = document.getElementById('dispCanvas');
 const accelWrap   = document.getElementById('accelWrap');
 const velWrap     = document.getElementById('velWrap');
+const dispWrap    = document.getElementById('dispWrap');
 const ac = accelCanvas.getContext('2d');
 const vc = velCanvas.getContext('2d');
+const dc = dispCanvas.getContext('2d');
 
 // ── Canvas sizing ────────────────────────────────────────────
 // Key fix: canvas.width/height must equal the PHYSICAL pixel dimensions
@@ -391,6 +475,7 @@ function sizeCanvas(canvas, wrap) {
 function sizeAll() {
   sizeCanvas(accelCanvas, accelWrap);
   sizeCanvas(velCanvas,   velWrap);
+  sizeCanvas(dispCanvas,  dispWrap);
 }
 
 // ── Coordinate helpers (CSS-pixel space) ────────────────────
@@ -421,6 +506,89 @@ function evtPos(e, canvas) {
 function setDPR(ctx, canvas) {
   const dpr = window.devicePixelRatio || 1;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+// ── Section palette ──────────────────────────────────────────
+const SECTION_COLORS = [
+  'rgba(255,193, 80,0.13)', 'rgba( 79,255,176,0.11)',
+  'rgba(167,139,250,0.13)', 'rgba(255,107,107,0.11)',
+  'rgba( 56,189,248,0.12)', 'rgba(251,146, 60,0.12)'
+];
+const SECTION_LINE_COLORS = [
+  '#ffc150', '#4fffb0', '#a78bfa', '#ff6b6b', '#38bdf8', '#fb923c'
+];
+
+// ── Build sections from rawPoints ────────────────────────────
+// Each consecutive pair of user vertices is one section.
+function buildSections() {
+  const sorted = [...rawPoints].sort((a, b) => a.t - b.t);
+  // Minimum section width — filters out degenerate point-sections created when
+  // the user clicks on or very near an existing timestamp endpoint.
+  const minDt = Math.max(0.05, tMax * 0.01);
+  sections = [];
+  for (let i = 0; i < sorted.length - 1; i++) {
+    const dt = sorted[i + 1].t - sorted[i].t;
+    if (dt < minDt) continue;  // skip near-zero sections
+    sections.push({
+      t1: sorted[i].t,
+      t2: sorted[i + 1].t,
+      a1: sorted[i].a,
+      a2: sorted[i + 1].a
+    });
+  }
+  // Number after filtering so labels are always S1, S2, S3…
+  sections.forEach((s, i) => {
+    const ci = i % SECTION_COLORS.length;
+    s.label     = 'S' + (i + 1);
+    s.idx       = i;
+    s.color     = SECTION_COLORS[ci];
+    s.lineColor = SECTION_LINE_COLORS[ci];
+  });
+}
+
+// ── Draw section overlays on any canvas ──────────────────────
+function drawSections(ctx, canvas, yRange) {
+  if (!sections.length) return;
+  setDPR(ctx, canvas);
+  const ph = plotH(canvas);
+
+  sections.forEach(sec => {
+    const x1 = toPX(canvas, sec.t1);
+    const x2 = toPX(canvas, sec.t2);
+    const bw  = x2 - x1;
+
+    // shaded band
+    ctx.fillStyle = sec.color;
+    ctx.fillRect(x1, PAD.top, bw, ph);
+
+    // right boundary line
+    ctx.strokeStyle = sec.lineColor;
+    ctx.globalAlpha = 0.55;
+    ctx.lineWidth = 1;
+    ctx.setLineDash([5, 4]);
+    ctx.beginPath();
+    ctx.moveTo(x2, PAD.top);
+    ctx.lineTo(x2, PAD.top + ph);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.globalAlpha = 1;
+
+    // label badge centred in band
+    const cx = x1 + bw / 2;
+    const labelY = PAD.top + 10;
+    ctx.font = 'bold 10px "Space Mono", monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    const tw = ctx.measureText(sec.label).width + 10;
+    const th = 16;
+    ctx.fillStyle = sec.lineColor + 'cc';
+    ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(cx - tw / 2, labelY - th / 2, tw, th, 4);
+    else ctx.rect(cx - tw / 2, labelY - th / 2, tw, th);
+    ctx.fill();
+    ctx.fillStyle = '#000';
+    ctx.fillText(sec.label, cx, labelY);
+  });
 }
 
 // ── Grid ─────────────────────────────────────────────────────
@@ -484,30 +652,55 @@ function drawGrid(ctx, canvas, range) {
 // ── Accel curve ──────────────────────────────────────────────
 function drawAccelCurve() {
   drawGrid(ac, accelCanvas, aRange);
-  if (rawPoints.length < 2) return;
   setDPR(ac, accelCanvas);
 
-  ac.strokeStyle = '#ff6b6b';
-  ac.lineWidth = 2.5;
-  ac.lineJoin = 'round';
-  ac.lineCap  = 'round';
-  ac.shadowColor = 'rgba(255,107,107,0.5)';
-  ac.shadowBlur  = 10;
-  ac.beginPath();
-  rawPoints.forEach((p, i) => {
-    const x = toPX(accelCanvas, p.t);
-    const y = toPY(accelCanvas, p.a, aRange);
-    i === 0 ? ac.moveTo(x, y) : ac.lineTo(x, y);
-  });
-  ac.stroke();
-  ac.shadowBlur = 0;
+  // Draw committed segments
+  if (rawPoints.length >= 2) {
+    // Section overlays first
+    drawSections(ac, accelCanvas, aRange);
+    setDPR(ac, accelCanvas);
 
-  ac.fillStyle = '#ff6b6b';
-  [rawPoints[0], rawPoints[rawPoints.length - 1]].forEach(p => {
+    ac.strokeStyle = '#ff6b6b';
+    ac.lineWidth = 2.5;
+    ac.lineJoin = 'round';
+    ac.lineCap  = 'round';
+    ac.shadowColor = 'rgba(255,107,107,0.5)';
+    ac.shadowBlur  = 10;
     ac.beginPath();
-    ac.arc(toPX(accelCanvas, p.t), toPY(accelCanvas, p.a, aRange), 4, 0, Math.PI * 2);
-    ac.fill();
-  });
+    rawPoints.forEach((p, i) => {
+      const x = toPX(accelCanvas, p.t);
+      const y = toPY(accelCanvas, p.a, aRange);
+      i === 0 ? ac.moveTo(x, y) : ac.lineTo(x, y);
+    });
+    ac.stroke();
+    ac.shadowBlur = 0;
+
+    // Vertex dots on every committed point
+    ac.fillStyle = '#ff6b6b';
+    rawPoints.forEach(p => {
+      ac.beginPath();
+      ac.arc(toPX(accelCanvas, p.t), toPY(accelCanvas, p.a, aRange), 4, 0, Math.PI * 2);
+      ac.fill();
+    });
+  }
+
+  // Live preview of segment being dragged
+  if (isDrawing && segStart && segPreview) {
+    const x1 = toPX(accelCanvas, segStart.t),   y1 = toPY(accelCanvas, segStart.a,   aRange);
+    const x2 = toPX(accelCanvas, segPreview.t), y2 = toPY(accelCanvas, segPreview.a, aRange);
+    ac.strokeStyle = 'rgba(255,107,107,0.55)';
+    ac.lineWidth = 2;
+    ac.setLineDash([6, 4]);
+    ac.beginPath();
+    ac.moveTo(x1, y1);
+    ac.lineTo(x2, y2);
+    ac.stroke();
+    ac.setLineDash([]);
+    ac.fillStyle = 'rgba(255,107,107,0.8)';
+    [[x1, y1], [x2, y2]].forEach(([x, y]) => {
+      ac.beginPath(); ac.arc(x, y, 5, 0, Math.PI * 2); ac.fill();
+    });
+  }
 }
 
 // ── Velocity curve ───────────────────────────────────────────
@@ -531,7 +724,7 @@ function drawVelCurve() {
   vc.closePath();
   vc.fill();
 
-  // line
+  // velocity line — first pass
   vc.strokeStyle = '#4fffb0';
   vc.lineWidth = 2.5;
   vc.lineJoin = 'round';
@@ -546,9 +739,77 @@ function drawVelCurve() {
   });
   vc.stroke();
   vc.shadowBlur = 0;
+
+  // section overlays on top of fill, then redraw line above them
+  drawSections(vc, velCanvas, niceRange);
+  setDPR(vc, velCanvas);
+  vc.strokeStyle = '#4fffb0';
+  vc.lineWidth = 2.5;
+  vc.lineJoin = 'round'; vc.lineCap = 'round';
+  vc.shadowColor = 'rgba(79,255,176,0.5)'; vc.shadowBlur = 10;
+  vc.beginPath();
+  velPoints.forEach((p, i) => {
+    const x = toPX(velCanvas, p.t);
+    const y = toPY(velCanvas, p.v, niceRange);
+    i === 0 ? vc.moveTo(x, y) : vc.lineTo(x, y);
+  });
+  vc.stroke();
+  vc.shadowBlur = 0;
 }
 
-// ── Numerical integration ────────────────────────────────────
+// ── Displacement curve ────────────────────────────────────────
+function drawDispCurve() {
+  if (!dispPoints.length) { drawGrid(dc, dispCanvas, 10); return; }
+
+  const xVals    = dispPoints.map(p => p.x);
+  const xAbsMax  = Math.max(Math.abs(Math.min(...xVals)), Math.abs(Math.max(...xVals)), 2);
+  const niceRange = Math.ceil(xAbsMax / 5) * 5 || 5;
+
+  drawGrid(dc, dispCanvas, niceRange);
+  setDPR(dc, dispCanvas);
+
+  // filled area
+  const zy = toPY(dispCanvas, 0, niceRange);
+  dc.fillStyle = 'rgba(167,139,250,0.08)';
+  dc.beginPath();
+  dc.moveTo(toPX(dispCanvas, dispPoints[0].t), zy);
+  dispPoints.forEach(p => dc.lineTo(toPX(dispCanvas, p.t), toPY(dispCanvas, p.x, niceRange)));
+  dc.lineTo(toPX(dispCanvas, dispPoints[dispPoints.length - 1].t), zy);
+  dc.closePath();
+  dc.fill();
+
+  // displacement line — first pass
+  dc.strokeStyle = '#a78bfa';
+  dc.lineWidth = 2.5;
+  dc.lineJoin = 'round';
+  dc.lineCap  = 'round';
+  dc.shadowColor = 'rgba(167,139,250,0.5)';
+  dc.shadowBlur  = 10;
+  dc.beginPath();
+  dispPoints.forEach((p, i) => {
+    const x = toPX(dispCanvas, p.t);
+    const y = toPY(dispCanvas, p.x, niceRange);
+    i === 0 ? dc.moveTo(x, y) : dc.lineTo(x, y);
+  });
+  dc.stroke();
+  dc.shadowBlur = 0;
+
+  // section overlays, then redraw line above them
+  drawSections(dc, dispCanvas, niceRange);
+  setDPR(dc, dispCanvas);
+  dc.strokeStyle = '#a78bfa';
+  dc.lineWidth = 2.5;
+  dc.lineJoin = 'round'; dc.lineCap = 'round';
+  dc.shadowColor = 'rgba(167,139,250,0.5)'; dc.shadowBlur = 10;
+  dc.beginPath();
+  dispPoints.forEach((p, i) => {
+    const x = toPX(dispCanvas, p.t);
+    const y = toPY(dispCanvas, p.x, niceRange);
+    i === 0 ? dc.moveTo(x, y) : dc.lineTo(x, y);
+  });
+  dc.stroke();
+  dc.shadowBlur = 0;
+}
 function integrate() {
   if (rawPoints.length < 2) { alert('Draw the acceleration curve first!'); return; }
   const v0 = parseFloat(document.getElementById('v0Input').value) || 0;
@@ -575,94 +836,246 @@ function integrate() {
     v += interpA(t) * DT;
   }
 
+  // Integrate velocity → displacement (x₀ = 0)
+  dispPoints = [];
+  let x = 0;
+  for (let i = 0; i < velPoints.length; i++) {
+    dispPoints.push({ t: velPoints[i].t, x: +x.toFixed(4) });
+    if (i < velPoints.length - 1) x += velPoints[i].v * DT;
+  }
+
+  buildSections();
+  drawAccelCurve();
   drawVelCurve();
+  drawDispCurve();
   updateStats();
 }
 
-// ── Stats ────────────────────────────────────────────────────
+// ── Stats / Section Panel ────────────────────────────────────
 function updateStats() {
-  if (!velPoints.length) return;
-  const v0   = velPoints[0].v;
-  const vf   = velPoints[velPoints.length - 1].v;
-  const vVals = velPoints.map(p => p.v);
-  const dv   = vf - v0;
+  if (!velPoints.length || !rawPoints.length || !sections.length) return;
 
-  document.getElementById('v0Display').textContent = v0.toFixed(2) + ' m/s';
-  document.getElementById('vmax').textContent      = Math.max(...vVals).toFixed(2) + ' m/s';
-  document.getElementById('vfinal').textContent    = vf.toFixed(2) + ' m/s';
-  document.getElementById('deltaV').textContent    = (dv >= 0 ? '+' : '') + dv.toFixed(2) + ' m/s';
-  document.getElementById('impulseVal').textContent = dv.toFixed(2) + ' N·s/kg';
+  function getV(t) {
+    for (let i = 0; i < velPoints.length - 1; i++) {
+      if (t >= velPoints[i].t && t <= velPoints[i + 1].t) {
+        const f = (t - velPoints[i].t) / (velPoints[i + 1].t - velPoints[i].t);
+        return velPoints[i].v + f * (velPoints[i + 1].v - velPoints[i].v);
+      }
+    }
+    return velPoints[velPoints.length - 1].v;
+  }
+  function getX(t) {
+    for (let i = 0; i < dispPoints.length - 1; i++) {
+      if (t >= dispPoints[i].t && t <= dispPoints[i + 1].t) {
+        const f = (t - dispPoints[i].t) / (dispPoints[i + 1].t - dispPoints[i].t);
+        return dispPoints[i].x + f * (dispPoints[i + 1].x - dispPoints[i].x);
+      }
+    }
+    return dispPoints[dispPoints.length - 1].x;
+  }
 
-  let zc = 0;
-  for (let i = 1; i < velPoints.length; i++)
-    if (velPoints[i - 1].v * velPoints[i].v < 0) zc++;
-  document.getElementById('zeroCross').textContent = zc;
+  function accelDesc(sec) {
+    const { a1, a2 } = sec;
+    const da   = a2 - a1;
+    const avgA = (a1 + a2) / 2;
+    const Z    = aRange * 0.06;
+    if (Math.abs(da) < aRange * 0.08) {
+      if (Math.abs(avgA) < Z)
+        return `Acceleration is <b>constant and zero</b> throughout — no net force acts on the object.`;
+      return avgA > 0
+        ? `Acceleration is <b>constant and positive</b> at <b>${avgA.toFixed(2)} m/s²</b> — steady force in the forward direction.`
+        : `Acceleration is <b>constant and negative</b> at <b>${avgA.toFixed(2)} m/s²</b> — steady force in the backward direction.`;
+    }
+    if (da > 0) {
+      if (a1 < -Z && a2 > Z)
+        return `Acceleration <b>increases from ${a1.toFixed(2)} to ${a2.toFixed(2)} m/s²</b>, crossing zero — net force reverses from <b>backward → forward</b> within this section.`;
+      return avgA > 0
+        ? `Acceleration is <b>positive and increasing</b> (${a1.toFixed(2)} → ${a2.toFixed(2)} m/s²) — the forward force is growing stronger.`
+        : `Acceleration is <b>negative but rising</b> (${a1.toFixed(2)} → ${a2.toFixed(2)} m/s²) — the backward force is weakening.`;
+    }
+    if (a1 > Z && a2 < -Z)
+      return `Acceleration <b>decreases from ${a1.toFixed(2)} to ${a2.toFixed(2)} m/s²</b>, crossing zero — net force reverses from <b>forward → backward</b> within this section.`;
+    return avgA > 0
+      ? `Acceleration is <b>positive but decreasing</b> (${a1.toFixed(2)} → ${a2.toFixed(2)} m/s²) — the forward force is dying down.`
+      : `Acceleration is <b>negative and more negative</b> (${a1.toFixed(2)} → ${a2.toFixed(2)} m/s²) — the backward force is intensifying.`;
+  }
 
-  const ins = [];
-  if (dv >  0.5) ins.push('Net acceleration — object speeds up overall.');
-  if (dv < -0.5) ins.push('Net deceleration — object slows down overall.');
-  if (zc > 0)    ins.push(`Velocity crosses zero ${zc} time(s) — object reverses direction.`);
-  if (Math.abs(vf) < 0.5) ins.push('Object nearly at rest at the end.');
-  if (!ins.length) ins.push('Velocity computed successfully from ∫ a dt.');
-  document.getElementById('insight').textContent = ins.join(' ');
+  function velDesc(sec) {
+    const { a1, a2, t1, t2 } = sec;
+    const v1 = getV(t1), v2 = getV(t2);
+    const da  = a2 - a1;
+    const avgA = (a1 + a2) / 2;
+    const dv  = v2 - v1;
+    const dvStr = `<span class="delta-badge">Δv = ${dv >= 0 ? '+' : ''}${dv.toFixed(2)} m/s</span>`;
+    const Z = aRange * 0.06;
+
+    if (a1 < -Z && a2 > Z) {
+      const tz = t1 + (t2 - t1) * (-a1) / (a2 - a1);
+      return `Acceleration crosses zero (negative → positive) at <b>t ≈ ${tz.toFixed(2)} s</b>.<br>
+▸ Before t = ${tz.toFixed(2)} s: a is still negative → velocity is <b>still decreasing</b>.<br>
+▸ At t = ${tz.toFixed(2)} s: velocity reaches a <b>local minimum (trough)</b> on the graph.<br>
+▸ After t = ${tz.toFixed(2)} s: a is positive → velocity <b>starts increasing</b>.<br>
+The velocity graph has a <b>turning point (minimum)</b> exactly where a = 0. ${dvStr}`;
+    }
+    if (a1 > Z && a2 < -Z) {
+      const tz = t1 + (t2 - t1) * a1 / (a1 - a2);
+      return `Acceleration crosses zero (positive → negative) at <b>t ≈ ${tz.toFixed(2)} s</b>.<br>
+▸ Before t = ${tz.toFixed(2)} s: a is still positive → velocity is <b>still increasing</b>.<br>
+▸ At t = ${tz.toFixed(2)} s: velocity reaches a <b>local maximum (peak)</b> on the graph.<br>
+▸ After t = ${tz.toFixed(2)} s: a is negative → velocity <b>starts decreasing</b>.<br>
+The velocity graph has a <b>turning point (maximum)</b> exactly where a = 0. ${dvStr}`;
+    }
+
+    if (Math.abs(da) < aRange * 0.08) {
+      if (Math.abs(avgA) < Z)
+        return `Acceleration ≈ 0 → velocity is <b>constant at ${v1.toFixed(2)} m/s</b>. The velocity graph is a <b>horizontal flat line</b>. ${dvStr}`;
+      return avgA > 0
+        ? `Constant positive acceleration (${avgA.toFixed(2)} m/s²) → velocity <b>increases linearly</b> from ${v1.toFixed(2)} to ${v2.toFixed(2)} m/s. Velocity graph is a <b>straight line with constant upward slope = ${avgA.toFixed(2)}</b>. ${dvStr}`
+        : `Constant negative acceleration (${avgA.toFixed(2)} m/s²) → velocity <b>decreases linearly</b> from ${v1.toFixed(2)} to ${v2.toFixed(2)} m/s. Velocity graph is a <b>straight line with constant downward slope = ${avgA.toFixed(2)}</b>. ${dvStr}`;
+    }
+    if (da > 0) {
+      return avgA > 0
+        ? `Acceleration is positive and <b>increasing</b> → velocity rises at a <b>growing rate</b> (${v1.toFixed(2)} → ${v2.toFixed(2)} m/s). The velocity graph bends <b>upward (convex curve, slope increases)</b>. ${dvStr}`
+        : `Acceleration is negative but <b>becoming less negative</b> → velocity still falls but <b>more slowly</b> (${v1.toFixed(2)} → ${v2.toFixed(2)} m/s). Velocity graph <b>flattens toward zero</b> (concave up, slope approaching 0). ${dvStr}`;
+    }
+    return avgA > 0
+      ? `Acceleration is positive but <b>decreasing</b> → velocity still rises but at a <b>slowing rate</b> (${v1.toFixed(2)} → ${v2.toFixed(2)} m/s). Velocity graph bends <b>downward (concave down, slope shrinks)</b>. ${dvStr}`
+      : `Acceleration is negative and <b>becoming more negative</b> → velocity falls <b>faster and faster</b> (${v1.toFixed(2)} → ${v2.toFixed(2)} m/s). Velocity graph curves <b>steeply downward</b>. ${dvStr}`;
+  }
+
+  function dispDesc(sec) {
+    const { t1, t2 } = sec;
+    const v1 = getV(t1), v2 = getV(t2);
+    const dx  = getX(t2) - getX(t1);
+    const dxStr = `<span class="delta-badge">Δx = ${dx >= 0 ? '+' : ''}${dx.toFixed(2)} m</span>`;
+    const Z = 0.3;
+
+    if (v1 > Z && v2 < -Z) {
+      const tz = t1 + (t2 - t1) * v1 / (v1 - v2);
+      return `Velocity crosses zero (positive → negative) at <b>t ≈ ${tz.toFixed(2)} s</b>.<br>
+▸ Before: object moves forward → displacement <b>still increasing</b>.<br>
+▸ At t = ${tz.toFixed(2)} s: displacement reaches a <b>local maximum (peak)</b>.<br>
+▸ After: object moves backward → displacement <b>decreases</b>.<br>
+Displacement graph has a <b>peak</b> where velocity = 0. ${dxStr}`;
+    }
+    if (v1 < -Z && v2 > Z) {
+      const tz = t1 + (t2 - t1) * (-v1) / (v2 - v1);
+      return `Velocity crosses zero (negative → positive) at <b>t ≈ ${tz.toFixed(2)} s</b>.<br>
+▸ Before: object moves backward → displacement <b>still decreasing</b>.<br>
+▸ At t = ${tz.toFixed(2)} s: displacement reaches a <b>local minimum (trough)</b>.<br>
+▸ After: object moves forward → displacement <b>increases</b>.<br>
+Displacement graph has a <b>trough</b> where velocity = 0. ${dxStr}`;
+    }
+
+    const avgV = (v1 + v2) / 2;
+    if (Math.abs(avgV) < Z) return `Velocity ≈ 0 → object nearly stationary. Displacement <b>barely changes</b>. ${dxStr}`;
+    const vda = v2 - v1;
+    if (v1 >= 0 && v2 >= 0) {
+      if (Math.abs(vda) < 0.5) return `Velocity is roughly constant (~${avgV.toFixed(2)} m/s) → displacement <b>increases linearly</b>. Graph is a <b>straight upward line</b>. ${dxStr}`;
+      return vda > 0
+        ? `Velocity positive and <b>increasing</b> (${v1.toFixed(2)} → ${v2.toFixed(2)} m/s) → displacement <b>increases at a growing rate</b>. Graph curves <b>upward (concave up)</b>. ${dxStr}`
+        : `Velocity positive but <b>decreasing</b> (${v1.toFixed(2)} → ${v2.toFixed(2)} m/s) → displacement <b>still increases but slower</b>. Graph bends <b>down (concave down)</b> though x is still rising. ${dxStr}`;
+    }
+    if (v1 <= 0 && v2 <= 0) {
+      if (Math.abs(vda) < 0.5) return `Velocity is roughly constant (~${avgV.toFixed(2)} m/s, negative) → displacement <b>decreases linearly</b>. Graph is a <b>straight downward line</b>. ${dxStr}`;
+      return vda < 0
+        ? `Velocity negative and <b>becoming more negative</b> (${v1.toFixed(2)} → ${v2.toFixed(2)} m/s) → displacement <b>decreases at an accelerating rate</b>. Graph curves <b>steeply downward</b>. ${dxStr}`
+        : `Velocity negative but <b>recovering</b> (${v1.toFixed(2)} → ${v2.toFixed(2)} m/s) → displacement <b>still decreasing but slowing</b>. Graph <b>flattens</b>. ${dxStr}`;
+    }
+    return `Velocity changes sign (${v1.toFixed(2)} → ${v2.toFixed(2)} m/s) → displacement has a <b>turning point</b> in this section. ${dxStr}`;
+  }
+
+  // ── Build tabbed section panel ────────────────────────────
+  const tabsEl   = document.getElementById('sectionTabs');
+  const bodiesEl = document.getElementById('sectionBodies');
+  tabsEl.innerHTML   = '';
+  bodiesEl.innerHTML = '';
+
+  sections.forEach((sec, i) => {
+    const lc      = SECTION_LINE_COLORS[i % SECTION_LINE_COLORS.length];
+    const isFirst = i === 0;
+
+    const tab = document.createElement('button');
+    tab.className = 'section-tab' + (isFirst ? ' active' : '');
+    tab.textContent = sec.label;
+    tab.style.borderColor = lc + '88';
+    if (isFirst) { tab.style.background = lc; tab.style.color = '#000'; }
+    tab.dataset.idx = i;
+    tabsEl.appendChild(tab);
+
+    const body = document.createElement('div');
+    body.className = 'section-body' + (isFirst ? ' active' : '');
+    body.dataset.idx = i;
+    body.innerHTML =
+      `<div class="section-time-badge">t = ${sec.t1.toFixed(2)} s → ${sec.t2.toFixed(2)} s &nbsp;|&nbsp; duration = ${(sec.t2 - sec.t1).toFixed(2)} s</div>` +
+      `<div class="section-row"><div class="section-row-label accel">Acceleration</div><div class="section-row-text">${accelDesc(sec)}</div></div>` +
+      `<div class="section-row"><div class="section-row-label vel">Velocity</div><div class="section-row-text">${velDesc(sec)}</div></div>` +
+      `<div class="section-row"><div class="section-row-label disp">Displacement</div><div class="section-row-text">${dispDesc(sec)}</div></div>`;
+    bodiesEl.appendChild(body);
+  });
+
+  tabsEl.querySelectorAll('.section-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const idx = +tab.dataset.idx;
+      const lc  = SECTION_LINE_COLORS[idx % SECTION_LINE_COLORS.length];
+      tabsEl.querySelectorAll('.section-tab').forEach(t => {
+        t.classList.remove('active'); t.style.background = 'transparent'; t.style.color = '';
+      });
+      tab.classList.add('active'); tab.style.background = lc; tab.style.color = '#000';
+      bodiesEl.querySelectorAll('.section-body').forEach(b => {
+        b.classList.toggle('active', +b.dataset.idx === idx);
+      });
+    });
+  });
+
+  document.getElementById('sectionPanel').style.display = 'block';
+  document.getElementById('hintStrip').style.display    = 'none';
 }
 
-// ── Drawing events ───────────────────────────────────────────
+// ── Drawing events (straight-line segments) ─────────────────
 function startDraw(e) {
   e.preventDefault();
-  isDrawing = true;
-  lastCX    = null;
-  rawPoints = [];
-  velPoints = [];
-  drawGrid(vc, velCanvas, aRange);
-  document.getElementById('drawHint').textContent     = 'DRAWING...';
-  document.getElementById('pointCount').textContent   = '0';
-  document.getElementById('vmax').textContent         = '—';
-  document.getElementById('vfinal').textContent       = '—';
-  document.getElementById('deltaV').textContent       = '—';
-  document.getElementById('impulseVal').textContent   = '—';
-  document.getElementById('zeroCross').textContent    = '—';
-  document.getElementById('insight').textContent      = 'Keep drawing, then press INTEGRATE →';
-  addPoint(e);
+  const { cx, cy } = evtPos(e, accelCanvas);
+  if (cx < PAD.left - 8 || cx > cssW(accelCanvas) - PAD.right + 8) return;
+  isDrawing  = true;
+  segStart   = { t: Math.round(toDataT(accelCanvas, cx)), a: Math.round(toDataV(accelCanvas, cy, aRange)) };
+  segPreview = { ...segStart };
+  velPoints  = [];
+  dispPoints = [];
+  drawGrid(vc, velCanvas,  aRange);
+  drawGrid(dc, dispCanvas, aRange);
+  document.getElementById('drawHint').textContent = 'DRAWING...';
+  document.getElementById('sectionPanel').style.display = 'none';
+  document.getElementById('hintStrip').style.display    = 'block';
+  drawAccelCurve();
 }
 
 function moveDraw(e) {
   if (!isDrawing) return;
   e.preventDefault();
-  addPoint(e);
+  const { cx, cy } = evtPos(e, accelCanvas);
+  segPreview = { t: Math.round(toDataT(accelCanvas, cx)), a: Math.round(toDataV(accelCanvas, cy, aRange)) };
+  drawAccelCurve();
 }
 
 function endDraw() {
   if (!isDrawing) return;
   isDrawing = false;
-  document.getElementById('drawHint').textContent = rawPoints.length > 2 ? 'READY' : 'DRAW MORE';
-  if (rawPoints.length > 3) integrate();
-}
+  if (!segStart || !segPreview) { segStart = segPreview = null; return; }
 
-function addPoint(e) {
-  const { cx, cy } = evtPos(e, accelCanvas);
-  // ignore if outside the plot area (with small margin)
-  if (cx < PAD.left - 8 || cx > cssW(accelCanvas) - PAD.right + 8) return;
+  // Ensure left-to-right order
+  let p1 = segStart, p2 = segPreview;
+  if (p1.t > p2.t) { [p1, p2] = [p2, p1]; }
 
-  // throttle by horizontal distance
-  if (lastCX !== null && Math.abs(cx - lastCX) < 2) return;
-  lastCX = cx;
-
-  const t = toDataT(accelCanvas, cx);
-  const a = toDataV(accelCanvas, cy, aRange);  // reuses the same math
-
-  // replace any existing point within a small t-window
-  const tol = tMax / plotW(accelCanvas) * 6;
-  const idx = rawPoints.findIndex(p => Math.abs(p.t - t) < tol);
-  if (idx >= 0) rawPoints.splice(idx, 1);
-  rawPoints.push({ t, a });
+  // Replace any existing rawPoints that fall inside this segment's t-range
+  rawPoints = rawPoints.filter(p => p.t < p1.t - 0.001 || p.t > p2.t + 0.001);
+  rawPoints.push({ t: p1.t, a: p1.a }, { t: p2.t, a: p2.a });
   rawPoints.sort((a, b) => a.t - b.t);
 
-  document.getElementById('pointCount').textContent = rawPoints.length;
-  document.getElementById('curTime').textContent    = t.toFixed(2) + ' s';
-  document.getElementById('curAccel').textContent   = a.toFixed(2) + ' m/s²';
-
+  segStart = segPreview = null;
+  document.getElementById('drawHint').textContent = rawPoints.length >= 2 ? 'READY' : 'DRAW MORE';
   drawAccelCurve();
+  if (rawPoints.length >= 2) integrate();
 }
 
 accelCanvas.addEventListener('mousedown', startDraw);
@@ -676,15 +1089,14 @@ window.addEventListener('touchend', endDraw);
 document.getElementById('integrateBtn').onclick = integrate;
 
 document.getElementById('clearBtn').onclick = () => {
-  rawPoints = []; velPoints = []; lastCX = null;
+  rawPoints = []; velPoints = []; dispPoints = []; sections = [];
+  segStart = segPreview = null;
   drawGrid(ac, accelCanvas, aRange);
   drawGrid(vc, velCanvas,   aRange);
-  ['curTime','curAccel','vmax','vfinal','v0Display','deltaV','impulseVal','zeroCross']
-    .forEach(id => { document.getElementById(id).textContent = '—'; });
-  document.getElementById('pointCount').textContent = '0';
-  document.getElementById('drawHint').textContent   = 'DRAW HERE';
-  document.getElementById('insight').textContent    =
-    'Draw the acceleration curve on the left by clicking and dragging. Press INTEGRATE → to compute velocity.';
+  drawGrid(dc, dispCanvas,  aRange);
+  document.getElementById('drawHint').textContent = 'DRAW HERE';
+  document.getElementById('sectionPanel').style.display = 'none';
+  document.getElementById('hintStrip').style.display    = 'block';
 };
 
 document.getElementById('exampleBtn').onclick = () => {
@@ -694,7 +1106,6 @@ document.getElementById('exampleBtn').onclick = () => {
     {t:5,a:-5},{t:5.5,a:-7},{t:6,a:-7},{t:6.5,a:-5},{t:7,a:-3},
     {t:7.5,a:-1},{t:8,a:0}
   ];
-  document.getElementById('pointCount').textContent = rawPoints.length;
   document.getElementById('drawHint').textContent   = 'EXAMPLE';
   drawAccelCurve();
   integrate();
@@ -702,21 +1113,25 @@ document.getElementById('exampleBtn').onclick = () => {
 
 document.getElementById('tmaxSelect').onchange = function () {
   tMax = +this.value;
-  rawPoints = []; velPoints = [];
+  rawPoints = []; velPoints = []; dispPoints = []; sections = [];
   drawGrid(ac, accelCanvas, aRange);
   drawGrid(vc, velCanvas,   aRange);
-  document.getElementById('pointCount').textContent = '0';
+  drawGrid(dc, dispCanvas,  aRange);
+  document.getElementById('sectionPanel').style.display = 'none';
+  document.getElementById('hintStrip').style.display    = 'block';
 };
 
 document.getElementById('arangeSelect').onchange = function () {
   aRange = +this.value;
-  rawPoints = []; velPoints = [];
+  rawPoints = []; velPoints = []; dispPoints = []; sections = [];
   drawGrid(ac, accelCanvas, aRange);
   drawGrid(vc, velCanvas,   aRange);
+  drawGrid(dc, dispCanvas,  aRange);
+  document.getElementById('sectionPanel').style.display = 'none';
+  document.getElementById('hintStrip').style.display    = 'block';
 };
 
 document.getElementById('v0Input').oninput = function () {
-  document.getElementById('v0Display').textContent = (+this.value || 0).toFixed(2) + ' m/s';
   if (rawPoints.length > 2) integrate();
 };
 
@@ -725,6 +1140,7 @@ window.addEventListener('resize', () => {
   sizeAll();
   drawAccelCurve();
   drawVelCurve();
+  drawDispCurve();
 });
 
 // Use requestAnimationFrame so the layout has finished before we measure widths
@@ -732,6 +1148,7 @@ requestAnimationFrame(() => {
   sizeAll();
   drawGrid(ac, accelCanvas, aRange);
   drawGrid(vc, velCanvas,   aRange);
+  drawGrid(dc, dispCanvas,  aRange);
 });
 </script>
 </body>
