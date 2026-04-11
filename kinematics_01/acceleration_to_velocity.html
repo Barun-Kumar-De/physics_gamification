@@ -315,6 +315,94 @@
     margin-left: 6px;
     vertical-align: middle;
   }
+
+  /* ── How-to Panel ───────────────────────────────────────── */
+  .howto-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .howto-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    background: var(--surface2);
+    border: none;
+    cursor: pointer;
+    color: var(--text2);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: background .15s;
+  }
+  .howto-toggle:hover { background: #1f2433; }
+  .howto-toggle .arrow {
+    font-size: 10px;
+    transition: transform .2s;
+    color: var(--text3);
+  }
+  .howto-toggle.open .arrow { transform: rotate(180deg); }
+  .howto-body {
+    display: none;
+    padding: 16px 20px 20px;
+  }
+  .howto-body.open { display: block; }
+  .howto-section {
+    margin-bottom: 16px;
+  }
+  .howto-section:last-child { margin-bottom: 0; }
+  .howto-section-title {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--border);
+  }
+  .howto-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .howto-list li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 12.5px;
+    color: var(--text2);
+    line-height: 1.55;
+  }
+  .howto-list li .bullet {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 700;
+    color: #000;
+    margin-top: 1px;
+  }
+  .howto-list li b { color: var(--text); }
+  .howto-list li code {
+    font-family: var(--mono);
+    font-size: 11px;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    padding: 1px 5px;
+    color: var(--accent3);
+  }
 </style>
 </head>
 <body>
@@ -326,6 +414,72 @@
     </div>
     <div class="header-badge">CLASS XI · MOTION IN A STRAIGHT LINE</div>
   </header>
+
+  <!-- ── How-To Instructions ────────────────────────────── -->
+  <div class="howto-panel">
+    <button class="howto-toggle" id="howtoToggle" onclick="this.classList.toggle('open');document.getElementById('howtoBody').classList.toggle('open')">
+      <span>📖 &nbsp;How to Use This Tool</span>
+      <span class="arrow">▼</span>
+    </button>
+    <div class="howto-body" id="howtoBody">
+
+      <div class="howto-section">
+        <div class="howto-section-title" style="color:#ff6b6b">Step 1 — Draw the Acceleration Curve</div>
+        <ul class="howto-list">
+          <li><span class="bullet" style="background:#ff6b6b">1</span><span><b>Click and drag</b> on the <b>Acceleration graph</b> (top-left) to draw a straight-line segment. The x-axis is time (s) and the y-axis is acceleration (m/s²).</span></li>
+          <li><span class="bullet" style="background:#ff6b6b">2</span><span>Both axes snap to <b>integer values only</b> — time snaps to whole seconds, acceleration snaps to whole m/s².</span></li>
+          <li><span class="bullet" style="background:#ff6b6b">3</span><span><b>Draw multiple segments</b> end-to-end to build a piecewise linear acceleration profile. Each new segment connects to the previous one.</span></li>
+          <li><span class="bullet" style="background:#ff6b6b">4</span><span>Use the <code>LOAD EXAMPLE</code> button to see a pre-built multi-segment profile.</span></li>
+          <li><span class="bullet" style="background:#ff6b6b">5</span><span>Use <code>CLEAR</code> to erase everything and start over.</span></li>
+        </ul>
+      </div>
+
+      <div class="howto-section">
+        <div class="howto-section-title" style="color:#ffd166">Step 2 — Configure Axes &amp; Initial Conditions</div>
+        <ul class="howto-list">
+          <li><span class="bullet" style="background:#ffd166">1</span><span>Set <b>T max</b> (5 s / 10 s / 20 s) to control how long the time axis is before drawing.</span></li>
+          <li><span class="bullet" style="background:#ffd166">2</span><span>Set <b>a range</b> (±5, ±10, ±20 m/s²) to control the vertical scale of the acceleration graph.</span></li>
+          <li><span class="bullet" style="background:#ffd166">3</span><span>Enter <b>v₀</b> — the initial velocity at t = 0. Default is 0 m/s. Changing it instantly recomputes all graphs.</span></li>
+        </ul>
+      </div>
+
+      <div class="howto-section">
+        <div class="howto-section-title" style="color:#4fffb0">Step 3 — Integrate to Get Velocity &amp; Displacement</div>
+        <ul class="howto-list">
+          <li><span class="bullet" style="background:#4fffb0">1</span><span>Click <code>INTEGRATE →</code> (or just finish drawing — it auto-integrates). The <b>Velocity graph</b> is computed via <b>v(t) = v₀ + ∫a dt</b>.</span></li>
+          <li><span class="bullet" style="background:#4fffb0">2</span><span>The <b>Displacement graph</b> is then computed via <b>x(t) = ∫v dt</b> with x₀ = 0.</span></li>
+          <li><span class="bullet" style="background:#4fffb0">3</span><span>All three graphs share the <b>same time axis</b>, so you can read off corresponding values at any moment.</span></li>
+        </ul>
+      </div>
+
+      <div class="howto-section">
+        <div class="howto-section-title" style="color:#a78bfa">Step 4 — Read the Section Analysis</div>
+        <ul class="howto-list">
+          <li><span class="bullet" style="background:#a78bfa">1</span><span>After integrating, the graphs are divided into <b>colour-coded sections</b> (S1, S2, S3…). Each section spans between two consecutive time points you chose.</span></li>
+          <li><span class="bullet" style="background:#a78bfa">2</span><span>A <b>Section-by-Section Analysis</b> panel appears below the graphs. Click each section tab (S1, S2…) to see its breakdown.</span></li>
+          <li><span class="bullet" style="background:#a78bfa">3</span><span>Each section shows three rows:<br>
+            &nbsp;&nbsp;• <b style="color:#ff6b6b">Acceleration</b> — what the acceleration is doing (constant, increasing, decreasing, crossing zero).<br>
+            &nbsp;&nbsp;• <b style="color:#4fffb0">Velocity</b> — how velocity responds (linear rise/fall, curve, local max/min at zero-crossing).<br>
+            &nbsp;&nbsp;• <b style="color:#a78bfa">Displacement</b> — how position changes (linear, concave up/down, local max/min where v = 0).
+          </span></li>
+          <li><span class="bullet" style="background:#a78bfa">4</span><span>The <b>Δv</b> and <b>Δx</b> badges show the net change in velocity and displacement over each section.</span></li>
+        </ul>
+      </div>
+
+      <div class="howto-section">
+        <div class="howto-section-title" style="color:var(--text3)">Key Physics Reminders</div>
+        <ul class="howto-list">
+          <li><span class="bullet" style="background:var(--text3)">→</span><span>Where <b>a = constant &gt; 0</b>: velocity rises linearly (straight line with positive slope).</span></li>
+          <li><span class="bullet" style="background:var(--text3)">→</span><span>Where <b>a is increasing</b>: velocity curve bends <b>upward</b> (concave up, slope grows).</span></li>
+          <li><span class="bullet" style="background:var(--text3)">→</span><span>Where <b>a crosses zero (+ → −)</b>: velocity has a <b>local maximum</b> at that exact time.</span></li>
+          <li><span class="bullet" style="background:var(--text3)">→</span><span>Where <b>a crosses zero (− → +)</b>: velocity has a <b>local minimum</b> at that exact time.</span></li>
+          <li><span class="bullet" style="background:var(--text3)">→</span><span>Where <b>v crosses zero (+ → −)</b>: displacement has a <b>local maximum</b> at that time.</span></li>
+          <li><span class="bullet" style="background:var(--text3)">→</span><span>Where <b>v = constant</b>: displacement increases <b>linearly</b> (straight line).</span></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
 
 <!--  <div class="formula-bar">
     <div class="formula-pill">
