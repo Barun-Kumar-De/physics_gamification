@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Velocity &amp; Acceleration — Interactive Problem</title>
+<link rel="stylesheet" href="velocity_acceleration_01.css">
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════
+     SCREEN 1 — Multiple Choice Question
+═════════════════════════════════════════════════════════ -->
+<div id="screen1" class="screen active">
+  <div class="screen-header">
+    <span class="screen-num">SCREEN 1</span>&ensp;—&ensp;Multiple Choice Question
+  </div>
+  <div class="content">
+
+    <div class="question-card">
+      <div class="q-icon">?</div>
+      <div>
+        <p class="q-body">
+          Velocity of a particle at t&nbsp;=&nbsp;0&nbsp;s is <strong>−8&nbsp;m/s</strong>,
+          initial acceleration at t&nbsp;=&nbsp;0&nbsp;s is <strong>−6&nbsp;m/s²</strong>.
+          Acceleration changes uniformly; final acceleration at t&nbsp;=&nbsp;10&nbsp;s is
+          <strong>−1&nbsp;m/s²</strong>.
+        </p>
+        <p class="q-ask">The magnitude of velocity of the particle from t&nbsp;=&nbsp;0&nbsp;s to t&nbsp;=&nbsp;10&nbsp;s:</p>
+      </div>
+    </div>
+
+    <div class="options-list">
+      <div class="option-card" id="opt1" onclick="selectOption(1)">
+        <span class="radio-outer"><span class="radio-inner"></span></span>
+        <span class="opt-text">1.&nbsp;&nbsp;Continuously increases</span>
+      </div>
+      <div class="option-card" id="opt2" onclick="selectOption(2)">
+        <span class="radio-outer"><span class="radio-inner"></span></span>
+        <span class="opt-text">2.&nbsp;&nbsp;Continuously decreases</span>
+      </div>
+      <div class="option-card" id="opt3" onclick="selectOption(3)">
+        <span class="radio-outer"><span class="radio-inner"></span></span>
+        <span class="opt-text">3.&nbsp;&nbsp;First increases then decreases</span>
+      </div>
+      <div class="option-card" id="opt4" onclick="selectOption(4)">
+        <span class="radio-outer"><span class="radio-inner"></span></span>
+        <span class="opt-text">4.&nbsp;&nbsp;First decreases then increases</span>
+      </div>
+    </div>
+
+    <p class="error-msg" id="errMsg"></p>
+    <div class="btn-row">
+      <button class="btn-primary" onclick="submitAnswer()">SUBMIT ANSWER</button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════
+     SCREEN 2 — Answer Feedback
+═════════════════════════════════════════════════════════ -->
+<div id="screen2" class="screen">
+  <div class="screen-header">
+    <span class="screen-num">SCREEN 2</span>&ensp;—&ensp;Answer Feedback
+  </div>
+  <div class="content">
+
+    <div class="feedback-row">
+      <!-- Shown when correct -->
+      <div id="cardCorrect" class="feedback-card correct-card" style="display:none">
+        <div class="fb-icon icon-correct">&#10003;</div>
+        <div class="fb-title correct-color">Correct!</div>
+        <div class="fb-option">Option 1 &mdash; Continuously increases</div>
+        <div class="fb-sub">You selected the right answer.</div>
+      </div>
+      <!-- Shown when incorrect -->
+      <div id="cardIncorrect" class="feedback-card incorrect-card" style="display:none">
+        <div class="fb-icon icon-incorrect">&#10007;</div>
+        <div class="fb-title incorrect-color">Incorrect</div>
+        <div class="fb-option" id="selectedOptText"></div>
+        <div class="fb-sub">The correct answer is Option 1.</div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-primary" onclick="goToExplanation()">VIEW EXPLANATION &rarr;</button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════
+     SCREEN 3 — Explanation & Graphs
+═════════════════════════════════════════════════════════ -->
+<div id="screen3" class="screen">
+  <div class="screen-header">
+    <span class="screen-num">SCREEN 3</span>&ensp;—&ensp;Explanation &amp; Graphs
+  </div>
+  <div class="content">
+
+    <div class="explanation-card">
+      <p>
+        <span class="expl-label">Explanation:&nbsp;</span>
+        The <strong>magnitude of velocity</strong> (speed) increases when velocity and
+        acceleration have the <strong>same sign</strong>. Here v₀&nbsp;=&nbsp;−8&nbsp;m/s
+        (negative) and acceleration is also <strong>negative throughout</strong>
+        (−6 to −1&nbsp;m/s²). Since both share the same sign, the particle keeps
+        speeding up. Hence the magnitude of velocity <strong>continuously increases</strong>
+        from 8&nbsp;m/s to 43&nbsp;m/s over the 10-second interval.
+      </p>
+    </div>
+
+    <div class="graphs-row">
+      <div class="graph-box">
+        <canvas id="atCanvas1"></canvas>
+      </div>
+      <div class="graph-box">
+        <canvas id="vtCanvas1"></canvas>
+      </div>
+    </div>
+
+    <div class="explore-card">
+      <div>
+        <div class="explore-title">Want to explore with different values?</div>
+        <div class="explore-sub">Try your own initial velocity, initial acceleration, and final acceleration.</div>
+      </div>
+      <button class="btn-teal" onclick="showScreen(4)">TRY IT &rarr;</button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════
+     SCREEN 4 — Custom Input
+═════════════════════════════════════════════════════════ -->
+<div id="screen4" class="screen">
+  <div class="screen-header">
+    <span class="screen-num">SCREEN 4</span>&ensp;—&ensp;Custom Input
+  </div>
+  <div class="content content-center">
+
+    <div class="keyboard-icon">&#9000;</div>
+    <h2 class="input-title">Enter Your Values</h2>
+
+    <div class="input-form">
+      <div class="input-group">
+        <label class="input-label">Velocity at t = 0 s &nbsp;(m/s)</label>
+        <input type="number" id="inV0" class="text-input" placeholder="e.g.  −8" step="0.1">
+      </div>
+      <div class="input-group">
+        <label class="input-label">Acceleration at t = 0 s &nbsp;(m/s²)</label>
+        <input type="number" id="inA0" class="text-input" placeholder="e.g.  −6" step="0.1">
+      </div>
+      <div class="input-group">
+        <label class="input-label">Acceleration at t = 10 s &nbsp;(m/s²)</label>
+        <input type="number" id="inAf" class="text-input" placeholder="e.g.  −1" step="0.1">
+      </div>
+    </div>
+
+    <p class="error-msg" id="customErr"></p>
+    <div class="btn-row">
+      <button class="btn-teal" onclick="generateCustomGraphs()">GENERATE GRAPHS</button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════
+     SCREEN 5 — Results for Custom Values
+═════════════════════════════════════════════════════════ -->
+<div id="screen5" class="screen">
+  <div class="screen-header">
+    <span class="screen-num">SCREEN 5</span>&ensp;—&ensp;Results for Custom Values
+  </div>
+  <div class="content">
+
+    <div class="values-summary" id="valuesSummary"></div>
+
+    <div class="graphs-row">
+      <div class="graph-box">
+        <canvas id="atCanvas2"></canvas>
+      </div>
+      <div class="graph-box">
+        <canvas id="vtCanvas2"></canvas>
+      </div>
+    </div>
+
+    <div class="graph-box" style="margin-bottom:20px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <span style="font-size:12px;font-weight:700;color:#555;letter-spacing:0.2px">Particle Motion — 1D Timeline</span>
+        <div style="display:flex;gap:8px">
+          <button id="animPlayBtn" onclick="toggleAnim()" style="padding:5px 16px;border-radius:4px;border:1.5px solid #1a2456;background:transparent;color:#1a2456;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">&#9654;&ensp;Play</button>
+          <button onclick="resetAnim()" style="padding:5px 14px;border-radius:4px;border:1.5px solid #aaa;background:transparent;color:#666;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">&#8635;&ensp;Reset</button>
+        </div>
+      </div>
+      <canvas id="particleCanvas"></canvas>
+    </div>
+
+    <div class="observation-card">
+      <div class="obs-icon">&#128200;</div>
+      <div>
+        <span class="obs-label">Observation: </span>
+        <span id="obsText"></span>
+      </div>
+    </div>
+
+    <div class="btn-row" style="margin-top:28px">
+      <button class="btn-outline" onclick="showScreen(4)">&larr; Try Different Values</button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════
+     JAVASCRIPT
+═════════════════════════════════════════════════════════ -->
+<script>
+// ── STATE ─────────────────────────────────────────────────
+let selectedOption = null;
+
+const OPT_LABELS = {
+  1: 'Continuously increases',
+  2: 'Continuously decreases',
+  3: 'First increases then decreases',
+  4: 'First decreases then increases'
+};
+
+// ── NAVIGATION ────────────────────────────────────────────
+function showScreen(n) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen' + n).classList.add('active');
+}
+
+function goToExplanation() {
+  showScreen(3);
+  // Draw after the screen is visible
+  setTimeout(drawExplanationGraphs, 30);
+}
+
+function restartQuiz() {
+  selectedOption = null;
+  [1, 2, 3, 4].forEach(i => {
+    document.getElementById('opt' + i).classList.remove('selected');
+  });
+  document.getElementById('errMsg').textContent = '';
+  showScreen(1);
+}
+
+// ── MCQ LOGIC ─────────────────────────────────────────────
+function selectOption(n) {
+  selectedOption = n;
+  [1, 2, 3, 4].forEach(i => {
+    document.getElementById('opt' + i).classList.toggle('selected', i === n);
+  });
+  document.getElementById('errMsg').textContent = '';
+}
+
+function submitAnswer() {
+  if (!selectedOption) {
+    document.getElementById('errMsg').textContent = 'Please select an option before submitting.';
+    return;
+  }
+
+  if (selectedOption === 1) {
+    document.getElementById('cardCorrect').style.display  = 'block';
+    document.getElementById('cardIncorrect').style.display = 'none';
+  } else {
+    document.getElementById('cardIncorrect').style.display = 'block';
+    document.getElementById('cardCorrect').style.display   = 'none';
+    document.getElementById('selectedOptText').textContent =
+      `You selected Option ${selectedOption} — ${OPT_LABELS[selectedOption]}`;
+  }
+
+  showScreen(2);
+}
+
+// ── PHYSICS ───────────────────────────────────────────────
+// Acceleration varies linearly: a(t) = a0 + (af−a0)/T · t
+// Velocity by integration:     v(t) = v0 + a0·t + (af−a0)/(2T)·t²
+function computeMotion(v0, a0, af, T = 10) {
+  const tArr = [], aArr = [], vArr = [];
+  for (let i = 0; i <= 10; i++) {
+    const t = i;
+    aArr.push(a0 + (af - a0) / T * t);
+    vArr.push(v0 + a0 * t + (af - a0) / (2 * T) * t * t);
+    tArr.push(t);
+  }
+  return { tArr, aArr, vArr };
+}
+
+// ── GRAPH DRAWING ─────────────────────────────────────────
+function niceStep(approx) {
+  if (!isFinite(approx) || approx <= 0) return 1;
+  const mag = Math.pow(10, Math.floor(Math.log10(approx)));
+  const n = approx / mag;
+  return n < 1.5 ? mag : n < 3.5 ? 2 * mag : n < 7.5 ? 5 * mag : 10 * mag;
+}
+
+function fmt(n) {
+  // Show one decimal if the value would be x.0, otherwise two decimals
+  return Number.isInteger(n) || Math.abs(n - Math.round(n)) < 1e-9
+    ? n.toFixed(1)
+    : parseFloat(n.toFixed(2)).toString();
+}
+
+function drawGraph(canvas, tArr, yArr, opts) {
+  // Sync internal resolution to CSS layout size
+  const box = canvas.parentElement;
+  canvas.width  = box.clientWidth  - 28;   // 14px padding each side
+  canvas.height = 300;
+
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const pad = { l: 62, r: 18, t: 36, b: 50 };
+  const pw = W - pad.l - pad.r;
+  const ph = H - pad.t - pad.b;
+
+  // Auto-scale Y
+  let yMin = Math.min(...yArr), yMax = Math.max(...yArr);
+  const span = yMax - yMin;
+  const yPad = Math.max(span * 0.13, 0.8);
+  yMin -= yPad; yMax += yPad;
+
+  const tx = t  => pad.l + (t  / 10)                   * pw;
+  const ty = y  => pad.t + (1 - (y - yMin) / (yMax - yMin)) * ph;
+
+  // White background
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, W, H);
+
+  // ── Title ──
+  ctx.fillStyle = '#333';
+  ctx.font = 'bold 12.5px "Segoe UI", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(opts.title, W / 2, 22);
+
+  // ── Y-axis ticks & horizontal grid ──
+  const yStep = niceStep(Math.abs(yMax - yMin) / 5.5);
+  const yFirst = Math.ceil(yMin / yStep - 1e-9) * yStep;
+
+  ctx.font = '10.5px "Segoe UI", sans-serif';
+  for (let y = yFirst; y <= yMax + 1e-9; y += yStep) {
+    if (y < yMin - 1e-9) continue;
+    const py = ty(y);
+
+    // Grid line
+    ctx.strokeStyle = '#ebebeb';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(pad.l, py); ctx.lineTo(pad.l + pw, py); ctx.stroke();
+
+    // Label
+    ctx.fillStyle = '#888';
+    ctx.textAlign = 'right';
+    ctx.fillText(fmt(y), pad.l - 6, py + 3.5);
+  }
+
+  // ── X-axis ticks & vertical grid ──
+  ctx.textAlign = 'center';
+  for (let t = 0; t <= 10; t += 2) {
+    const px = tx(t);
+    ctx.strokeStyle = '#ebebeb';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(px, pad.t); ctx.lineTo(px, pad.t + ph); ctx.stroke();
+    ctx.fillStyle = '#888';
+    ctx.font = '10.5px "Segoe UI", sans-serif';
+    ctx.fillText(t, px, pad.t + ph + 16);
+  }
+
+  // ── Border axes ──
+  ctx.strokeStyle = '#c0c0c0';
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(pad.l, pad.t);
+  ctx.lineTo(pad.l, pad.t + ph);
+  ctx.lineTo(pad.l + pw, pad.t + ph);
+  ctx.stroke();
+
+  // ── Zero line (if in range) ──
+  if (yMin < 0 && yMax > 0) {
+    ctx.strokeStyle = '#bbb';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([5, 4]);
+    ctx.beginPath(); ctx.moveTo(pad.l, ty(0)); ctx.lineTo(pad.l + pw, ty(0)); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // ── Data line ──
+  ctx.strokeStyle = opts.color;
+  ctx.lineWidth = 2.2;
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  tArr.forEach((t, i) => {
+    const px = tx(t), py = ty(yArr[i]);
+    i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+  });
+  ctx.stroke();
+
+  // ── Data dots ──
+  ctx.fillStyle = opts.color;
+  tArr.forEach((t, i) => {
+    ctx.beginPath();
+    ctx.arc(tx(t), ty(yArr[i]), 4.5, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  // ── Axis labels ──
+  ctx.fillStyle = '#555';
+  ctx.font = '11px "Segoe UI", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Time (s)', pad.l + pw / 2, H - 6);
+
+  ctx.save();
+  ctx.translate(13, pad.t + ph / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText(opts.yLabel, 0, 0);
+  ctx.restore();
+}
+
+// ── SCREEN 3 GRAPHS ───────────────────────────────────────
+function drawExplanationGraphs() {
+  const { tArr, aArr, vArr } = computeMotion(-8, -6, -1);
+  drawGraph(document.getElementById('atCanvas1'), tArr, aArr, {
+    title:  'Acceleration vs Time',
+    yLabel: 'Acceleration (m/s²)',
+    color:  '#2d9e75'
+  });
+  drawGraph(document.getElementById('vtCanvas1'), tArr, vArr.map(Math.abs), {
+    title:  '|v| vs Time',
+    yLabel: 'Speed  |v|  (m/s)',
+    color:  '#6b7db3'
+  });
+}
+
+// ── SCREEN 4 → 5 ──────────────────────────────────────────
+function generateCustomGraphs() {
+  const v0 = parseFloat(document.getElementById('inV0').value);
+  const a0 = parseFloat(document.getElementById('inA0').value);
+  const af = parseFloat(document.getElementById('inAf').value);
+
+  if (isNaN(v0) || isNaN(a0) || isNaN(af)) {
+    document.getElementById('customErr').textContent =
+      'Please enter valid numbers in all three fields.';
+    return;
+  }
+  document.getElementById('customErr').textContent = '';
+
+  // Values banner
+  document.getElementById('valuesSummary').innerHTML =
+    `v₀ = <b>${v0}</b> m/s &nbsp;&nbsp;|&nbsp;&nbsp; ` +
+    `a₀ = <b>${a0}</b> m/s² &nbsp;&nbsp;|&nbsp;&nbsp; ` +
+    `a₁₀ = <b>${af}</b> m/s²`;
+
+  showScreen(5);
+
+  setTimeout(() => {
+    const { tArr, aArr, vArr } = computeMotion(v0, a0, af);
+
+    drawGraph(document.getElementById('atCanvas2'), tArr, aArr, {
+      title:  'Acceleration vs Time (Custom)',
+      yLabel: 'Acceleration (m/s²)',
+      color:  '#2d9e75'
+    });
+    drawGraph(document.getElementById('vtCanvas2'), tArr, vArr.map(Math.abs), {
+      title:  '|v| vs Time (Custom)',
+      yLabel: 'Speed  |v|  (m/s)',
+      color:  '#6b7db3'
+    });
+
+    initAnim(v0, a0, af);
+
+    document.getElementById('obsText').textContent =
+      buildObservation(v0, a0, af, vArr);
+  }, 30);
+}
+
+// ── OBSERVATION TEXT ──────────────────────────────────────
+function buildObservation(v0, a0, af, vArr) {
+  const spdArr = vArr.map(Math.abs);
+
+  // Determine magnitude-of-velocity trend
+  let isMonoInc = true, isMonoDec = true;
+  for (let i = 1; i < spdArr.length; i++) {
+    if (spdArr[i] < spdArr[i - 1] - 1e-9) isMonoInc = false;
+    if (spdArr[i] > spdArr[i - 1] + 1e-9) isMonoDec = false;
+  }
+
+  let trend;
+  if (isMonoInc) {
+    trend = 'the magnitude of velocity continuously increases over the 10-second interval';
+  } else if (isMonoDec) {
+    trend = 'the magnitude of velocity continuously decreases over the 10-second interval';
+  } else {
+    // Find turning point (minimum speed)
+    const tpIdx = spdArr.reduce((best, s, i) => (s < spdArr[best] ? i : best), 0);
+    const firstDir = spdArr[1] >= spdArr[0] ? 'increases' : 'decreases';
+    const secondDir = firstDir === 'increases' ? 'decreases' : 'increases';
+    trend = `the magnitude of velocity first ${firstDir} then ${secondDir}` +
+            ` (turning point near t ≈ ${tpIdx} s)`;
+  }
+
+  // Sign analysis
+  const aChangesSign = (a0 > 0) !== (af > 0) && a0 !== 0 && af !== 0;
+  const sameSign = (v0 > 0) === (a0 > 0) && v0 !== 0 && a0 !== 0;
+
+  let signNote = '';
+  if (sameSign)
+    signNote = ' Since v₀ and a₀ share the same sign, the particle speeds up initially.';
+  else if (!sameSign && v0 !== 0 && a0 !== 0)
+    signNote = ' Since v₀ and a₀ have opposite signs, the particle initially slows down (|v| decreases).';
+  if (aChangesSign)
+    signNote += ' Acceleration changes sign during the interval, causing a change in the direction of velocity.';
+
+  const coeff = ((af - a0) / 20).toFixed(4).replace(/\.?0+$/, '');
+  return `Acceleration varies linearly from ${a0} m/s² to ${af} m/s² over 10 s. ` +
+         `|v(t)| = |${v0} + ${a0}t + ${coeff}t²|. ` +
+         `For these inputs, ${trend}.${signNote}`;
+}
+
+// ── PARTICLE ANIMATION (Screen 5) ────────────────────────
+const anim = { playing: false, startWall: null, curT: 0,
+               v0: 0, a0: 0, af: 0, xMin: 0, xMax: 0, frameId: null };
+
+function xAtT(t, v0, a0, af) {
+  return v0 * t + 0.5 * a0 * t * t + (af - a0) / 60 * t * t * t;
+}
+function vAtT(t, v0, a0, af) {
+  return v0 + a0 * t + (af - a0) / 20 * t * t;
+}
+
+function initAnim(v0, a0, af) {
+  if (anim.frameId) { cancelAnimationFrame(anim.frameId); anim.frameId = null; }
+  anim.playing = false; anim.curT = 0;
+  anim.v0 = v0; anim.a0 = a0; anim.af = af;
+  const xs = [];
+  for (let i = 0; i <= 200; i++) xs.push(xAtT(i / 20, v0, a0, af));
+  anim.xMin = Math.min(0, ...xs);
+  anim.xMax = Math.max(0, ...xs);
+  setPlayBtn(false);
+  drawAnim();
+}
+
+function toggleAnim() {
+  if (anim.playing) {
+    cancelAnimationFrame(anim.frameId);
+    anim.frameId = null;
+    anim.playing = false;
+  } else {
+    if (anim.curT >= 10) anim.curT = 0;
+    anim.startWall = performance.now() - anim.curT * 1000;
+    anim.playing = true;
+    animLoop();
+  }
+  setPlayBtn(anim.playing);
+}
+
+function resetAnim() {
+  if (anim.frameId) { cancelAnimationFrame(anim.frameId); anim.frameId = null; }
+  anim.playing = false; anim.curT = 0;
+  setPlayBtn(false);
+  drawAnim();
+}
+
+function setPlayBtn(playing) {
+  const btn = document.getElementById('animPlayBtn');
+  if (btn) btn.innerHTML = playing ? '&#9646;&#9646;&ensp;Pause' : '&#9654;&ensp;Play';
+}
+
+function animLoop() {
+  if (!anim.playing) return;
+  anim.curT = Math.min((performance.now() - anim.startWall) / 1000, 10);
+  drawAnim();
+  if (anim.curT < 10) {
+    anim.frameId = requestAnimationFrame(animLoop);
+  } else {
+    anim.playing = false; anim.frameId = null;
+    setPlayBtn(false);
+  }
+}
+
+function drawAnim() {
+  const canvas = document.getElementById('particleCanvas');
+  if (!canvas) return;
+
+  const box = canvas.parentElement;
+  canvas.width  = box.clientWidth - 28;
+  canvas.height = 155;
+
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const { v0, a0, af, curT, xMin, xMax } = anim;
+
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, W, H);
+
+  // ── Layout constants ──
+  const infoH = 68;        // height of info panel
+  const lineY  = infoH + 42; // y of the number line
+  const lPad   = 60, rPad = 44;
+  const lw     = W - lPad - rPad;
+
+  const xSpan  = Math.max(xMax - xMin, 0.1);
+  const xPadV  = xSpan * 0.12;
+  const xLo = xMin - xPadV, xHi = xMax + xPadV;
+  const toP = x => lPad + (x - xLo) / (xHi - xLo) * lw;
+
+  // ── Info panel background ──
+  ctx.fillStyle = '#f7f8fc';
+  ctx.fillRect(0, 0, W, infoH);
+  ctx.strokeStyle = '#e4e8f0';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(0, infoH); ctx.lineTo(W, infoH); ctx.stroke();
+
+  // Time progress bar
+  const barL = lPad, barW = lw, barY = 14, barH = 6;
+  ctx.fillStyle = '#dde2f0';
+  ctx.beginPath();
+  ctx.roundRect(barL, barY, barW, barH, 3);
+  ctx.fill();
+  ctx.fillStyle = '#4a5fa3';
+  ctx.beginPath();
+  ctx.roundRect(barL, barY, barW * (curT / 10), barH, 3);
+  ctx.fill();
+
+  ctx.fillStyle = '#555';
+  ctx.font = '10.5px "Segoe UI", sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('0 s', barL, barY - 3);
+  ctx.textAlign = 'right';
+  ctx.fillText('10 s', barL + barW, barY - 3);
+
+  // t label centred
+  ctx.fillStyle = '#333';
+  ctx.font = 'bold 12px "Segoe UI", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('t = ' + curT.toFixed(1) + ' s', W / 2, barY + barH + 16);
+
+  // Current x
+  const curX = xAtT(curT, v0, a0, af);
+  const curV = vAtT(curT, v0, a0, af);
+  const speed = Math.max(Math.abs(vAtT(0, v0, a0, af)), Math.abs(vAtT(10, v0, a0, af)));
+  const THRESH = Math.max(speed * 0.015, 0.01);
+
+  ctx.fillStyle = '#4a5fa3';
+  ctx.font = '12px "Segoe UI", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('x = ' + fmt(curX) + ' m', W / 2, barY + barH + 32);
+
+  // Direction label
+  const isPos = curV >  THRESH;
+  const isNeg = curV < -THRESH;
+  const dirText  = isPos ? '→ moving in positive direction'
+                 : isNeg ? '← moving in negative direction'
+                 :         '● momentarily at rest';
+  ctx.fillStyle  = isPos ? '#27ae60' : isNeg ? '#e74c3c' : '#888';
+  ctx.font = 'bold 11.5px "Segoe UI", sans-serif';
+  ctx.fillText(dirText, W / 2, barY + barH + 48);
+
+  // ── Number line ──
+  ctx.strokeStyle = '#c8c8c8';
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(lPad, lineY); ctx.lineTo(lPad + lw, lineY); ctx.stroke();
+
+  // Arrowhead on right
+  ctx.fillStyle = '#bbb';
+  ctx.beginPath();
+  ctx.moveTo(lPad + lw + 10, lineY);
+  ctx.lineTo(lPad + lw + 2, lineY - 5);
+  ctx.lineTo(lPad + lw + 2, lineY + 5);
+  ctx.fill();
+
+  // Axis label
+  ctx.fillStyle = '#aaa';
+  ctx.font = '10px "Segoe UI", sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('x (m)', lPad + lw + 14, lineY + 4);
+
+  // Ticks & labels
+  const step = niceStep(xSpan / 5);
+  const first = Math.ceil(xLo / step - 1e-9) * step;
+  ctx.font = '10px "Segoe UI", sans-serif';
+  ctx.textAlign = 'center';
+  for (let x = first; x <= xHi + 1e-9; x += step) {
+    const px = toP(x);
+    if (px < lPad - 2 || px > lPad + lw + 2) continue;
+    ctx.strokeStyle = '#e0e0e0';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(px, lineY - 5); ctx.lineTo(px, lineY + 5); ctx.stroke();
+    ctx.fillStyle = '#aaa';
+    ctx.fillText(fmt(x), px, lineY + 17);
+  }
+
+  // Origin (O) marker
+  const p0 = toP(0);
+  ctx.strokeStyle = '#bbb';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(p0, lineY - 9); ctx.lineTo(p0, lineY + 9); ctx.stroke();
+  ctx.fillStyle = '#aaa';
+  ctx.font = 'bold 9.5px "Segoe UI", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('O', p0, lineY - 13);
+
+  // Ghost particle at origin
+  ctx.fillStyle = 'rgba(107,125,179,0.15)';
+  ctx.beginPath(); ctx.arc(p0, lineY, 9, 0, Math.PI * 2); ctx.fill();
+
+  // ── Particle ──
+  const px = toP(curX);
+
+  // Glow
+  ctx.fillStyle = 'rgba(74,95,163,0.12)';
+  ctx.beginPath(); ctx.arc(px, lineY, 17, 0, Math.PI * 2); ctx.fill();
+
+  // Body
+  ctx.fillStyle = '#4a5fa3';
+  ctx.beginPath(); ctx.arc(px, lineY, 10, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.arc(px, lineY, 10, 0, Math.PI * 2); ctx.stroke();
+
+  // Velocity arrow
+  if (isPos || isNeg) {
+    const dir = isPos ? 1 : -1;
+    const arrowColor = isPos ? '#27ae60' : '#e74c3c';
+    const tailX = px + dir * 12;
+    const headX = px + dir * 26;
+    ctx.strokeStyle = arrowColor;
+    ctx.lineWidth = 2.2;
+    ctx.beginPath(); ctx.moveTo(tailX, lineY); ctx.lineTo(headX - dir * 6, lineY); ctx.stroke();
+    ctx.fillStyle = arrowColor;
+    ctx.beginPath();
+    ctx.moveTo(headX, lineY);
+    ctx.lineTo(headX - dir * 7, lineY - 5);
+    ctx.lineTo(headX - dir * 7, lineY + 5);
+    ctx.fill();
+  }
+}
+
+// ── WINDOW RESIZE ─────────────────────────────────────────
+window.addEventListener('resize', () => {
+  const s3 = document.getElementById('screen3');
+  const s5 = document.getElementById('screen5');
+  if (s3.classList.contains('active')) setTimeout(drawExplanationGraphs, 10);
+  if (s5.classList.contains('active')) {
+    const v0 = parseFloat(document.getElementById('inV0').value);
+    const a0 = parseFloat(document.getElementById('inA0').value);
+    const af = parseFloat(document.getElementById('inAf').value);
+    if (!isNaN(v0) && !isNaN(a0) && !isNaN(af)) {
+      const { tArr, aArr, vArr } = computeMotion(v0, a0, af);
+      drawGraph(document.getElementById('atCanvas2'), tArr, aArr,
+        { title: 'Acceleration vs Time (Custom)', yLabel: 'Acceleration (m/s²)', color: '#2d9e75' });
+      drawGraph(document.getElementById('vtCanvas2'), tArr, vArr.map(Math.abs),
+        { title: '|v| vs Time (Custom)', yLabel: 'Speed  |v|  (m/s)', color: '#6b7db3' });
+      drawAnim();
+    }
+  }
+});
+</script>
+
+</body>
+</html>
