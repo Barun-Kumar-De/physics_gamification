@@ -420,6 +420,40 @@ function drawGraph(canvas, tArr, yArr, opts) {
   ctx.rotate(-Math.PI / 2);
   ctx.fillText(opts.yLabel, 0, 0);
   ctx.restore();
+
+  // ── Highlight current time marker ──
+  if (opts.highlightT !== undefined && opts.highlightT !== null) {
+    const ht = Math.max(0, Math.min(10, opts.highlightT));
+    const hx = tx(ht);
+
+    // Interpolate y at ht
+    const i0 = Math.min(Math.floor(ht), yArr.length - 2);
+    const frac = ht - i0;
+    const hyVal = yArr[i0] + frac * (yArr[i0 + 1] - yArr[i0]);
+    const hy = ty(hyVal);
+
+    // Vertical dashed indicator line
+    ctx.save();
+    ctx.strokeStyle = 'rgba(255,140,0,0.8)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 3]);
+    ctx.beginPath(); ctx.moveTo(hx, pad.t); ctx.lineTo(hx, pad.t + ph); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Highlighted dot
+    ctx.fillStyle = '#ff8c00';
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(hx, hy, 6, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+
+    // Value label (flip side based on vertical position)
+    const labelY = hy < pad.t + ph / 2 ? hy + 17 : hy - 9;
+    ctx.fillStyle = '#c86000';
+    ctx.font = 'bold 10.5px "Segoe UI", sans-serif';
+    ctx.textAlign = hx > pad.l + pw * 0.8 ? 'right' : 'center';
+    ctx.fillText(fmt(hyVal), hx, labelY);
+    ctx.restore();
+  }
 }
 
 // ── SCREEN 3 GRAPHS ───────────────────────────────────────
@@ -460,6 +494,10 @@ function generateCustomGraphs() {
 
   setTimeout(() => {
     const { tArr, aArr, vArr } = computeMotion(v0, a0, af);
+
+    customState.tArr = tArr;
+    customState.aArr = aArr;
+    customState.vArr = vArr;
 
     drawGraph(document.getElementById('atCanvas2'), tArr, aArr, {
       title:  'Acceleration vs Time (Custom)',
@@ -525,6 +563,7 @@ function buildObservation(v0, a0, af, vArr) {
 // ── PARTICLE ANIMATION (Screen 5) ────────────────────────
 const anim = { playing: false, startWall: null, curT: 0,
                v0: 0, a0: 0, af: 0, xMin: 0, xMax: 0, frameId: null };
+const customState = { tArr: null, aArr: null, vArr: null };
 
 function xAtT(t, v0, a0, af) {
   return v0 * t + 0.5 * a0 * t * t + (af - a0) / 60 * t * t * t;
@@ -738,6 +777,22 @@ function drawAnim() {
     ctx.lineTo(headX - dir * 7, lineY - 5);
     ctx.lineTo(headX - dir * 7, lineY + 5);
     ctx.fill();
+  }
+
+  // ── Sync highlight on both graphs ──
+  if (customState.tArr) {
+    drawGraph(document.getElementById('atCanvas2'), customState.tArr, customState.aArr, {
+      title:  'Acceleration vs Time (Custom)',
+      yLabel: 'Acceleration (m/s²)',
+      color:  '#2d9e75',
+      highlightT: curT
+    });
+    drawGraph(document.getElementById('vtCanvas2'), customState.tArr, customState.vArr.map(Math.abs), {
+      title:  '|v| vs Time (Custom)',
+      yLabel: 'Speed  |v|  (m/s)',
+      color:  '#6b7db3',
+      highlightT: curT
+    });
   }
 }
 
