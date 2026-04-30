@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projectile Motion — Interactive Learning</title>
+<link rel="stylesheet" href="projectile_motion_01.css">
+</head>
+<body>
+
+<!-- Fixed screen badge -->
+<div id="screenBadge">Screen 1</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCREEN 1 — Hero / Title
+══════════════════════════════════════════════════════════ -->
+<div id="screen1" class="screen active">
+  <div class="hero-screen">
+    <h1 class="hero-main-title">PROJECTILE MOTION</h1>
+    <p class="hero-subtitle">Understanding Horizontal &amp; Vertical Components of Velocity</p>
+    <div class="hero-canvas-box">
+      <canvas id="heroCanvas"></canvas>
+    </div>
+    <p class="hero-desc">
+      Learn how gravity affects only the vertical component of a projectile's velocity,
+      why the trajectory is a parabola, and how angled throws change the path.
+    </p>
+    <button class="btn-start" onclick="goTo(2)">START LEARNING &#9654;</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCREEN 2 — The Scenario
+══════════════════════════════════════════════════════════ -->
+<div id="screen2" class="screen">
+  <div class="pg-header"><h1>The Scenario</h1></div>
+  <div class="pg-body">
+    <div class="two-col">
+      <div class="card scenario-text">
+        <h2>A ball is thrown horizontally from the top of a hill.</h2>
+        <p>As it leaves the thrower's hand, it has:</p>
+        <p>
+          &bull; <span class="bullet-blue">Initial horizontal velocity (Vx)</span><br>
+          &bull; <span class="bullet-orange">Zero initial vertical velocity (Vy&nbsp;=&nbsp;0)</span>
+        </p>
+        <p>Gravity pulls it downward, creating a curved parabolic path to the ground.</p>
+      </div>
+      <div class="scenario-diagram">
+        <canvas id="scenarioCanvas"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="nav-bar right">
+    <button class="btn-next" onclick="goTo(3)">NEXT &#9654;</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCREEN 3 — Horizontal Component (Vx)
+══════════════════════════════════════════════════════════ -->
+<div id="screen3" class="screen">
+  <div class="pg-header"><h1 style="color:var(--blue)">Horizontal Component (Vx)</h1></div>
+  <div class="pg-body">
+    <div class="key-box kb-blue">
+      <div class="kl">Key Concept</div>
+      Gravity acts DOWNWARD (vertical). The horizontal direction is perpendicular (90°) to gravity.
+      <br><strong>Therefore, gravity has NO effect on horizontal velocity. Vx remains constant.</strong>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">Force &amp; Direction Diagram</div>
+        <canvas id="forceCanvas" style="display:block;width:100%;height:260px;"></canvas>
+      </div>
+      <div class="card">
+        <div class="card-title">Horizontal Motion Equations</div>
+        <div class="eq-line">Acceleration (a<sub>x</sub>) = 0</div>
+        <div class="eq-note">(No horizontal force)</div>
+        <span class="eq-blue">Vx = Vx<sub>0</sub> (constant)</span>
+        <div class="eq-line" style="margin-top:8px;">Horizontal Distance:</div>
+        <div style="font-size:22px;font-weight:800;color:var(--navy);margin-top:4px;">x = Vx<sub>0</sub> × t</div>
+      </div>
+    </div>
+  </div>
+  <div class="nav-bar">
+    <button class="btn-back" onclick="goTo(2)">&#9664; BACK</button>
+    <button class="btn-next" onclick="goTo(4)">NEXT &#9654;</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCREEN 4 — Vertical Component (Vy)
+══════════════════════════════════════════════════════════ -->
+<div id="screen4" class="screen">
+  <div class="pg-header"><h1 style="color:var(--orange)">Vertical Component (Vy)</h1></div>
+  <div class="pg-body">
+    <div class="key-box kb-orange">
+      <div class="kl">Key Concept</div>
+      Gravity acts in the SAME direction as the vertical component (both downward).
+      <br><strong>So gravity continuously accelerates the ball downward. Vy increases over time!</strong>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">Vertical Acceleration</div>
+        <div class="vy-chart-wrap">
+          <div class="vy-col">
+            <div class="vy-t">t=0</div>
+            <div class="vy-bar" style="height:3px;"></div>
+            <div class="vy-val">0.0</div>
+          </div>
+          <div class="vy-col">
+            <div class="vy-t">t=1s</div>
+            <div class="vy-bar" style="height:40px;"></div>
+            <div class="vy-val">9.8</div>
+          </div>
+          <div class="vy-col">
+            <div class="vy-t">t=2s</div>
+            <div class="vy-bar" style="height:80px;"></div>
+            <div class="vy-val">19.6</div>
+          </div>
+          <div class="vy-col">
+            <div class="vy-t">t=3s</div>
+            <div class="vy-bar" style="height:120px;"></div>
+            <div class="vy-val">29.4</div>
+          </div>
+        </div>
+        <div class="vy-note"><em>Vy grows each second ↓</em></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Vertical Motion Equations</div>
+        <div class="eq-line">Acceleration (a<sub>y</sub>) = g = 9.8 m/s²</div>
+        <div class="eq-note">(Gravity pulls downward)</div>
+        <span class="eq-orange">Vy = g × t</span>
+        <div class="eq-note">(since initial Vy = 0)</div>
+        <div class="eq-line" style="margin-top:12px;">Height fallen:</div>
+        <div style="font-size:22px;font-weight:800;color:var(--navy);margin-top:4px;">h = ½ × g × t²</div>
+      </div>
+    </div>
+  </div>
+  <div class="nav-bar">
+    <button class="btn-back" onclick="goTo(3)">&#9664; BACK</button>
+    <button class="btn-next" onclick="goTo(5)">NEXT &#9654;</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCREEN 5 — Why is the Path a Parabola? (two-panel)
+══════════════════════════════════════════════════════════ -->
+<div id="screen5" class="screen">
+
+  <!-- ── Panel A: MCQ question ── -->
+  <div id="s5-question">
+    <div class="pg-header">
+      <h1>Think First!</h1>
+      <div class="pg-sub">Answer the question below before we reveal the concept</div>
+    </div>
+    <div class="pg-body">
+      <div class="q-meta">Quick Question</div>
+      <div class="q-block" style="border-color:var(--purple);">
+        <div class="q-text">
+          A ball is thrown horizontally from the top of a hill. What will be the shape of its path as it falls to the ground?
+        </div>
+      </div>
+      <div class="opts">
+        <div class="opt" id="s5A" onclick="selectS5('A')">
+          <div class="opt-badge ob-a">A</div>
+          <div class="opt-txt">Straight line (angled downward)</div>
+          <div class="radio-ring"><div class="radio-fill"></div></div>
+        </div>
+        <div class="opt" id="s5B" onclick="selectS5('B')">
+          <div class="opt-badge ob-b">B</div>
+          <div class="opt-txt">Parabola</div>
+          <div class="radio-ring"><div class="radio-fill"></div></div>
+        </div>
+        <div class="opt" id="s5C" onclick="selectS5('C')">
+          <div class="opt-badge ob-c">C</div>
+          <div class="opt-txt">Depends on the velocity at which the ball is thrown</div>
+          <div class="radio-ring"><div class="radio-fill"></div></div>
+        </div>
+        <div class="opt" id="s5D" onclick="selectS5('D')">
+          <div class="opt-badge ob-d">D</div>
+          <div class="opt-txt">Depends on the height of the hill</div>
+          <div class="radio-ring"><div class="radio-fill"></div></div>
+        </div>
+      </div>
+      <div class="submit-area">
+        <div class="err-msg" id="s5Err"></div>
+        <button class="btn-submit" onclick="submitS5()">SUBMIT ANSWER</button>
+      </div>
+    </div>
+    <div class="nav-bar">
+      <button class="btn-back" onclick="goTo(4)">&#9664; BACK</button>
+    </div>
+  </div>
+
+  <!-- ── Panel B: Result banner + full explanation ── -->
+  <div id="s5-explain" style="display:none;">
+    <div class="pg-header"><h1>Why is the Path a Parabola?</h1></div>
+    <div class="pg-body">
+      <div class="result-banner" id="s5Banner" style="margin-bottom:20px;"></div>
+      <div class="key-box kb-purple">
+        <div class="kl">Key Insight</div>
+        The displacement–time equations for x and y, when combined, yield a quadratic equation —
+        the mathematical definition of a parabola.
+        This is true regardless of the velocity or hill height.
+      </div>
+      <div class="two-col">
+        <!-- Derivation -->
+        <div class="card">
+          <div class="card-title">Deriving the Path Equation</div>
+          <div class="deriv-s1">Step 1: Horizontal displacement</div>
+          <div class="deriv-eq">x(t) = Vx<sub>0</sub> × t &nbsp;&nbsp;(linear in t)<br>
+            <strong>So: t = x / Vx<sub>0</sub></strong>
+          </div>
+          <div class="deriv-s2">Step 2: Vertical displacement</div>
+          <div class="deriv-eq">y(t) = ½ × g × t² &nbsp;&nbsp;(quadratic in t)</div>
+          <div class="deriv-s3">Step 3: Substitute t from Step 1 into Step 2</div>
+          <div style="font-size:18px;font-weight:800;color:var(--navy);margin:10px 0 4px;">
+            y = ½ × g × (x / Vx<sub>0</sub>)²
+          </div>
+          <div style="font-size:17px;font-weight:700;color:var(--purple);margin-bottom:4px;">
+            y = (g / 2Vx<sub>0</sub>²) × x²
+          </div>
+          <div style="font-size:16px;font-weight:800;color:var(--green);margin-top:8px;">
+            This is y = k × x² — a PARABOLA!
+          </div>
+        </div>
+        <!-- Mini graphs -->
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div class="card" style="padding:14px 16px;">
+            <div class="graph-label gl-blue">x(t) is LINEAR</div>
+            <canvas id="xtCanvas" style="display:block;width:100%;height:130px;"></canvas>
+          </div>
+          <div class="card" style="padding:14px 16px;">
+            <div class="graph-label gl-orange">y(t) is QUADRATIC</div>
+            <canvas id="ytCanvas" style="display:block;width:100%;height:130px;"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-bar">
+      <button class="btn-back" onclick="showS5Question()">&#9664; BACK</button>
+      <button class="btn-next" onclick="goTo(6)">NEXT &#9654;</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCREEN 6 — Interactive Simulation (horizontal throw)
+══════════════════════════════════════════════════════════ -->
+<div id="screen6" class="screen">
+  <div class="pg-header">
+    <h1>Interactive Simulation</h1>
+    <div class="pg-sub">Adjust initial horizontal velocity and observe the trajectory</div>
+  </div>
+  <div class="pg-body">
+    <div class="sim-wrap">
+      <!-- Controls -->
+      <div class="sim-ctrl">
+        <div class="ctrl-heading">Controls</div>
+        <div class="ctrl-group">
+          <label class="ctrl-lbl">Initial Horizontal Velocity (Vx<sub>0</sub>)</label>
+          <div class="slider-marks"><span>5</span><span>10</span><span>15</span><span>20 m/s</span></div>
+          <input type="range" id="vxSlider" min="5" max="20" step="1" value="10" oninput="updateSim1()">
+          <div class="vbadge vb-blue" id="vxDisplay">Vx<sub>0</sub> = 10 m/s</div>
+        </div>
+        <div class="ctrl-group">
+          <label class="ctrl-lbl">Height of Hill (h)</label>
+          <div class="slider-marks"><span>20</span><span>35</span><span>50</span><span>65</span><span>80 m</span></div>
+          <input type="range" id="hSlider1" min="20" max="80" step="5" value="45" oninput="updateSim1()">
+          <div class="vbadge vb-orange" id="hDisplay1">h = 45 m</div>
+        </div>
+        <div class="ctrl-heading" style="margin-top:4px;">Live Readouts</div>
+        <div class="live-box">
+          <div id="ro1Time">Time: 0.0 s</div>
+          <div class="ro-blue"  id="ro1Vx">Vx: 10 m/s (constant)</div>
+          <div class="ro-orange" id="ro1Vy">Vy: 0.0 m/s</div>
+          <div class="ro-green"  id="ro1Range">Range: — m</div>
+        </div>
+        <div class="formula-box" id="formulaBox1">y = 0.049 × x² (parabola)</div>
+        <div class="sim-btns">
+          <button class="btn-play"  id="playBtn1"  onclick="toggleSim1()">&#9654; PLAY</button>
+          <button class="btn-reset" onclick="resetSim1()">&#8635; RESET</button>
+        </div>
+      </div>
+      <!-- Canvas -->
+      <div class="sim-canvas-panel">
+        <div class="canvas-lbl">Simulation Canvas</div>
+        <canvas id="sim1Canvas"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="nav-bar">
+    <button class="btn-back" onclick="goTo(5)">&#9664; BACK</button>
+    <button class="btn-next" onclick="goTo(7)">NEXT &#9654;</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCREEN 7 — Test Your Understanding Q1
+══════════════════════════════════════════════════════════ -->
+<div id="screen7" class="screen">
+  <div class="pg-header"><h1>Test Your Understanding</h1></div>
+  <div class="pg-body">
+    <div class="q-meta">Question 1</div>
+    <div class="q-block">
+      <div class="q-text">
+        A ball is thrown horizontally from a hill of height 80 m with an initial horizontal
+        velocity of 15 m/s. What is the horizontal distance from the base of the hill where
+        the ball lands?
+      </div>
+      <div class="q-given">(Take g = 10 m/s²)</div>
+    </div>
+    <div class="opts">
+      <div class="opt" id="q1A" onclick="selectQ1('A')">
+        <div class="opt-badge ob-a">A</div>
+        <div class="opt-txt">45 meters</div>
+        <div class="radio-ring"><div class="radio-fill"></div></div>
+      </div>
+      <div class="opt" id="q1B" onclick="selectQ1('B')">
+        <div class="opt-badge ob-b">B</div>
+        <div class="opt-txt">60 meters</div>
+        <div class="radio-ring"><div class="radio-fill"></div></div>
+      </div>
+      <div class="opt" id="q1C" onclick="selectQ1('C')">
+        <div class="opt-badge ob-c">C</div>
+        <div class="opt-txt">75 meters</div>
+        <div class="radio-ring"><div class="radio-fill"></div></div>
+      </div>
+      <div class="opt" id="q1D" onclick="selectQ1('D')">
+        <div class="opt-badge ob-d">D</div>
+        <div class="opt-txt">120 meters</div>
+        <div class="radio-ring"><div class="radio-fill"></div></div>
+      </div>
+    </div>
+    <div class="submit-area">
+      <div class="err-msg" id="q1Err"></div>
+      <button class="btn-submit" onclick="submitQ1()">SUBMIT ANSWER</button>
+      <div class="hint-txt">Hint: First find time using h = ½ g t², then use x = Vx<sub>0</sub> × t</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCREEN 8 — Result Q1
+══════════════════════════════════════════════════════════ -->
+<div id="screen8" class="screen">
+  <div class="pg-header"><h1>Result — Question 1</h1></div>
+  <div class="pg-body">
+    <div class="result-banner" id="resBanner1"></div>
+    <div class="sol-card" id="solCard1">
+      <h3>SOLUTION BREAKDOWN</h3>
+      <div class="sol-given">Given: h = 80 m,&nbsp; Vx<sub>0</sub> = 15 m/s,&nbsp; g = 10 m/s²</div>
+      <div class="sol-step">Step 1: Find time of flight</div>
+      <div class="sol-eq">h = ½ × g × t²&nbsp; → &nbsp;80 = ½ × 10 × t²&nbsp; → &nbsp;t² = 16&nbsp; → &nbsp;t = 4 seconds</div>
+      <div class="sol-step">Step 2: Find horizontal distance</div>
+      <div class="sol-result">x = Vx<sub>0</sub> × t = 15 × 4 = <strong>60 meters</strong></div>
+      <div class="sol-note">Gravity doesn't affect Vx, so it stays 15 m/s the entire flight!</div>
+    </div>
+    <div class="res-btns">
+      <button class="btn-try" onclick="retryQ1()">&#8635; TRY AGAIN</button>
+      <button class="btn-cont" onclick="goTo(9)">CONTINUE &#9654;</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCREEN 9 — Part 2 Hero: Throw at an Angle
+══════════════════════════════════════════════════════════ -->
+<div id="screen9" class="screen">
+  <div class="hero-screen">
+    <p class="hero-part-title">PART 2: THROW AT AN ANGLE</p>
+    <p class="hero-subtitle">What happens when the ball is thrown at an angle — upward (+θ) or downward (−θ)?</p>
+    <div class="hero-canvas-box">
+      <canvas id="hero2Canvas"></canvas>
+    </div>
+    <button class="btn-start" onclick="goTo(10)">CONTINUE &#9654;</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCREEN 10 — Throwing at an Angle (θ)
+══════════════════════════════════════════════════════════ -->
+<div id="screen10" class="screen">
+  <div class="pg-header"><h1 style="color:var(--purple)">Throwing at an Angle (θ)</h1></div>
+  <div class="pg-body">
+    <div class="key-box kb-purple">
+      <div class="kl">Key Concept</div>
+      When thrown at angle θ with speed V<sub>0</sub>, the velocity has BOTH components from the start:
+      <br>
+      <strong style="color:var(--blue);">Vx<sub>0</sub> = V<sub>0</sub> × cos(θ)</strong>
+      &nbsp;&nbsp;&nbsp;
+      <strong style="color:var(--orange);">Vy<sub>0</sub> = V<sub>0</sub> × sin(θ)</strong>
+    </div>
+    <div class="two-col">
+      <!-- Positive angle -->
+      <div class="card">
+        <div class="ch ch-teal">Positive Angle (+θ): Ball Thrown UP</div>
+        <div style="color:var(--teal);font-weight:700;margin-bottom:8px;">Vy<sub>0</sub> is UPWARD (positive)</div>
+        <div class="eq-line">Ball first rises, slows down, stops momentarily, then falls</div>
+        <div class="eq-line" style="margin-top:8px;">Gravity opposes upward motion:</div>
+        <div style="font-size:17px;font-weight:700;color:var(--teal);margin:8px 0;">
+          Vy = V<sub>0</sub> sin(θ) – g × t
+        </div>
+        <div style="font-weight:700;margin-bottom:8px;">Longer flight time → Greater horizontal range</div>
+        <div class="eq-note">Path: still a parabola, but inverted ∩ shape that goes up first then curves down below hilltop level</div>
+      </div>
+      <!-- Negative angle -->
+      <div class="card">
+        <div class="ch ch-red">Negative Angle (−θ): Ball Thrown DOWN</div>
+        <div style="color:var(--red);font-weight:700;margin-bottom:8px;">Vy<sub>0</sub> is DOWNWARD (negative)</div>
+        <div class="eq-line">Ball immediately goes down and accelerates faster</div>
+        <div class="eq-line" style="margin-top:8px;">Gravity adds to downward motion:</div>
+        <div style="font-size:17px;font-weight:700;color:var(--red);margin:8px 0;">
+          Vy = V<sub>0</sub> sin(θ) + g × t &nbsp;<em style="font-size:13px;">(both downward)</em>
+        </div>
+        <div style="font-weight:700;margin-bottom:8px;">Shorter flight time → Smaller horizontal range</div>
+        <div class="eq-note">Path: steeper parabola curving sharply downward</div>
+      </div>
+    </div>
+  </div>
+  <div class="nav-bar">
+    <button class="btn-back" onclick="goTo(9)">&#9664; BACK</button>
+    <button class="btn-next" onclick="goTo(11)">NEXT &#9654;</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCREEN 11 — Angled Throw: Complete Equations
+══════════════════════════════════════════════════════════ -->
+<div id="screen11" class="screen">
+  <div class="pg-header"><h1>Angled Throw: Complete Equations</h1></div>
+  <div class="pg-body">
+    <div class="key-box kb-purple">
+      <div class="kl">Initial Velocity Components</div>
+      Initial velocity V<sub>0</sub> at angle θ:&nbsp;&nbsp;
+      <strong style="color:var(--blue);">Vx<sub>0</sub> = V<sub>0</sub> cosθ</strong>
+      &nbsp;&nbsp;&nbsp;
+      <strong style="color:var(--orange);">Vy<sub>0</sub> = V<sub>0</sub> sinθ</strong>
+    </div>
+    <div class="two-col">
+      <!-- Horizontal -->
+      <div class="card">
+        <div class="ch ch-blue">Horizontal (unchanged!)</div>
+        <div class="eq-line">a<sub>x</sub> = 0 &nbsp;<span class="eq-note">(still no horizontal force)</span></div>
+        <span class="eq-blue">Vx = V<sub>0</sub> cosθ (constant)</span>
+        <div style="font-size:16px;font-weight:700;color:var(--navy);margin-bottom:8px;">x(t) = V<sub>0</sub> cosθ × t</div>
+        <div class="eq-note">Same principle: gravity is perpendicular, so Vx is unaffected!</div>
+      </div>
+      <!-- Vertical -->
+      <div class="card">
+        <div class="ch ch-orange">Vertical (now has initial Vy!)</div>
+        <div class="eq-line">a<sub>y</sub> = g &nbsp;<span class="eq-note">(gravity still acts)</span></div>
+        <span class="eq-orange">Vy(t) = V<sub>0</sub> sinθ + g × t</span>
+        <div style="font-size:16px;font-weight:700;color:var(--navy);margin-bottom:8px;">y(t) = V<sub>0</sub> sinθ × t + ½ g t²</div>
+        <div class="eq-note">+θ → sinθ &gt; 0 (upward) &nbsp;|&nbsp; −θ → sinθ &lt; 0 (downward)</div>
+      </div>
+    </div>
+    <!-- Path equation box -->
+    <div class="path-box">
+      <div class="pb-lbl">Path Equation (still a parabola!)</div>
+      <div class="pb-eq">y = x × tanθ + (g / 2V<sub>0</sub>²cos²θ) × x²</div>
+      <div class="pb-note">This is y = ax + bx² — still quadratic in x, so the path is ALWAYS a parabola!</div>
+    </div>
+  </div>
+  <div class="nav-bar">
+    <button class="btn-back" onclick="goTo(10)">&#9664; BACK</button>
+    <button class="btn-next" onclick="goTo(12)">NEXT &#9654;</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCREEN 12 — How Angle Changes the Path
+══════════════════════════════════════════════════════════ -->
+<div id="screen12" class="screen">
+  <div class="pg-header"><h1>How Angle Changes the Path</h1></div>
+  <div class="pg-body">
+    <div class="sim-canvas-panel" style="margin-bottom:16px;">
+      <div class="canvas-lbl">Trajectory Comparison (V<sub>0</sub> = 15 m/s, h = 44.1 m)</div>
+      <canvas id="angleCompCanvas" style="display:block;width:100%;height:480px;border-radius:4px;background:#f8fafc;"></canvas>
+    </div>
+    <div class="angle-summary">
+      <strong style="color:var(--purple);">All three paths are parabolas.</strong>
+      Throwing upward (+θ) gives the ball more time in the air → greatest range.
+      Throwing downward (−θ) reduces flight time → shortest range.
+      In all cases, Vx remains constant — only Vy is affected by gravity.
+    </div>
+  </div>
+  <div class="nav-bar">
+    <button class="btn-back" onclick="goTo(11)">&#9664; BACK</button>
+    <button class="btn-next" onclick="goTo(13)">NEXT &#9654;</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCREEN 13 — Simulation: Angled Throw
+══════════════════════════════════════════════════════════ -->
+<div id="screen13" class="screen">
+  <div class="pg-header">
+    <h1>Simulation: Angled Throw</h1>
+    <div class="pg-sub">Change speed and angle to see how the trajectory changes</div>
+  </div>
+  <div class="pg-body">
+    <div class="sim-wrap">
+      <!-- Controls -->
+      <div class="sim-ctrl">
+        <div class="ctrl-heading">Controls</div>
+        <div class="ctrl-group">
+          <label class="ctrl-lbl">Launch Speed (V<sub>0</sub>)</label>
+          <div class="slider-marks"><span>5</span><span>10</span><span>15</span><span>20</span><span>25 m/s</span></div>
+          <input type="range" id="v0Slider" min="5" max="25" step="1" value="20" oninput="updateSim2()">
+          <div class="vbadge vb-purple" id="v0Display">V<sub>0</sub> = 20 m/s</div>
+        </div>
+        <div class="ctrl-group">
+          <label class="ctrl-lbl">Throw Angle (θ)</label>
+          <div class="slider-marks"><span>−60°</span><span>−30°</span><span>0°</span><span>+30°</span><span>+60°</span></div>
+          <input type="range" id="thetaSlider" min="-60" max="60" step="5" value="30" oninput="updateSim2()">
+          <div class="vbadge vb-teal" id="thetaDisplay">θ = +30° (upward)</div>
+        </div>
+        <div class="ctrl-group">
+          <label class="ctrl-lbl">Hill Height (h)</label>
+          <div class="slider-marks"><span>20</span><span>35</span><span>50</span><span>65</span><span>80 m</span></div>
+          <input type="range" id="hSlider2" min="20" max="80" step="5" value="45" oninput="updateSim2()">
+          <div class="vbadge vb-orange" id="hDisplay2">h = 45 m</div>
+        </div>
+        <div class="ctrl-heading" style="margin-top:4px;">Computed Values</div>
+        <div class="live-box">
+          <div class="ro-blue"   id="ro2Vx0">Vx<sub>0</sub> = 17.3 m/s</div>
+          <div class="ro-orange" id="ro2Vy0">Vy<sub>0</sub> = 10.0 m/s ↑</div>
+          <div id="ro2Time">Time of flight: 4.2 s</div>
+          <div class="ro-green"  id="ro2Range">Range: 72.7 m</div>
+        </div>
+        <div class="formula-box" id="formulaBox2">y = −0.577 × x + 0.0163 × x²  (parabola)</div>
+        <div class="sim-btns">
+          <button class="btn-play"  id="playBtn2"  onclick="toggleSim2()">&#9654; PLAY</button>
+          <button class="btn-reset" onclick="resetSim2()">&#8635; RESET</button>
+        </div>
+      </div>
+      <!-- Canvas -->
+      <div class="sim-canvas-panel">
+        <div class="canvas-lbl" id="sim2Label">Simulation Canvas (θ = +30°)</div>
+        <canvas id="sim2Canvas"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="nav-bar">
+    <button class="btn-back" onclick="goTo(12)">&#9664; BACK</button>
+    <button class="btn-next" onclick="goTo(14)">NEXT &#9654;</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCREEN 14 — Test Your Understanding Q2
+══════════════════════════════════════════════════════════ -->
+<div id="screen14" class="screen">
+  <div class="pg-header"><h1>Test Your Understanding — Angled Throw</h1></div>
+  <div class="pg-body">
+    <div class="q-meta">Question 2</div>
+    <div class="q-block" style="border-color:var(--purple);">
+      <div class="q-text">
+        A ball is thrown from a 45 m high hill at 20 m/s at an angle of +30° above the horizontal.
+        What is the horizontal distance from the base of the hill where the ball lands?
+      </div>
+      <div class="q-given">(Take g = 10 m/s². &nbsp;cos30° = 0.866, &nbsp;sin30° = 0.5)</div>
+    </div>
+    <div class="opts">
+      <div class="opt" id="q2A" onclick="selectQ2('A')">
+        <div class="opt-badge ob-a">A</div>
+        <div class="opt-txt">52 meters</div>
+        <div class="radio-ring"><div class="radio-fill"></div></div>
+      </div>
+      <div class="opt" id="q2B" onclick="selectQ2('B')">
+        <div class="opt-badge ob-b">B</div>
+        <div class="opt-txt">69.3 meters</div>
+        <div class="radio-ring"><div class="radio-fill"></div></div>
+      </div>
+      <div class="opt" id="q2C" onclick="selectQ2('C')">
+        <div class="opt-badge ob-c">C</div>
+        <div class="opt-txt">86.6 meters</div>
+        <div class="radio-ring"><div class="radio-fill"></div></div>
+      </div>
+      <div class="opt" id="q2D" onclick="selectQ2('D')">
+        <div class="opt-badge ob-d">D</div>
+        <div class="opt-txt">100 meters</div>
+        <div class="radio-ring"><div class="radio-fill"></div></div>
+      </div>
+    </div>
+    <div class="submit-area">
+      <div class="err-msg" id="q2Err"></div>
+      <button class="btn-submit" onclick="submitQ2()">SUBMIT ANSWER</button>
+      <div class="hint-txt">Hint: Decompose V<sub>0</sub> into components, find t from the vertical equation, then use x = Vx<sub>0</sub> × t</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCREEN 15 — Result Q2
+══════════════════════════════════════════════════════════ -->
+<div id="screen15" class="screen">
+  <div class="pg-header"><h1>Result — Question 2</h1></div>
+  <div class="pg-body">
+    <div class="result-banner" id="resBanner2"></div>
+    <div class="sol-card">
+      <h3>SOLUTION BREAKDOWN</h3>
+      <div class="sol-given">Given: V<sub>0</sub> = 20 m/s,&nbsp; θ = +30°,&nbsp; h = 45 m,&nbsp; g = 10 m/s²</div>
+      <div class="sol-step">Step 1: Decompose velocity</div>
+      <div class="sol-result" style="font-size:15px;">
+        Vx<sub>0</sub> = 20 × cos30° = 20 × 0.866 = <strong>17.32 m/s</strong><br>
+        Vy<sub>0</sub> = 20 × sin30° = 20 × 0.5 = <strong>10 m/s (upward)</strong>
+      </div>
+      <div class="sol-step">Step 2: Find time of flight (taking downward as +ve)</div>
+      <div class="sol-eq">
+        h = −Vy<sub>0</sub> × t + ½ g t²<br>
+        45 = −10t + 5t²&nbsp; → &nbsp;5t² − 10t − 45 = 0&nbsp; → &nbsp;t² − 2t − 9 = 0
+      </div>
+      <div class="sol-eq">t = (2 + √(4+36)) / 2 = (2 + √40) / 2 ≈ <strong>4 seconds</strong></div>
+      <div class="sol-step">Step 3: Horizontal distance</div>
+      <div class="sol-result">x = Vx<sub>0</sub> × t = 17.32 × 4 ≈ <strong>69.3 meters</strong></div>
+      <div class="sol-note">The upward throw gave the ball more time in air (4s vs 3s for horizontal), resulting in a greater range!</div>
+    </div>
+    <div class="res-btns">
+      <button class="btn-try" onclick="retryQ2()">&#8635; TRY AGAIN</button>
+      <button class="btn-cont" onclick="goTo(1)" style="background:var(--navy);">&#8635; RESTART</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════════════════ -->
+<script>
+'use strict';
+
+// ── Physics constants ──────────────────────────────────
+const G  = 9.8;   // m/s² for simulations
+const H0 = 44.1;  // hill height (m) — gives exactly t=3s at g=9.8
+
+// ── Navigation ────────────────────────────────────────
+let currentScreen = 1;
+function goTo(n) {
+  document.getElementById('screen' + currentScreen).classList.remove('active');
+  document.getElementById('screen' + n).classList.add('active');
+  document.getElementById('screenBadge').textContent = 'Screen ' + n;
+  currentScreen = n;
+  window.scrollTo(0, 0);
+  onScreenEnter(n);
+}
+
+function onScreenEnter(n) {
+  if (n === 1)  setTimeout(drawHeroCanvas,  30);
+  if (n === 2)  setTimeout(drawScenario,    30);
+  if (n === 3)  setTimeout(drawForceDiagram,30);
+  if (n === 5)  resetS5();
+  if (n === 6)  { initSim1(); }
+  if (n === 7)  resetQ1();
+  if (n === 9)  setTimeout(drawHero2Canvas, 30);
+  if (n === 12) setTimeout(drawAngleComp,   30);
+  if (n === 13) { initSim2(); }
+  if (n === 14) resetQ2();
+}
+
+// ── Canvas utilities ───────────────────────────────────
+function arrow(ctx, x1, y1, x2, y2, color, lw) {
+  const dx = x2-x1, dy = y2-y1;
+  const len = Math.sqrt(dx*dx+dy*dy);
+  if (len < 1) return;
+  const ang = Math.atan2(dy, dx);
+  const hl = Math.min(11, len*0.35);
+  ctx.save();
+  ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = lw;
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2 - hl*Math.cos(ang), y2 - hl*Math.sin(ang));
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x2, y2);
+  ctx.lineTo(x2 - hl*Math.cos(ang-0.38), y2 - hl*Math.sin(ang-0.38));
+  ctx.lineTo(x2 - hl*Math.cos(ang+0.38), y2 - hl*Math.sin(ang+0.38));
+  ctx.closePath(); ctx.fill();
+  ctx.restore();
+}
+
+function sizeCanvas(id, h) {
+  const c = document.getElementById(id);
+  c.width  = c.parentElement.clientWidth - (h ? 0 : 24);
+  c.height = h || 260;
+  return c;
+}
+
+// ── SCREEN 1 — Hero illustration ──────────────────────
+function drawHeroCanvas() {
+  const c = document.getElementById('heroCanvas');
+  c.width  = c.parentElement.clientWidth;
+  c.height = 230;
+  const ctx = c.getContext('2d');
+  const W = c.width, H = c.height;
+  ctx.clearRect(0, 0, W, H);
+
+  const hillW = 90, hillX = 60;
+  const groundY = H - 30;
+  const launchX = hillX + hillW;
+  const launchY = groundY - 170;
+
+  // Ground
+  ctx.strokeStyle = '#4caf50'; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(hillX, groundY); ctx.lineTo(W-20, groundY); ctx.stroke();
+
+  // Hill
+  ctx.fillStyle = 'rgba(76,175,80,0.3)';
+  ctx.strokeStyle = '#4caf50'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.rect(hillX, launchY, hillW, groundY - launchY); ctx.fill(); ctx.stroke();
+
+  // Dashed parabolic path
+  const range = W - launchX - 30;
+  ctx.strokeStyle = '#5eb3f0'; ctx.lineWidth = 2;
+  ctx.setLineDash([7, 6]);
+  ctx.beginPath();
+  const steps = 60;
+  for (let i = 0; i <= steps; i++) {
+    const frac = i / steps;
+    const px = launchX + frac * range;
+    const py = launchY + (frac * range) * (frac * range) / (range * 1.1) * (groundY - launchY);
+    i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+  }
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Ball
+  ctx.fillStyle = '#e8943a';
+  ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.arc(launchX, launchY, 11, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+}
+
+// ── SCREEN 2 — Scenario diagram ───────────────────────
+function drawScenario() {
+  const c = document.getElementById('scenarioCanvas');
+  c.width  = c.parentElement.clientWidth - 20;
+  c.height = 320;
+  const ctx = c.getContext('2d');
+  const W = c.width, H = c.height;
+  ctx.fillStyle = '#f8fafc'; ctx.fillRect(0,0,W,H);
+
+  const hillW = 85, hillX = 30;
+  const groundY = H - 40;
+  const launchX = hillX + hillW;
+  const launchY = 60;
+
+  // Ground
+  ctx.fillStyle = '#4caf50';
+  ctx.fillRect(hillX, groundY, W - hillX - 20, 3);
+  ctx.fillStyle = '#4caf50';
+  ctx.font = '12px Segoe UI,sans-serif'; ctx.textAlign = 'left';
+  ctx.fillText('Ground', launchX + 20, groundY + 17);
+
+  // Hill
+  ctx.fillStyle = '#c8e6c9';
+  ctx.strokeStyle = '#4caf50'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.rect(hillX, launchY, hillW, groundY - launchY); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = '#666'; ctx.font = 'bold 12px Segoe UI,sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('Hill', hillX + hillW/2, launchY + (groundY-launchY)/2 - 8);
+  ctx.fillText('h', hillX + hillW/2, launchY + (groundY-launchY)/2 + 10);
+
+  // Dashed parabolic path
+  const range = W - launchX - 35;
+  ctx.strokeStyle = '#aaa'; ctx.lineWidth = 1.5;
+  ctx.setLineDash([6,5]);
+  ctx.beginPath();
+  for (let i = 0; i <= 50; i++) {
+    const f = i / 50;
+    const px = launchX + f * range;
+    const py = launchY + f * f * (groundY - launchY);
+    i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+  }
+  ctx.stroke(); ctx.setLineDash([]);
+
+  // Parabolic path label
+  ctx.fillStyle = '#aaa'; ctx.font = 'italic 11px Segoe UI,sans-serif'; ctx.textAlign = 'left';
+  ctx.save(); ctx.translate(launchX + range*0.45, launchY + 50); ctx.rotate(0.35);
+  ctx.fillText('parabolic path', 0, 0); ctx.restore();
+
+  // Vx arrow
+  const arrowLen = 120;
+  arrow(ctx, launchX, launchY, launchX + arrowLen, launchY, '#2c7bb5', 2.5);
+  ctx.fillStyle = '#2c7bb5'; ctx.font = 'bold 13px Segoe UI,sans-serif'; ctx.textAlign = 'left';
+  ctx.fillText('Vx →', launchX + arrowLen + 5, launchY + 4);
+
+  // Vy arrow
+  const vyLen = 80;
+  arrow(ctx, launchX, launchY, launchX, launchY + vyLen, '#e8943a', 2.5);
+  ctx.fillStyle = '#e8943a'; ctx.font = 'bold 13px Segoe UI,sans-serif'; ctx.textAlign = 'left';
+  ctx.fillText('Vy ↓', launchX + 5, launchY + vyLen + 16);
+
+  // Ball
+  ctx.fillStyle = '#e8943a'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.arc(launchX, launchY, 11, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+}
+
+// ── SCREEN 3 — Force & direction diagram ──────────────
+function drawForceDiagram() {
+  const c = document.getElementById('forceCanvas');
+  c.width  = c.parentElement.clientWidth - 44;
+  c.height = 260;
+  const ctx = c.getContext('2d');
+  const W = c.width, H = c.height;
+  ctx.fillStyle = '#f8fafc'; ctx.fillRect(0,0,W,H);
+
+  const midX = W * 0.28, midY = H * 0.42;
+  const lineRight = W * 0.76;
+
+  // Horizontal Vx line
+  ctx.strokeStyle = '#2c7bb5'; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(midX - 10, midY); ctx.lineTo(lineRight, midY); ctx.stroke();
+
+  // Arrowhead at right
+  arrow(ctx, midX - 10, midY, lineRight + 12, midY, '#2c7bb5', 3);
+
+  // Label above line
+  ctx.fillStyle = '#2c7bb5'; ctx.font = 'bold 13px Segoe UI,sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('Vx (horizontal) → CONSTANT', (midX + lineRight)/2, midY - 12);
+
+  // 90° label
+  ctx.fillStyle = '#e8943a'; ctx.font = 'bold 12px Segoe UI,sans-serif'; ctx.textAlign = 'left';
+  ctx.fillText('90°', midX + 4, midY + 18);
+
+  // Small square for right angle
+  const sq = 10;
+  ctx.strokeStyle = '#e8943a'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.rect(midX, midY, sq, sq); ctx.stroke();
+
+  // Gravity arrow (downward)
+  const gravLen = 110;
+  arrow(ctx, midX, midY, midX, midY + gravLen, '#c0394b', 3);
+  ctx.fillStyle = '#c0394b'; ctx.font = 'bold 13px Segoe UI,sans-serif'; ctx.textAlign = 'left';
+  ctx.fillText('g (gravity) ↓', midX + 12, midY + gravLen - 10);
+}
+
+// ── SCREEN 5 — x(t) and y(t) mini-graphs ─────────────
+function drawParabolaGraphs() {
+  drawXtGraph();
+  drawYtGraph();
+}
+
+function drawXtGraph() {
+  const c = document.getElementById('xtCanvas');
+  c.width  = c.parentElement.clientWidth - 32;
+  c.height = 130;
+  const ctx = c.getContext('2d');
+  const W = c.width, H = c.height;
+  ctx.fillStyle = '#f8fafc'; ctx.fillRect(0,0,W,H);
+
+  const pad = {l:32, r:14, t:12, b:24};
+  const pw = W-pad.l-pad.r, ph = H-pad.t-pad.b;
+
+  // Axes
+  ctx.strokeStyle = '#ccc'; ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(pad.l, pad.t); ctx.lineTo(pad.l, pad.t+ph);
+  ctx.lineTo(pad.l+pw, pad.t+ph); ctx.stroke();
+
+  // Axis labels
+  ctx.fillStyle = '#aaa'; ctx.font = '11px Segoe UI,sans-serif';
+  ctx.textAlign = 'center'; ctx.fillText('t', pad.l+pw+6, pad.t+ph+2);
+  ctx.textAlign = 'right';  ctx.fillText('x', pad.l-4, pad.t+5);
+
+  // Linear line
+  ctx.strokeStyle = '#2c7bb5'; ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.moveTo(pad.l, pad.t+ph);
+  ctx.lineTo(pad.l+pw, pad.t);
+  ctx.stroke();
+}
+
+function drawYtGraph() {
+  const c = document.getElementById('ytCanvas');
+  c.width  = c.parentElement.clientWidth - 32;
+  c.height = 130;
+  const ctx = c.getContext('2d');
+  const W = c.width, H = c.height;
+  ctx.fillStyle = '#f8fafc'; ctx.fillRect(0,0,W,H);
+
+  const pad = {l:32, r:14, t:12, b:24};
+  const pw = W-pad.l-pad.r, ph = H-pad.t-pad.b;
+
+  // Axes
+  ctx.strokeStyle = '#ccc'; ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(pad.l, pad.t); ctx.lineTo(pad.l, pad.t+ph);
+  ctx.lineTo(pad.l+pw, pad.t+ph); ctx.stroke();
+
+  // Axis labels
+  ctx.fillStyle = '#aaa'; ctx.font = '11px Segoe UI,sans-serif';
+  ctx.textAlign = 'center'; ctx.fillText('t', pad.l+pw+6, pad.t+ph+2);
+  ctx.textAlign = 'right';  ctx.fillText('y', pad.l-4, pad.t+5);
+
+  // Quadratic curve (y falls, so starts high and curves down)
+  ctx.strokeStyle = '#e8943a'; ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  const steps = 60;
+  for (let i = 0; i <= steps; i++) {
+    const frac = i / steps;
+    const px = pad.l + frac * pw;
+    const py = pad.t + frac * frac * ph;
+    i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+  }
+  ctx.stroke();
+}
+
+// ── SCREEN 9 — Part 2 hero canvas ─────────────────────
+function drawHero2Canvas() {
+  const c = document.getElementById('hero2Canvas');
+  c.width  = c.parentElement.clientWidth;
+  c.height = 230;
+  const ctx = c.getContext('2d');
+  const W = c.width, H = c.height;
+  ctx.clearRect(0,0,W,H);
+
+  const hillW = 80, hillX = 50;
+  const groundY = H - 30;
+  const launchX = hillX + hillW;
+  const launchY = groundY - 140;
+
+  // Ground
+  ctx.strokeStyle = '#4caf50'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(hillX, groundY); ctx.lineTo(W-15, groundY); ctx.stroke();
+
+  // Hill
+  ctx.fillStyle = 'rgba(76,175,80,0.3)';
+  ctx.strokeStyle = '#4caf50'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.rect(hillX, launchY, hillW, groundY-launchY); ctx.fill(); ctx.stroke();
+
+  // Three trajectories: +30° (teal), 0° (blue), -30° (red)
+  const configs = [
+    { label:'+30°', color:'#1a9e72', theta: 30 },
+    { label:'0°',   color:'#5eb3f0', theta: 0  },
+    { label:'−30°', color:'#e05060', theta:-30 },
+  ];
+  const v0 = 12, g = G;
+  const h = groundY - launchY;
+  const scale = (W - launchX - 20) / 55;
+
+  configs.forEach(cfg => {
+    const th = cfg.theta * Math.PI / 180;
+    const vx = v0 * Math.cos(th);
+    const vy = v0 * Math.sin(th);  // positive up
+    const tF = (vy + Math.sqrt(vy*vy + 2*g*h/scale/scale*scale*scale)) / g;
+    // simplified: use physics units, then scale
+    const tFlight = (vy + Math.sqrt(vy*vy + 2*g*(h/scale))) / g;
+    const N = 50;
+    ctx.strokeStyle = cfg.color; ctx.lineWidth = 2;
+    ctx.setLineDash([]);
+    ctx.beginPath();
+    for (let i = 0; i <= N; i++) {
+      const t = i * tFlight / N;
+      const px = launchX + vx * t * scale;
+      const py = launchY + (-vy * t + 0.5 * g * t * t) * scale;
+      if (py > groundY + 2) break;
+      i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+
+    // Label near launch
+    ctx.fillStyle = cfg.color; ctx.font = 'bold 11px Segoe UI,sans-serif'; ctx.textAlign = 'left';
+    const labelX = launchX + 4;
+    const labelY = launchY - cfg.theta * 1.8 - 6;
+    ctx.fillText(cfg.label, labelX - 32, labelY);
+  });
+
+  // Ball
+  ctx.fillStyle = '#e8943a'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(launchX, launchY, 9, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+}
+
+// ── SCREEN 12 — Angle comparison ──────────────────────
+function drawAngleComp() {
+  const c = document.getElementById('angleCompCanvas');
+  c.width  = c.parentElement.clientWidth - 24;
+  c.height = 480;
+  const ctx = c.getContext('2d');
+  const W = c.width, H = c.height;
+  ctx.fillStyle = '#f8fafc'; ctx.fillRect(0,0,W,H);
+
+  const g = G, h = H0, v0 = 15;
+  const configs = [
+    { theta: 30,  color: '#1a9e72', label: '+30° (thrown up)',   lpos: 'above' },
+    { theta:  0,  color: '#2c7bb5', label: '0° (horizontal)',    lpos: 'mid'   },
+    { theta:-30,  color: '#c0394b', label: '−30° (thrown down)', lpos: 'below' },
+  ];
+
+  // Compute all trajectories to determine bounding box
+  let maxRange = 0, maxAbove = 0;
+  configs.forEach(cfg => {
+    const th = cfg.theta * Math.PI / 180;
+    const vx = v0 * Math.cos(th), vy = v0 * Math.sin(th);
+    const tF = (vy + Math.sqrt(vy*vy + 2*g*h)) / g;
+    cfg.vx = vx; cfg.vy = vy; cfg.tF = tF;
+    cfg.range = vx * tF;
+    maxRange = Math.max(maxRange, cfg.range);
+    if (vy > 0) maxAbove = Math.max(maxAbove, vy*vy/(2*g));
+  });
+
+  const hillW = 70;
+  const padL = 18, padR = 28, padT = 14, padB = 44;
+  const usableW = W - padL - padR - hillW;
+  const usableH = H - padT - padB;
+  const totalH = maxAbove + h;
+  const scaleX = usableW / (maxRange * 1.08);
+  const scaleY = usableH / (totalH * 1.1);
+  const scale  = Math.min(scaleX, scaleY);
+
+  const launchX = padL + hillW;
+  const launchY = padT + maxAbove * scale * 1.15 + 6;
+  const groundY = launchY + h * scale;
+
+  // Ground
+  ctx.fillStyle = '#4caf50';
+  ctx.fillRect(padL, groundY, W - padR - padL, 3);
+  ctx.fillStyle = '#4caf50'; ctx.font = '12px Segoe UI,sans-serif'; ctx.textAlign = 'right';
+  ctx.fillText('Ground', W - padR - 2, groundY + 16);
+
+  // Hill
+  ctx.fillStyle = '#c8e6c9'; ctx.strokeStyle = '#4caf50'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.rect(padL, launchY, hillW - 4, groundY - launchY); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = '#666'; ctx.font = 'bold 11px Segoe UI,sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('Hill', padL + (hillW-4)/2, launchY + (groundY-launchY)/2);
+
+  // Trajectories as dots
+  configs.forEach(cfg => {
+    const { vx, vy, tF, range, color } = cfg;
+    const N = 12;
+    ctx.fillStyle = color;
+    for (let i = 1; i <= N; i++) {
+      const t = i * tF / N;
+      const px = launchX + vx * t * scale;
+      const py = launchY + (-vy * t + 0.5 * g * t * t) * scale;
+      if (py > groundY + 2 || px > W - padR) break;
+      ctx.beginPath(); ctx.arc(px, py, 6, 0, Math.PI*2); ctx.fill();
+    }
+    // Landing
+    const lx = launchX + range * scale;
+    ctx.beginPath(); ctx.arc(lx, groundY, 8, 0, Math.PI*2); ctx.fill();
+
+    // Range annotation
+    const annY = groundY + 20 + (cfg.theta === 30 ? 18 : cfg.theta === 0 ? 0 : -18) + 18;
+    ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.setLineDash([4,3]);
+    ctx.beginPath(); ctx.moveTo(launchX, annY); ctx.lineTo(lx, annY); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = color; ctx.font = 'bold 11px Segoe UI,sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('← ' + cfg.label + ' →', launchX + (lx-launchX)/2, annY + 13);
+  });
+
+  // Ball
+  ctx.fillStyle = '#e8943a'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.arc(launchX, launchY, 10, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+}
+
+// ══════════════════════════════════════════════════════
+//  SIMULATION 1 — Horizontal throw
+// ══════════════════════════════════════════════════════
+const s1 = { vx:10, h:45, t:0, playing:false, frameId:null, startWall:null };
+
+function sim1Params() {
+  const tF = Math.sqrt(2 * s1.h / G);
+  return { tF, range: s1.vx * tF };
+}
+
+function updateSim1() {
+  s1.vx = +document.getElementById('vxSlider').value;
+  s1.h  = +document.getElementById('hSlider1').value;
+  document.getElementById('vxDisplay').innerHTML = 'Vx<sub>0</sub> = ' + s1.vx + ' m/s';
+  document.getElementById('hDisplay1').textContent = 'h = ' + s1.h + ' m';
+  const k = G / (2 * s1.vx * s1.vx);
+  document.getElementById('formulaBox1').textContent =
+    'y = ' + k.toFixed(3) + ' × x²  (parabola)';
+  resetSim1(false);
+  drawSim1Canvas(0);
+  updateReadouts1(0);
+}
+
+function initSim1() {
+  s1.vx = +document.getElementById('vxSlider').value;
+  s1.h  = +document.getElementById('hSlider1').value;
+  resetSim1(false);
+  setTimeout(() => { drawSim1Canvas(0); }, 30);
+}
+
+function resetSim1(full) {
+  if (s1.frameId) { cancelAnimationFrame(s1.frameId); s1.frameId = null; }
+  s1.playing = false; s1.t = 0; s1.startWall = null;
+  document.getElementById('playBtn1').innerHTML = '&#9654; PLAY';
+  if (full !== false) drawSim1Canvas(0);
+  updateReadouts1(0);
+}
+
+function toggleSim1() {
+  if (s1.playing) {
+    cancelAnimationFrame(s1.frameId); s1.frameId = null;
+    s1.playing = false;
+    document.getElementById('playBtn1').innerHTML = '&#9654; PLAY';
+  } else {
+    const { tF } = sim1Params();
+    if (s1.t >= tF) s1.t = 0;
+    s1.startWall = performance.now() - s1.t * 1000;
+    s1.playing = true;
+    document.getElementById('playBtn1').innerHTML = '&#9646;&#9646; PAUSE';
+    animSim1();
+  }
+}
+
+function animSim1() {
+  if (!s1.playing) return;
+  const { tF } = sim1Params();
+  s1.t = Math.min((performance.now() - s1.startWall) / 1000, tF);
+  drawSim1Canvas(s1.t);
+  updateReadouts1(s1.t);
+  if (s1.t < tF) {
+    s1.frameId = requestAnimationFrame(animSim1);
+  } else {
+    s1.playing = false; s1.frameId = null;
+    document.getElementById('playBtn1').innerHTML = '&#9654; PLAY';
+  }
+}
+
+function updateReadouts1(t) {
+  const { tF, range } = sim1Params();
+  const vy = G * t;
+  document.getElementById('ro1Time').textContent  = 'Time: ' + t.toFixed(1) + ' s';
+  document.getElementById('ro1Vx').innerHTML = '<span class="ro-blue">Vx: ' + s1.vx + ' m/s (constant)</span>';
+  document.getElementById('ro1Vy').innerHTML = '<span class="ro-orange">Vy: ' + vy.toFixed(1) + ' m/s (increasing)</span>';
+  document.getElementById('ro1Range').innerHTML  = t >= tF
+    ? '<span class="ro-green">Range: ' + range.toFixed(1) + ' m</span>'
+    : '<span class="ro-green">Range: — m</span>';
+}
+
+function drawSim1Canvas(t) {
+  const c = document.getElementById('sim1Canvas');
+  if (!c) return;
+  c.width  = c.parentElement.clientWidth - 24;
+  c.height = 390;
+  drawProjectileCanvas(c, s1.vx, 0, s1.h, G, t, false);
+}
+
+// ══════════════════════════════════════════════════════
+//  SIMULATION 2 — Angled throw
+// ══════════════════════════════════════════════════════
+const s2 = { v0:20, theta:30, h:45, t:0, playing:false, frameId:null, startWall:null };
+
+function sim2Params() {
+  const th = s2.theta * Math.PI / 180;
+  const vx = s2.v0 * Math.cos(th);
+  const vy = s2.v0 * Math.sin(th);   // positive upward
+  const tF = (vy + Math.sqrt(vy*vy + 2*G*s2.h)) / G;
+  return { vx, vy, tF, range: vx * tF };
+}
+
+function updateSim2() {
+  s2.v0    = +document.getElementById('v0Slider').value;
+  s2.theta = +document.getElementById('thetaSlider').value;
+  s2.h     = +document.getElementById('hSlider2').value;
+  document.getElementById('hDisplay2').textContent = 'h = ' + s2.h + ' m';
+  document.getElementById('v0Display').innerHTML = 'V<sub>0</sub> = ' + s2.v0 + ' m/s';
+  const dir = s2.theta > 0 ? ' (upward)' : s2.theta < 0 ? ' (downward)' : ' (horizontal)';
+  document.getElementById('thetaDisplay').innerHTML =
+    'θ = ' + (s2.theta >= 0 ? '+' : '') + s2.theta + '°' + dir;
+  document.getElementById('sim2Label').innerHTML =
+    'Simulation Canvas (θ = ' + (s2.theta >= 0 ? '+':'') + s2.theta + '°)';
+  const { vx, vy, tF, range } = sim2Params();
+  document.getElementById('ro2Vx0').innerHTML =
+    '<span class="ro-blue">Vx<sub>0</sub> = ' + (s2.v0+'×cos'+s2.theta+'° = ') + vx.toFixed(1) + ' m/s</span>';
+  document.getElementById('ro2Vy0').innerHTML =
+    '<span class="ro-orange">Vy<sub>0</sub> = ' + vx.toFixed(1).replace(vx.toFixed(1),
+      (s2.v0 + '×sin' + s2.theta + '° = ' + vy.toFixed(1))) + ' m/s ' + (vy>=0?'↑':'↓') + '</span>';
+  document.getElementById('ro2Time').textContent  = 'Time of flight: ' + tF.toFixed(1) + ' s';
+  document.getElementById('ro2Range').innerHTML   = '<span class="ro-green">Range: ' + range.toFixed(1) + ' m</span>';
+  const A = -vy / vx;
+  const B = G / (2 * vx * vx);
+  let fStr;
+  if (Math.abs(A) < 0.0005) {
+    fStr = 'y = ' + B.toFixed(4) + ' × x²  (parabola)';
+  } else if (A < 0) {
+    fStr = 'y = −' + Math.abs(A).toFixed(3) + ' × x + ' + B.toFixed(4) + ' × x²  (parabola)';
+  } else {
+    fStr = 'y = ' + A.toFixed(3) + ' × x + ' + B.toFixed(4) + ' × x²  (parabola)';
+  }
+  document.getElementById('formulaBox2').textContent = fStr;
+  resetSim2(false);
+  drawSim2Canvas(0);
+}
+
+function initSim2() {
+  s2.v0    = +document.getElementById('v0Slider').value;
+  s2.theta = +document.getElementById('thetaSlider').value;
+  s2.h     = +document.getElementById('hSlider2').value;
+  updateSim2();
+}
+
+function resetSim2(full) {
+  if (s2.frameId) { cancelAnimationFrame(s2.frameId); s2.frameId = null; }
+  s2.playing = false; s2.t = 0; s2.startWall = null;
+  document.getElementById('playBtn2').innerHTML = '&#9654; PLAY';
+  if (full !== false) drawSim2Canvas(0);
+}
+
+function toggleSim2() {
+  if (s2.playing) {
+    cancelAnimationFrame(s2.frameId); s2.frameId = null;
+    s2.playing = false;
+    document.getElementById('playBtn2').innerHTML = '&#9654; PLAY';
+  } else {
+    const { tF } = sim2Params();
+    if (s2.t >= tF) s2.t = 0;
+    s2.startWall = performance.now() - s2.t * 1000;
+    s2.playing = true;
+    document.getElementById('playBtn2').innerHTML = '&#9646;&#9646; PAUSE';
+    animSim2();
+  }
+}
+
+function animSim2() {
+  if (!s2.playing) return;
+  const { tF } = sim2Params();
+  s2.t = Math.min((performance.now() - s2.startWall) / 1000, tF);
+  drawSim2Canvas(s2.t);
+  if (s2.t < tF) {
+    s2.frameId = requestAnimationFrame(animSim2);
+  } else {
+    s2.playing = false; s2.frameId = null;
+    document.getElementById('playBtn2').innerHTML = '&#9654; PLAY';
+  }
+}
+
+function drawSim2Canvas(t) {
+  const c = document.getElementById('sim2Canvas');
+  if (!c) return;
+  c.width  = c.parentElement.clientWidth - 24;
+  c.height = 390;
+  const { vx, vy } = sim2Params();
+  drawProjectileCanvas(c, vx, vy, s2.h, G, t, s2.theta !== 0);
+}
+
+// ══════════════════════════════════════════════════════
+//  Generic projectile canvas renderer
+//  vx0   — horizontal velocity (m/s)
+//  vy0   — initial vertical velocity, positive = UPWARD (m/s)
+//  h     — hill height (m)
+//  g     — gravity (m/s²)
+//  curT  — current time to draw ball at
+//  showLaunchArrow — draw V0 angle arrow at start
+// ══════════════════════════════════════════════════════
+function drawProjectileCanvas(canvas, vx0, vy0, h, g, curT, showLaunchArrow) {
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+
+  // Physics
+  const tF = (vy0 + Math.sqrt(vy0*vy0 + 2*g*h)) / g;
+  const range = vx0 * tF;
+  const maxAbove = vy0 > 0 ? vy0*vy0/(2*g) : 0;  // max height above launch
+
+  // Layout
+  const hillW = 78, padL = 16, padR = 26, padT = 16, padB = 42;
+  const usableW = W - padL - padR - hillW;
+  const usableH = H - padT - padB;
+  const totalH  = maxAbove + h;
+  const scaleX  = usableW / (range  * 1.08);
+  const scaleY  = usableH / (totalH * 1.1 + 0.01);
+  const scale   = Math.min(scaleX, scaleY);
+
+  const launchX = padL + hillW;
+  const launchY = padT + maxAbove * scale * 1.15 + (maxAbove > 0 ? 6 : 0);
+  const groundY = launchY + h * scale;
+
+  // Background
+  ctx.fillStyle = '#f8fafc'; ctx.fillRect(0, 0, W, H);
+
+  // Ground line
+  ctx.fillStyle = '#4caf50';
+  ctx.fillRect(padL, groundY, W - padR - padL, 3);
+  ctx.fillStyle = '#4caf50'; ctx.font = '12px Segoe UI,sans-serif'; ctx.textAlign = 'left';
+  ctx.fillText('Ground', W - padR - 52, groundY + 16);
+
+  // Hill
+  ctx.fillStyle = '#c8e6c9'; ctx.strokeStyle = '#4caf50'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.rect(padL, launchY, hillW - 4, groundY - launchY); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = '#666'; ctx.font = 'bold 11px Segoe UI,sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('Hill', padL + (hillW-4)/2, launchY + (groundY-launchY)*0.45);
+  ctx.fillText('h', padL + (hillW-4)/2, launchY + (groundY-launchY)*0.6);
+
+  // Trail dots at even time intervals
+  const nDots = 10;
+  ctx.fillStyle = '#4a7ab5';
+  for (let i = 1; i <= nDots; i++) {
+    const ti = i * tF / nDots;
+    if (ti > curT + 0.001) break;
+    const px = launchX + vx0 * ti * scale;
+    const py = launchY + (-vy0 * ti + 0.5 * g * ti * ti) * scale;
+    if (py > groundY + 2 || px > W - padR) break;
+    ctx.beginPath(); ctx.arc(px, py, 5.5, 0, Math.PI*2); ctx.fill();
+  }
+
+  // Ball position
+  const bx = launchX + vx0 * curT * scale;
+  const by = launchY + (-vy0 * curT + 0.5 * g * curT * curT) * scale;
+
+  // Velocity vectors (only during flight)
+  if (curT > 0 && curT < tF * 0.99 && by < groundY + 2) {
+    const vy_now = -vy0 + g * curT;  // downward positive
+    const vscale = Math.max(2, Math.min(4, scale * 0.7));
+    // Vx arrow
+    arrow(ctx, bx, by, bx + vx0 * vscale, by, '#4a7ab5', 2);
+    ctx.fillStyle = '#4a7ab5'; ctx.font = 'bold 11px Segoe UI,sans-serif'; ctx.textAlign = 'left';
+    ctx.fillText('Vx', bx + vx0*vscale + 5, by + 4);
+    // Vy arrow
+    const vyDir = vy_now > 0 ? 1 : -1;
+    const vyLen = Math.abs(vy_now) * vscale;
+    if (vyLen > 4) {
+      arrow(ctx, bx, by, bx, by + vyDir * vyLen, '#e8943a', 2);
+      ctx.fillStyle = '#e8943a'; ctx.textAlign = 'left';
+      ctx.fillText('Vy', bx + 5, by + vyDir*(vyLen + 14));
+    }
+  }
+
+  // Launch angle arrow (for angled sim at t=0)
+  if (showLaunchArrow && curT < 0.05 && vy0 !== 0) {
+    const th = Math.atan2(-vy0, vx0);  // canvas angle (y flipped)
+    const aLen = 52;
+    arrow(ctx, launchX, launchY,
+      launchX + aLen*Math.cos(th), launchY + aLen*Math.sin(th), '#7c5cbf', 2.5);
+    ctx.fillStyle = '#7c5cbf'; ctx.font = 'bold 11px Segoe UI,sans-serif'; ctx.textAlign = 'left';
+    const degLabel = (vy0 >= 0 ? '+' : '') + Math.round(Math.atan2(vy0, vx0)*180/Math.PI) + '°';
+    ctx.fillText('V₀ at ' + degLabel,
+      launchX + aLen*Math.cos(th) + 5, launchY + aLen*Math.sin(th) - 4);
+  }
+
+  // Ball
+  ctx.fillStyle = '#e8943a'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.arc(bx, by, 10, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+
+  // Landing marker
+  const landX = launchX + range * scale;
+  if (curT >= tF * 0.95) {
+    ctx.fillStyle = '#e74c3c'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(landX, groundY, 10, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#e74c3c'; ctx.font = 'bold 12px Segoe UI,sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('Landing', landX, groundY - 16);
+  }
+
+  // Range annotation after landing
+  if (curT >= tF) {
+    const annotY = groundY + 20;
+    ctx.strokeStyle = '#aaa'; ctx.lineWidth = 1; ctx.setLineDash([5,4]);
+    ctx.beginPath(); ctx.moveTo(launchX, annotY); ctx.lineTo(landX, annotY); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#555'; ctx.font = '12px Segoe UI,sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('← x = Vx₀ × t = ' + range.toFixed(1) + ' m →',
+      launchX + (landX - launchX) / 2, annotY + 14);
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  Screen 5 — Path shape MCQ
+// ══════════════════════════════════════════════════════
+let s5sel = null;
+const S5_CORRECT = 'B';
+
+function resetS5() {
+  s5sel = null;
+  ['A','B','C','D'].forEach(o => document.getElementById('s5'+o).classList.remove('sel'));
+  document.getElementById('s5Err').textContent = '';
+  document.getElementById('s5-question').style.display = 'block';
+  document.getElementById('s5-explain').style.display  = 'none';
+}
+
+function showS5Question() {
+  document.getElementById('s5-question').style.display = 'block';
+  document.getElementById('s5-explain').style.display  = 'none';
+}
+
+function selectS5(opt) {
+  s5sel = opt;
+  ['A','B','C','D'].forEach(o => document.getElementById('s5'+o).classList.toggle('sel', o===opt));
+  document.getElementById('s5Err').textContent = '';
+}
+
+function submitS5() {
+  if (!s5sel) { document.getElementById('s5Err').textContent = 'Please select an option before submitting.'; return; }
+  const banner = document.getElementById('s5Banner');
+  if (s5sel === S5_CORRECT) {
+    banner.className = 'result-banner rb-correct';
+    banner.innerHTML = '&#10003;&nbsp; CORRECT! The path is always a <strong>parabola</strong>. Here\'s the mathematical proof:';
+  } else {
+    banner.className = 'result-banner rb-incorrect';
+    banner.innerHTML = '&#10007;&nbsp; Not quite! The path is always a <strong>parabola</strong> — regardless of velocity or hill height. Here\'s why:';
+  }
+  document.getElementById('s5-question').style.display = 'none';
+  document.getElementById('s5-explain').style.display  = 'block';
+  setTimeout(drawParabolaGraphs, 30);
+}
+
+// ══════════════════════════════════════════════════════
+//  MCQ — Question 1
+// ══════════════════════════════════════════════════════
+let q1sel = null;
+const Q1_CORRECT = 'B';
+
+function selectQ1(opt) {
+  q1sel = opt;
+  ['A','B','C','D'].forEach(o => document.getElementById('q1'+o).classList.toggle('sel', o===opt));
+  document.getElementById('q1Err').textContent = '';
+}
+
+function submitQ1() {
+  if (!q1sel) { document.getElementById('q1Err').textContent = 'Please select an option before submitting.'; return; }
+  const banner = document.getElementById('resBanner1');
+  if (q1sel === Q1_CORRECT) {
+    banner.className = 'result-banner rb-correct';
+    banner.innerHTML = '&#10003;&nbsp; CORRECT!&nbsp; The answer is B) 60 meters';
+  } else {
+    banner.className = 'result-banner rb-incorrect';
+    banner.innerHTML = '&#10007;&nbsp; Incorrect. The correct answer is B) 60 meters.';
+  }
+  goTo(8);
+}
+
+function resetQ1() {
+  q1sel = null;
+  ['A','B','C','D'].forEach(o => document.getElementById('q1'+o).classList.remove('sel'));
+  document.getElementById('q1Err').textContent = '';
+}
+
+function retryQ1() { resetQ1(); goTo(7); }
+
+// ══════════════════════════════════════════════════════
+//  MCQ — Question 2
+// ══════════════════════════════════════════════════════
+let q2sel = null;
+const Q2_CORRECT = 'B';
+
+function selectQ2(opt) {
+  q2sel = opt;
+  ['A','B','C','D'].forEach(o => document.getElementById('q2'+o).classList.toggle('sel', o===opt));
+  document.getElementById('q2Err').textContent = '';
+}
+
+function submitQ2() {
+  if (!q2sel) { document.getElementById('q2Err').textContent = 'Please select an option before submitting.'; return; }
+  const banner = document.getElementById('resBanner2');
+  if (q2sel === Q2_CORRECT) {
+    banner.className = 'result-banner rb-correct';
+    banner.innerHTML = '&#10003;&nbsp; CORRECT!&nbsp; The answer is B) 69.3 meters';
+  } else {
+    banner.className = 'result-banner rb-incorrect';
+    banner.innerHTML = '&#10007;&nbsp; Incorrect. The correct answer is B) 69.3 meters.';
+  }
+  goTo(15);
+}
+
+function resetQ2() {
+  q2sel = null;
+  ['A','B','C','D'].forEach(o => document.getElementById('q2'+o).classList.remove('sel'));
+  document.getElementById('q2Err').textContent = '';
+}
+
+function retryQ2() { resetQ2(); goTo(14); }
+
+// ══════════════════════════════════════════════════════
+//  Resize handler
+// ══════════════════════════════════════════════════════
+window.addEventListener('resize', () => {
+  if (currentScreen === 1)  drawHeroCanvas();
+  if (currentScreen === 2)  drawScenario();
+  if (currentScreen === 3)  drawForceDiagram();
+  if (currentScreen === 5 && document.getElementById('s5-explain').style.display !== 'none') drawParabolaGraphs();
+  if (currentScreen === 6)  drawSim1Canvas(s1.t);
+  if (currentScreen === 9)  drawHero2Canvas();
+  if (currentScreen === 12) drawAngleComp();
+  if (currentScreen === 13) drawSim2Canvas(s2.t);
+});
+
+// ── Startup ────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('screenBadge').textContent = 'Screen 1';
+  drawHeroCanvas();
+});
+</script>
+</body>
+</html>
