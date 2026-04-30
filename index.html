@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PhysicsLab – Interactive Physics for JEE &amp; NEET</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ① NAVBAR -->
+<nav id="navbar">
+  <a class="nav-logo" href="#home">
+    <!-- Atom SVG icon -->
+    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="18" cy="18" r="3.5" fill="#1A9FE0"/>
+      <ellipse cx="18" cy="18" rx="15" ry="6" stroke="#1A9FE0" stroke-width="1.8" fill="none"/>
+      <ellipse cx="18" cy="18" rx="15" ry="6" stroke="#4DB8F0" stroke-width="1.8" fill="none" transform="rotate(60 18 18)"/>
+      <ellipse cx="18" cy="18" rx="15" ry="6" stroke="#4DB8F0" stroke-width="1.8" fill="none" transform="rotate(120 18 18)"/>
+    </svg>
+    <span>PhysicsLab</span>
+  </a>
+
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#modules">Modules</a></li>
+    <li><a href="#about-section">About</a></li>
+    <li><a href="#footer-cta">Contact</a></li>
+    <li><a class="nav-badge" href="#modules">JEE | NEET</a></li>
+  </ul>
+
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+
+<!-- ② HERO -->
+<section id="home">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <h1>Learn Physics<br>by Doing</h1>
+      <p>Interactive simulations that make JEE &amp; NEET physics concepts click — not just memorize.</p>
+      <div class="hero-ctas">
+        <a class="btn-primary" href="#modules">Explore Modules</a>
+        <a class="btn-secondary" href="#modules">Explore More</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-circle-bg"></div>
+      <div class="hero-circle-sm"></div>
+      <div class="hero-rocket">🚀</div>
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-item">
+      <span class="stat-icon">📘</span>
+      <div class="stat-text">
+        <strong>2</strong>
+        <span>Modules</span>
+      </div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-icon">🧪</span>
+      <div class="stat-text">
+        <strong>10+</strong>
+        <span>Simulations</span>
+      </div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-icon">🏆</span>
+      <div class="stat-text">
+        <strong>JEE</strong>
+        <span>&amp; NEET Ready</span>
+      </div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-icon">👆</span>
+      <div class="stat-text">
+        <strong>100%</strong>
+        <span>Interactive</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ③ MODULE CARDS -->
+<section id="modules">
+  <div class="section-header">
+    <h2>Choose Your Module</h2>
+    <p>Pick a topic and start your interactive learning journey</p>
+  </div>
+
+  <div class="module-cards-grid">
+    <!-- Card 1: Kinematics -->
+    <div class="module-card kinematics">
+      <div class="card-header">
+        <div class="card-icon">📈</div>
+        <div class="card-header-text">
+          <p class="module-label">Module 1</p>
+          <h3>Kinematics Graphs</h3>
+        </div>
+      </div>
+      <div class="card-preview">
+        <canvas id="cardCanvasKin" height="160"></canvas>
+      </div>
+      <div class="card-body">
+        Displacement, velocity &amp; acceleration vs time — adjust motion type to see how graphs relate in real time.
+      </div>
+      <div class="card-footer">
+        <a class="btn-module" href="http://jeeneetprep.stemlabstudio.in/kinematics_02/velocity_acceleration_01.html">Launch Module →</a>
+      </div>
+    </div>
+
+    <!-- Card 2: Projectile -->
+    <div class="module-card projectile">
+      <div class="card-header">
+        <div class="card-icon">🎯</div>
+        <div class="card-header-text">
+          <p class="module-label">Module 2</p>
+          <h3>Projectile Motion</h3>
+        </div>
+      </div>
+      <div class="card-preview">
+        <canvas id="cardCanvasProj" height="160"></canvas>
+      </div>
+      <div class="card-body">
+        Set angle &amp; velocity, launch and observe the parabolic trajectory with live metrics for range &amp; height.
+      </div>
+      <div class="card-footer">
+        <a class="btn-module" href="http://jeeneetprep.stemlabstudio.in/kinematics_03/projectile_motion_01.html">Launch Module →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ⑥ FOOTER / CTA -->
+<section id="footer-cta">
+  <span class="cta-icon">🎓</span>
+  <h2>Ready to master Physics?</h2>
+  <p>Start with any module — it's free, interactive, and built for exam prep.</p>
+  <a class="btn-primary" href="#modules">Get Started Now →</a>
+</section>
+
+<footer id="about-section">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="brand-name" href="#home">
+        <svg width="28" height="28" viewBox="0 0 36 36" fill="none">
+          <circle cx="18" cy="18" r="3.5" fill="#1A9FE0"/>
+          <ellipse cx="18" cy="18" rx="15" ry="6" stroke="#1A9FE0" stroke-width="1.8" fill="none"/>
+          <ellipse cx="18" cy="18" rx="15" ry="6" stroke="#4DB8F0" stroke-width="1.8" fill="none" transform="rotate(60 18 18)"/>
+          <ellipse cx="18" cy="18" rx="15" ry="6" stroke="#4DB8F0" stroke-width="1.8" fill="none" transform="rotate(120 18 18)"/>
+        </svg>
+        PhysicsLab
+      </a>
+      <p>Making physics intuitive for every JEE &amp; NEET student through hands-on interactive simulations.</p>
+    </div>
+
+    <div class="footer-col">
+      <h5>Quick Links</h5>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#modules">Modules</a></li>
+        <li><a href="#about-section">About</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h5>Exam Focus</h5>
+      <ul>
+        <li><a href="#">JEE Main</a></li>
+        <li><a href="#">JEE Advanced</a></li>
+        <li><a href="#">NEET UG</a></li>
+        <li><a href="#">Board Exams</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    © 2026 PhysicsLab. Built for learners, by educators.
+  </div>
+</footer>
+
+
+<script>
+/* ================================================
+   UTILITY
+   ================================================ */
+const $ = id => document.getElementById(id);
+
+function dpr() { return window.devicePixelRatio || 1; }
+
+function setupCanvas(canvas) {
+  const rect = canvas.getBoundingClientRect();
+  const d = dpr();
+  canvas.width  = rect.width  * d;
+  canvas.height = rect.height * d;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(d, d);
+  return { ctx, W: rect.width, H: rect.height };
+}
+
+/* ================================================
+   CARD PREVIEW – Kinematics mini-graph
+   ================================================ */
+function drawKinCard() {
+  const canvas = $('cardCanvasKin');
+  const { ctx, W, H } = setupCanvas(canvas);
+  ctx.clearRect(0, 0, W, H);
+
+  const pad = { l: 24, r: 12, t: 16, b: 24 };
+  const gW = W - pad.l - pad.r;
+  const gH = H - pad.t - pad.b;
+
+  // background
+  ctx.fillStyle = '#F7FAFC';
+  ctx.fillRect(0, 0, W, H);
+
+  // axes
+  ctx.strokeStyle = '#CBD5E0';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(pad.l, pad.t);
+  ctx.lineTo(pad.l, pad.t + gH);
+  ctx.lineTo(pad.l + gW, pad.t + gH);
+  ctx.stroke();
+
+  // labels
+  ctx.fillStyle = '#8899AA';
+  ctx.font = '10px Segoe UI';
+  ctx.fillText('y-axis', 2, pad.t + gH / 2);
+  ctx.fillText('time (t)', pad.l + gW - 26, pad.t + gH + 16);
+
+  // displacement line (red solid)
+  ctx.strokeStyle = '#E05252';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  const pts = [0, 0.1, 0.25, 0.55, 0.4, 0.6, 0.7, 0.9, 0.85, 1];
+  for (let i = 0; i < pts.length; i += 2) {
+    const x = pad.l + (pts[i] * gW);
+    const y = pad.t + gH - (pts[i+1] * gH * 0.8);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  // velocity line (blue dashed)
+  ctx.strokeStyle = '#1A9FE0';
+  ctx.lineWidth = 1.8;
+  ctx.setLineDash([4, 3]);
+  ctx.beginPath();
+  const vpts = [0, 0.05, 0.3, 0.35, 0.5, 0.3, 0.7, 0.5, 1, 0.7];
+  for (let i = 0; i < vpts.length; i += 2) {
+    const x = pad.l + (vpts[i] * gW);
+    const y = pad.t + gH - (vpts[i+1] * gH * 0.8);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // legend
+  ctx.font = '9px Segoe UI';
+  ctx.fillStyle = '#E05252'; ctx.fillText('— displacement', W - 88, pad.t + 14);
+  ctx.fillStyle = '#1A9FE0'; ctx.fillText('- - velocity',    W - 88, pad.t + 26);
+}
+
+/* ================================================
+   CARD PREVIEW – Projectile mini-graph
+   ================================================ */
+function drawProjCard() {
+  const canvas = $('cardCanvasProj');
+  const { ctx, W, H } = setupCanvas(canvas);
+  ctx.clearRect(0, 0, W, H);
+
+  ctx.fillStyle = '#FFF9F9';
+  ctx.fillRect(0, 0, W, H);
+
+  const pad = { l: 16, r: 16, t: 24, b: 24 };
+  const gW = W - pad.l - pad.r;
+  const gH = H - pad.t - pad.b;
+
+  // ground
+  ctx.strokeStyle = '#CBD5E0';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(pad.l, pad.t + gH);
+  ctx.lineTo(pad.l + gW, pad.t + gH);
+  ctx.stroke();
+
+  // parabola
+  ctx.strokeStyle = '#E05252';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([5, 4]);
+  ctx.beginPath();
+  const steps = 60;
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps;
+    const x = pad.l + t * gW;
+    const y = pad.t + gH - (4 * gH * 0.75 * t * (1 - t));
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // launch & land dots
+  const dotR = 5;
+  ctx.fillStyle = '#1A9FE0';
+  [[pad.l, pad.t + gH], [pad.l + gW, pad.t + gH]].forEach(([cx, cy]) => {
+    ctx.beginPath(); ctx.arc(cx, cy, dotR, 0, Math.PI * 2); ctx.fill();
+  });
+
+  // H_max label
+  const hx = pad.l + gW / 2;
+  const hy = pad.t + gH * 0.02;
+  ctx.fillStyle = '#E05252';
+  ctx.font = '10px Segoe UI';
+  ctx.fillText('H_max', hx - 14, hy + 10);
+  ctx.beginPath(); ctx.arc(hx, hy + 14, 4, 0, Math.PI * 2);
+  ctx.fill();
+
+  // angle arc
+  ctx.strokeStyle = '#0F1B2D'; ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.arc(pad.l, pad.t + gH, 18, -Math.PI / 4, 0);
+  ctx.stroke();
+  ctx.fillStyle = '#0F1B2D'; ctx.font = '9px Segoe UI';
+  ctx.fillText('θ', pad.l + 14, pad.t + gH - 6);
+
+  // Range label
+  ctx.fillStyle = '#8899AA'; ctx.font = '9px Segoe UI';
+  ctx.fillText('Range (R)', pad.l + gW / 2 - 18, pad.t + gH + 16);
+}
+
+
+/* ================================================
+   HAMBURGER MENU
+   ================================================ */
+$('hamburger').addEventListener('click', () => {
+  $('navLinks').classList.toggle('open');
+});
+
+/* ================================================
+   INIT & RESIZE
+   ================================================ */
+function initAll() {
+  drawKinCard();
+  drawProjCard();
+}
+
+window.addEventListener('load', initAll);
+window.addEventListener('resize', () => {
+  drawKinCard();
+  drawProjCard();
+});
+</script>
+</body>
+</html>
