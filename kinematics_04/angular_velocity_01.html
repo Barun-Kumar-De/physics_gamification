@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Angular Velocity — Interactive Module</title>
+  <link rel="stylesheet" href="angular_velocity_01.css" />
+</head>
+<body>
+<div id="app">
+
+  <!-- HEADER -->
+  <header>
+    <span class="module-title">Angular Velocity · Interactive Concept Module</span>
+    <span class="screen-label" id="headerLabel">Screen 1 of 8</span>
+  </header>
+
+  <!-- ══════════════════════════════════════════════
+       SCREEN 01 — Angular Displacement
+  ═══════════════════════════════════════════════ -->
+  <section class="screen active" id="s1">
+    <div class="screen-title">Screen 01 · Concept of Angular Displacement</div>
+    <div class="cols">
+      <!-- LEFT -->
+      <div class="panel">
+        <div class="panel-label">Concept Panel</div>
+        <h2>Angular Displacement (θ)</h2>
+        <p>Angle swept by the radius vector of a particle in circular motion, measured from a reference line.</p>
+        <div class="section-label">Units</div>
+        <div class="unit-tags">
+          <span class="unit-tag active" id="s1-unit-rad" onclick="s1SetUnit('rad')">radian (SI)</span>
+          <span class="unit-tag" id="s1-unit-deg" onclick="s1SetUnit('deg')">degree</span>
+        </div>
+        <div class="section-label">Key Relation</div>
+        <div class="formula-box">θ (rad) = arc length / radius &nbsp;·&nbsp; 180° = π rad</div>
+      </div>
+
+      <!-- CANVAS -->
+      <div class="canvas-panel">
+        <div class="panel-label" style="align-self:flex-start">Interactive Canvas</div>
+        <canvas id="c1" width="420" height="360"></canvas>
+        <div class="canvas-hint">&#8635; drag radius to rotate</div>
+        <div class="readout-bar">
+          <div class="readout-chip" id="s1-rad-chip">θ = 0.00 rad</div>
+          <div class="readout-chip" id="s1-deg-chip">θ = 0.0°</div>
+        </div>
+      </div>
+
+    </div>
+    <div class="nav-row">
+      <button class="btn reset" onclick="s1Reset()">RESET</button>
+      <button class="btn primary" onclick="goTo(2)">NEXT →</button>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       SCREEN 02 — Defining Angular Velocity
+  ═══════════════════════════════════════════════ -->
+  <section class="screen" id="s2">
+    <div class="screen-title">Screen 02 · Defining Angular Velocity</div>
+    <div class="cols">
+      <!-- LEFT -->
+      <div class="panel">
+        <div class="panel-label">Definitions</div>
+        <h2>Average Angular Velocity</h2>
+        <div class="formula-box">ω̄ = Δθ / Δt</div>
+        <p>Total angular displacement divided by total time interval.</p>
+        <h2>Instantaneous Angular Velocity</h2>
+        <div class="formula-box">ω = dθ / dt</div>
+        <p>Limit of average angular velocity as Δt → 0.</p>
+        <div class="section-label">Units</div>
+        <div class="unit-tags">
+          <span class="unit-tag active" id="s2-unit-rad" onclick="s2SetUnit('rad')">rad/s</span>
+          <span class="unit-tag" id="s2-unit-rpm" onclick="s2SetUnit('rpm')">rev/min</span>
+          <span class="unit-tag" id="s2-unit-degs" onclick="s2SetUnit('degs')">deg/s</span>
+        </div>
+      </div>
+
+      <!-- CANVAS -->
+      <div class="canvas-panel">
+        <div class="panel-label" style="align-self:flex-start">Interactive Canvas</div>
+        <canvas id="c2" width="420" height="300"></canvas>
+        <div class="live-readout">
+          <div>Δθ = <span class="val" id="s2-dtheta">1.57 rad</span></div>
+          <div>Δt = <span class="val" id="s2-dt">0.50 s</span></div>
+          <div>ω = <span class="val" id="s2-omega">3.14 rad/s</span></div>
+          <div id="s2-conversion" style="font-size:0.8rem;color:var(--text-muted);margin-top:4px;font-style:italic;"></div>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="right-panel">
+        <div class="interactive-box">
+          <div class="ibox-label">Interactive</div>
+          <ul>
+            <li>Slider: change Δθ and Δt</li>
+            <li>Observe ω update in real time</li>
+          </ul>
+        </div>
+        <div class="controls-box">
+          <div class="ctrl-label">Controls</div>
+          <div class="slider-group">
+            <label>Δθ (radians)</label>
+            <input type="range" id="s2-sl-dtheta" min="0.1" max="6.28" step="0.01" value="1.57" oninput="s2Update()" />
+            <div class="slider-val" id="s2-sl-dtheta-val">current: 1.57 rad</div>
+          </div>
+          <div class="slider-group">
+            <label>Δt (seconds)</label>
+            <input type="range" id="s2-sl-dt" min="0.1" max="5" step="0.1" value="0.5" oninput="s2Update()" />
+            <div class="slider-val" id="s2-sl-dt-val">current: 0.50 s</div>
+          </div>
+        </div>
+        <div class="nav-row">
+          <button class="btn" onclick="goTo(1)">← BACK</button>
+          <button class="btn primary" onclick="goTo(3)">NEXT →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       SCREEN 03 — Direction of Angular Velocity
+  ═══════════════════════════════════════════════ -->
+  <section class="screen" id="s3">
+    <div class="screen-title">Screen 03 · Direction of Angular Velocity</div>
+    <div class="cols">
+      <!-- LEFT -->
+      <div class="panel">
+        <div class="panel-label">Concept Panel</div>
+        <h2>Right-Hand Thumb Rule</h2>
+        <p>Curl the fingers of your right hand in the direction of rotation. The thumb points along the direction of <strong>ω⃗</strong>.</p>
+        <div style="display:flex;gap:10px;justify-content:center;margin:10px 0;">
+          <div style="text-align:center;">
+            <canvas id="c3-rhr-acw" width="100" height="120"></canvas>
+            <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">↺ Anticlockwise</div>
+          </div>
+          <div style="text-align:center;">
+            <canvas id="c3-rhr-cw" width="100" height="120"></canvas>
+            <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">↻ Clockwise</div>
+          </div>
+        </div>
+        <div class="sign-box">
+          <div class="section-label">Sign Convention</div>
+          <div class="sign-row"><span class="odot">⊙</span> <span class="sign-lbl">out of screen</span><span class="sign-arrow">→</span> anticlockwise ω</div>
+          <div class="sign-row"><span class="otimes">⊗</span> <span class="sign-lbl">into screen</span><span class="sign-arrow">→</span> clockwise ω</div>
+        </div>
+      </div>
+
+      <!-- CANVAS -->
+      <div class="canvas-panel">
+        <div class="panel-label" style="align-self:flex-start">Interactive Canvas</div>
+        <canvas id="c3" width="420" height="340"></canvas>
+        <div id="s3-omega-label" style="font-size:0.92rem;font-weight:600;color:var(--blue);">ω⃗ (out of screen)</div>
+        <div class="readout-bar">
+          <button class="toggle-btn active" id="s3-acw-btn" onclick="s3SetDir('acw')" style="flex:1;padding:10px;">↺ Anticlockwise</button>
+          <button class="toggle-btn" id="s3-cw-btn" onclick="s3SetDir('cw')" style="flex:1;padding:10px;">↻ Clockwise</button>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="right-panel">
+        <div class="controls-box">
+          <div class="ctrl-label">View</div>
+          <div class="toggle-group" style="flex-direction:column;">
+            <button class="toggle-btn active" id="s3-v2d" onclick="s3SetView('2d')">2D top view</button>
+            <button class="toggle-btn" id="s3-v3d" onclick="s3SetView('3d')">3D perspective</button>
+          </div>
+        </div>
+        <div class="nav-row">
+          <button class="btn" onclick="goTo(2)">← BACK</button>
+          <button class="btn primary" onclick="goTo(4)">NEXT →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       SCREEN 04 — v = rω
+  ═══════════════════════════════════════════════ -->
+  <section class="screen" id="s4">
+    <div class="screen-title">Screen 04 · Relation Between Linear &amp; Angular Velocity</div>
+    <div class="cols">
+      <!-- LEFT -->
+      <div class="panel">
+        <div class="panel-label">Key Relation</div>
+        <h2>Linear ↔ Angular</h2>
+        <div class="formula-box" style="font-size:1.4rem;padding:18px;">v = r ω</div>
+        <p><strong>v</strong> = linear (tangential) speed</p>
+        <p><strong>r</strong> = radius (distance from axis)</p>
+        <p><strong>ω</strong> = angular speed (rad/s)</p>
+        <div class="insight-box">
+          <div class="insight-label">Insight</div>
+          All points on a rigid rotating body share the same ω, but points farther from the axis have larger linear speed v.
+        </div>
+      </div>
+
+      <!-- CANVAS -->
+      <div class="canvas-panel">
+        <div class="panel-label" style="align-self:flex-start">Interactive Canvas</div>
+        <canvas id="c4" width="420" height="340"></canvas>
+        <div style="font-size:0.82rem;color:var(--text-muted);font-style:italic;">Same ω · Different r</div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="right-panel">
+        <div class="interactive-box">
+          <div class="ibox-label">Interactive</div>
+          <ul>
+            <li>Drag points to change r₁, r₂</li>
+            <li>Slider sets shared ω</li>
+            <li>v₁ and v₂ compared live</li>
+          </ul>
+        </div>
+        <div class="controls-box">
+          <div class="ctrl-label">Controls</div>
+          <div class="slider-group">
+            <label>ω (rad/s)</label>
+            <input type="range" id="s4-sl-omega" min="0.5" max="10" step="0.1" value="4.0" oninput="s4Update()" />
+            <div class="slider-val" id="s4-omega-val">ω = 4.0 rad/s</div>
+          </div>
+          <div class="slider-group">
+            <label>r₁ (m)</label>
+            <input type="range" id="s4-sl-r1" min="0.05" max="0.5" step="0.01" value="0.20" oninput="s4Update()" />
+            <div class="slider-val" id="s4-r1-val">r₁ = 0.20 m</div>
+          </div>
+          <div class="slider-group">
+            <label>r₂ (m)</label>
+            <input type="range" id="s4-sl-r2" min="0.1" max="0.9" step="0.01" value="0.45" oninput="s4Update()" />
+            <div class="slider-val" id="s4-r2-val">r₂ = 0.45 m</div>
+          </div>
+        </div>
+        <div class="comparison-box">
+          <div class="section-label" style="margin-bottom:6px;">Comparison</div>
+          <div>v₁ (r₁ = <span id="s4-r1-disp">0.20</span> m) = <span class="cv" id="s4-v1">0.80 m/s</span></div>
+          <div>v₂ (r₂ = <span id="s4-r2-disp">0.45</span> m) = <span class="cv" id="s4-v2">1.80 m/s</span></div>
+          <div style="margin-top:6px;font-size:0.82rem;">v₁/v₂ = r₁/r₂ = <span class="cv" id="s4-ratio">0.44</span></div>
+        </div>
+        <div class="nav-row">
+          <button class="btn" onclick="goTo(3)">← BACK</button>
+          <button class="btn primary" onclick="goTo(6)">NEXT →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       SCREEN 05 — Multiple Representations
+  ═══════════════════════════════════════════════ -->
+  <section class="screen" id="s6">
+    <div class="screen-title">Screen 05 · Multiple Representations</div>
+    <div style="display:flex;justify-content:center;margin-bottom:12px;">
+      <div class="rep-panel">
+        <div class="rep-label" id="s6-motion-label">MOTION ANIMATION</div>
+        <canvas id="c6a" width="240" height="220"></canvas>
+      </div>
+    </div>
+    <div class="challenge-row">
+      <div class="challenge-panel">
+        <div class="ch-label">Challenge A · Motion → Graph</div>
+        <p>Watch the rotation. Pick the matching θ–t graph.</p>
+        <div class="choice-grid" id="s6-ca-choices">
+          <div class="choice-item" id="s6ca-A" onclick="s6ChooseA('A')">
+            <canvas width="60" height="50" id="g6ca-A"></canvas>A
+          </div>
+          <div class="choice-item" id="s6ca-B" onclick="s6ChooseA('B')">
+            <canvas width="60" height="50" id="g6ca-B"></canvas>B
+          </div>
+          <div class="choice-item" id="s6ca-C" onclick="s6ChooseA('C')">
+            <canvas width="60" height="50" id="g6ca-C"></canvas>C
+          </div>
+          <div class="choice-item" id="s6ca-D" onclick="s6ChooseA('D')">
+            <canvas width="60" height="50" id="g6ca-D"></canvas>D
+          </div>
+        </div>
+        <div id="s6-ca-feedback" style="font-size:0.8rem;margin-top:8px;min-height:20px;"></div>
+      </div>
+      <div class="challenge-panel">
+        <div class="ch-label">Challenge B · Motion → Graph</div>
+        <p>Watch the rotation above. Pick the matching ω–t graph.</p>
+        <div class="choice-grid" id="s6-cb-choices">
+          <div class="choice-item" id="s6cb-A" onclick="s6ChooseB('A')">
+            <canvas width="60" height="50" id="g6cb-A"></canvas>A
+          </div>
+          <div class="choice-item" id="s6cb-B" onclick="s6ChooseB('B')">
+            <canvas width="60" height="50" id="g6cb-B"></canvas>B
+          </div>
+          <div class="choice-item" id="s6cb-C" onclick="s6ChooseB('C')">
+            <canvas width="60" height="50" id="g6cb-C"></canvas>C
+          </div>
+          <div class="choice-item" id="s6cb-D" onclick="s6ChooseB('D')">
+            <canvas width="60" height="50" id="g6cb-D"></canvas>D
+          </div>
+        </div>
+        <div id="s6-cb-feedback" style="font-size:0.8rem;margin-top:8px;min-height:20px;"></div>
+      </div>
+    </div>
+    <div class="nav-row" style="margin-top:10px;">
+      <button class="btn" onclick="goTo(4)">← BACK</button>
+      <button class="btn" onclick="s6RotateAgain()">↺ Rotate Again</button>
+      <button class="btn primary" onclick="goTo(7)">NEXT →</button>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       SCREEN 06 — MCQ 1
+  ═══════════════════════════════════════════════ -->
+  <section class="screen" id="s7">
+    <div class="screen-title">Screen 06 · JEE Main Practice — Angular Velocity</div>
+    <div class="mcq-layout">
+      <div class="question-panel">
+        <div class="q-label">Question</div>
+        <p><span class="q-num">Q1.</span></p>
+        <p class="q-text">A particle moves in a circle of radius 0.5 m with a constant angular speed. It completes 30 revolutions per minute. The linear speed of the particle is approximately:</p>
+        <div style="background:var(--canvas-bg);border:1px dashed var(--border);border-radius:6px;padding:14px;text-align:center;font-size:0.82rem;font-style:italic;color:var(--text-muted);">
+          Figure: particle on a horizontal circle, radius r = 0.5 m
+        </div>
+        <div class="choices" id="s7-choices">
+          <button class="choice-btn" onclick="s7Choose('A')">(A) &nbsp;0.79 m/s <span class="checkmark"></span></button>
+          <button class="choice-btn" onclick="s7Choose('B')">(B) &nbsp;1.57 m/s <span class="checkmark"></span></button>
+          <button class="choice-btn" onclick="s7Choose('C')">(C) &nbsp;3.14 m/s <span class="checkmark"></span></button>
+          <button class="choice-btn" onclick="s7Choose('D')">(D) &nbsp;6.28 m/s <span class="checkmark"></span></button>
+        </div>
+      </div>
+      <div class="solution-panel" id="s7-solution" style="display:none">
+        <div class="sol-label">Solution</div>
+        <div class="sol-step">
+          <div class="step-title">Step 1 · Convert RPM → rad/s</div>
+          <div class="step-formula">ω = 2π × (30/60) = π rad/s ≈ 3.14 rad/s</div>
+        </div>
+        <div class="sol-step">
+          <div class="step-title">Step 2 · Apply v = r ω</div>
+          <div class="step-formula">v = 0.5 × π = π/2 m/s ≈ 1.57 m/s</div>
+        </div>
+        <div class="answer-label">Answer</div>
+        <div class="answer-box">(B) &nbsp;1.57 m/s</div>
+        <div class="insight-box">
+          <div class="insight-label">Takeaway</div>
+          Always convert revolutions to radians (1 rev = 2π rad). Then v = rω gives linear speed in m/s if r is in metres.
+        </div>
+      </div>
+    </div>
+    <div class="nav-row" style="margin-top:12px;">
+      <button class="btn" onclick="goTo(6)">← BACK</button>
+      <button class="btn primary" onclick="goTo(8)">NEXT →</button>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       SCREEN 08 — MCQ 2
+  ═══════════════════════════════════════════════ -->
+  <section class="screen" id="s8">
+    <div class="screen-title">Screen 07 · JEE Main Practice — Angular Velocity</div>
+    <div class="mcq-layout">
+      <div class="question-panel">
+        <div class="q-label">Question</div>
+        <p><span class="q-num">Q2.</span></p>
+        <p class="q-text">The angular position of a rotating disc is given by θ(t) = 2t³ − 3t² + 4 (in radians, t in seconds). The angular velocity of the disc at t = 2 s is:</p>
+        <div class="q-formula-box">θ(t) = 2t³ − 3t² + 4</div>
+        <div class="q-hint">💡 Hint: ω = dθ/dt</div>
+        <div class="choices" id="s8-choices">
+          <button class="choice-btn" onclick="s8Choose('A')">(A) &nbsp;6 rad/s <span class="checkmark"></span></button>
+          <button class="choice-btn" onclick="s8Choose('B')">(B) &nbsp;10 rad/s <span class="checkmark"></span></button>
+          <button class="choice-btn" onclick="s8Choose('C')">(C) &nbsp;12 rad/s <span class="checkmark"></span></button>
+          <button class="choice-btn" onclick="s8Choose('D')">(D) &nbsp;18 rad/s <span class="checkmark"></span></button>
+        </div>
+      </div>
+      <div class="solution-panel" id="s8-solution" style="display:none">
+        <div class="sol-label">Solution</div>
+        <div class="sol-step">
+          <div class="step-title">Step 1 · Differentiate θ(t)</div>
+          <div class="step-formula">ω(t) = dθ/dt = 6t² − 6t</div>
+        </div>
+        <div class="sol-step">
+          <div class="step-title">Step 2 · Substitute t = 2 s</div>
+          <div class="step-formula">ω(2) = 6(4) − 6(2) = 24 − 12 = 12 rad/s</div>
+        </div>
+        <div class="answer-label">Answer</div>
+        <div class="answer-box">(C) &nbsp;12 rad/s</div>
+        <div class="insight-box">
+          <div class="insight-label">Takeaway</div>
+          Instantaneous ω is the time derivative of θ(t). For variable rotation, evaluate ω = dθ/dt at the required instant.
+        </div>
+      </div>
+    </div>
+    <div class="nav-row" style="margin-top:12px;">
+      <button class="btn" onclick="goTo(7)">← BACK</button>
+      <button class="btn primary" onclick="goTo(1)">↺ Start Over</button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span id="footerLabel">Screen 1 of 8 · Angular Velocity · JEE Main / NEET</span>
+    <div class="progress-dots" id="progressDots"></div>
+  </footer>
+
+</div>
+<script src="angular_velocity_01.js"></script>
+</body>
+</html>
