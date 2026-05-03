@@ -12,6 +12,7 @@
   <!-- HEADER -->
   <header>
     <span class="module-title">Angular Velocity · Interactive Concept Module</span>
+    <button id="voiceBtn" onclick="toggleVoice()" title="Mute narration">🔊</button>
     <span class="screen-label" id="headerLabel">Screen 1 of 8</span>
   </header>
 
@@ -68,11 +69,13 @@
         <h2>Instantaneous Angular Velocity</h2>
         <div class="formula-box">ω = dθ / dt</div>
         <p>Limit of average angular velocity as Δt → 0.</p>
-        <div class="section-label">Units</div>
-        <div class="unit-tags">
-          <span class="unit-tag active" id="s2-unit-rad" onclick="s2SetUnit('rad')">rad/s</span>
-          <span class="unit-tag" id="s2-unit-rpm" onclick="s2SetUnit('rpm')">rev/min</span>
-          <span class="unit-tag" id="s2-unit-degs" onclick="s2SetUnit('degs')">deg/s</span>
+        <div class="units-section" id="s2-units-section">
+          <div class="section-label">Units</div>
+          <div class="unit-tags">
+            <span class="unit-tag active" id="s2-unit-rad" onclick="s2SetUnit('rad')">rad/s</span>
+            <span class="unit-tag" id="s2-unit-rpm" onclick="s2SetUnit('rpm')">rev/min</span>
+            <span class="unit-tag" id="s2-unit-degs" onclick="s2SetUnit('degs')">deg/s</span>
+          </div>
         </div>
       </div>
 
@@ -97,7 +100,7 @@
             <li>Observe ω update in real time</li>
           </ul>
         </div>
-        <div class="controls-box">
+        <div class="controls-box" id="s2-controls-box">
           <div class="ctrl-label">Controls</div>
           <div class="slider-group">
             <label>Δθ (radians)</label>
@@ -159,7 +162,7 @@
 
       <!-- RIGHT -->
       <div class="right-panel">
-        <div class="controls-box">
+        <div class="controls-box" id="s3-view-box">
           <div class="ctrl-label">View</div>
           <div class="toggle-group" style="flex-direction:column;">
             <button class="toggle-btn active" id="s3-v2d" onclick="s3SetView('2d')">2D top view</button>
@@ -211,7 +214,7 @@
             <li>v₁ and v₂ compared live</li>
           </ul>
         </div>
-        <div class="controls-box">
+        <div class="controls-box" id="s4-controls-box">
           <div class="ctrl-label">Controls</div>
           <div class="slider-group">
             <label>ω (rad/s)</label>
@@ -255,7 +258,7 @@
       </div>
     </div>
     <div class="challenge-row">
-      <div class="challenge-panel">
+      <div class="challenge-panel" id="s6-challenge-a">
         <div class="ch-label">Challenge A · Motion → Graph</div>
         <p>Watch the rotation. Pick the matching θ–t graph.</p>
         <div class="choice-grid" id="s6-ca-choices">
@@ -274,7 +277,7 @@
         </div>
         <div id="s6-ca-feedback" style="font-size:0.8rem;margin-top:8px;min-height:20px;"></div>
       </div>
-      <div class="challenge-panel">
+      <div class="challenge-panel" id="s6-challenge-b">
         <div class="ch-label">Challenge B · Motion → Graph</div>
         <p>Watch the rotation above. Pick the matching ω–t graph.</p>
         <div class="choice-grid" id="s6-cb-choices">
