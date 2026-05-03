@@ -286,7 +286,7 @@ body {
 
 .module-cards-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 28px;
   max-width: 1100px;
   margin: 0 auto;
@@ -303,6 +303,7 @@ body {
 .module-card:hover { transform: translateY(-6px); box-shadow: 0 12px 40px rgba(0,0,0,0.15); }
 .module-card.kinematics { border-top-color: var(--blue); }
 .module-card.projectile  { border-top-color: var(--red); }
+.module-card.angular     { border-top-color: var(--green); }
 
 .card-header {
   display: flex;
@@ -322,6 +323,7 @@ body {
 }
 .kinematics .card-icon { background: #EBF6FE; }
 .projectile  .card-icon { background: #FEF0EE; }
+.angular     .card-icon { background: #EAF7EF; }
 
 .card-header-text .module-label {
   font-size: 0.72rem;
@@ -332,6 +334,7 @@ body {
 }
 .kinematics .module-label { color: var(--blue); }
 .projectile  .module-label { color: var(--red); }
+.angular     .module-label { color: var(--green); }
 
 .card-header-text h3 {
   font-size: 1.25rem;
@@ -377,6 +380,7 @@ body {
 .btn-module:hover { filter: brightness(1.1); transform: translateY(-1px); }
 .kinematics .btn-module { background: var(--blue); }
 .projectile  .btn-module { background: var(--red); }
+.angular     .btn-module { background: var(--green); }
 
 /* =============================================
    MODULE DETAIL SECTIONS  (Sections ④ ⑤)
@@ -643,7 +647,7 @@ footer {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
   gap: 40px;
   max-width: 1100px;
   margin: 0 auto 36px;
@@ -684,6 +688,18 @@ footer {
 }
 .footer-col ul li a:hover { color: var(--white); }
 
+.footer-contact-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.contact-icon {
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  opacity: 0.75;
+}
+
 .footer-bottom {
   border-top: 1px solid rgba(255,255,255,0.08);
   padding-top: 20px;
@@ -698,7 +714,7 @@ footer {
    RESPONSIVE
    ============================================= */
 @media (max-width: 900px) {
-  .module-cards-grid { grid-template-columns: 1fr; }
+  .module-cards-grid { grid-template-columns: 1fr 1fr; }
   .sim-layout { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .hero-visual { display: none; }
@@ -718,6 +734,7 @@ footer {
     box-shadow: 0 8px 20px rgba(0,0,0,0.3);
   }
   .nav-links.open li { list-style: none; }
+  .module-cards-grid { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr; gap: 28px; }
   .stats-bar { gap: 24px; }
   .info-cards { grid-template-columns: 1fr 1fr; }
