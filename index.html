@@ -57,7 +57,7 @@
     <div class="stat-item">
       <span class="stat-icon">📘</span>
       <div class="stat-text">
-        <strong>2</strong>
+        <strong>3</strong>
         <span>Modules</span>
       </div>
     </div>
@@ -110,7 +110,7 @@
         Displacement, velocity &amp; acceleration vs time — adjust motion type to see how graphs relate in real time.
       </div>
       <div class="card-footer">
-        <a class="btn-module" href="http://jeeneetprep.stemlabstudio.in/kinematics_02/velocity_acceleration_01.html">Launch Module →</a>
+        <a class="btn-module" href="kinematics_02/velocity_acceleration_01.html">Launch Module →</a>
       </div>
     </div>
 
@@ -130,7 +130,27 @@
         Set angle &amp; velocity, launch and observe the parabolic trajectory with live metrics for range &amp; height.
       </div>
       <div class="card-footer">
-        <a class="btn-module" href="http://jeeneetprep.stemlabstudio.in/kinematics_03/projectile_motion_01.html">Launch Module →</a>
+        <a class="btn-module" href="kinematics_03/projectile_motion_01.html">Launch Module →</a>
+      </div>
+    </div>
+
+    <!-- Card 3: Angular Velocity -->
+    <div class="module-card angular">
+      <div class="card-header">
+        <div class="card-icon">🔄</div>
+        <div class="card-header-text">
+          <p class="module-label">Module 3</p>
+          <h3>Angular Velocity</h3>
+        </div>
+      </div>
+      <div class="card-preview">
+        <canvas id="cardCanvasAngVel" height="160"></canvas>
+      </div>
+      <div class="card-body">
+        Visualise ω, angular displacement θ, and the link between linear &amp; angular speed — v = rω — on a spinning disk.
+      </div>
+      <div class="card-footer">
+        <a class="btn-module" href="kinematics_04/angular_velocity_01.html">Launch Module →</a>
       </div>
     </div>
   </div>
@@ -177,6 +197,20 @@
         <li><a href="#">JEE Advanced</a></li>
         <li><a href="#">NEET UG</a></li>
         <li><a href="#">Board Exams</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h5>Contact</h5>
+      <ul class="footer-contact-list">
+        <li>
+          <span class="contact-icon">✉</span>
+          <a href="mailto:barunkd@gmail.com">barunkd@gmail.com</a>
+        </li>
+        <li>
+          <span class="contact-icon">📞</span>
+          <a href="tel:+919986207588">+91 99862 07588</a>
+        </li>
       </ul>
     </div>
   </div>
@@ -337,6 +371,118 @@ function drawProjCard() {
 
 
 /* ================================================
+   CARD PREVIEW – Angular Velocity mini-diagram
+   ================================================ */
+function drawAngVelCard() {
+  const canvas = $('cardCanvasAngVel');
+  const { ctx, W, H } = setupCanvas(canvas);
+  ctx.clearRect(0, 0, W, H);
+
+  ctx.fillStyle = '#F0FBF4';
+  ctx.fillRect(0, 0, W, H);
+
+  const cx = W * 0.42, cy = H * 0.50;
+  const R = Math.min(W, H) * 0.30;
+
+  // Disk fill
+  ctx.beginPath();
+  ctx.arc(cx, cy, R, 0, Math.PI * 2);
+  ctx.fillStyle = '#D4F0E3';
+  ctx.fill();
+  ctx.strokeStyle = '#27AE60';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Sector for θ
+  const theta = Math.PI / 3.5;
+  ctx.beginPath();
+  ctx.moveTo(cx, cy);
+  ctx.arc(cx, cy, R * 0.42, -Math.PI / 2, -Math.PI / 2 + theta);
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(39,174,96,0.18)';
+  ctx.fill();
+  ctx.strokeStyle = '#27AE60';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  // θ label
+  ctx.fillStyle = '#1A7040';
+  ctx.font = 'bold 11px Segoe UI';
+  ctx.fillText('θ', cx + R * 0.18, cy - R * 0.08);
+
+  // Radius line (12 o'clock)
+  ctx.strokeStyle = '#1A7040';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(cx, cy);
+  ctx.lineTo(cx, cy - R);
+  ctx.stroke();
+  ctx.fillStyle = '#1A7040';
+  ctx.font = '10px Segoe UI';
+  ctx.fillText('r', cx + 4, cy - R * 0.48);
+
+  // Center dot
+  ctx.beginPath();
+  ctx.arc(cx, cy, 4, 0, Math.PI * 2);
+  ctx.fillStyle = '#27AE60';
+  ctx.fill();
+
+  // Curved ω arrow outside disk
+  const arcR = R + 11;
+  const arcStart = -Math.PI / 2;
+  const arcEnd   = arcStart + 1.1;
+  ctx.strokeStyle = '#E05252';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(cx, cy, arcR, arcStart, arcEnd);
+  ctx.stroke();
+
+  // Arrowhead at end of ω arc
+  const ax = cx + arcR * Math.cos(arcEnd);
+  const ay = cy + arcR * Math.sin(arcEnd);
+  ctx.save();
+  ctx.translate(ax, ay);
+  ctx.rotate(arcEnd + Math.PI / 2);
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(-5, -9);
+  ctx.lineTo(5, -9);
+  ctx.closePath();
+  ctx.fillStyle = '#E05252';
+  ctx.fill();
+  ctx.restore();
+
+  // ω label
+  ctx.fillStyle = '#E05252';
+  ctx.font = 'bold 13px Segoe UI';
+  ctx.fillText('ω', cx + R + 14, cy - R * 0.15);
+
+  // Linear velocity arrow at top of disk
+  const vx = cx, vy = cy - R;
+  ctx.strokeStyle = '#1A9FE0';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(vx, vy);
+  ctx.lineTo(vx + 30, vy);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(vx + 30, vy);
+  ctx.lineTo(vx + 22, vy - 4);
+  ctx.lineTo(vx + 22, vy + 4);
+  ctx.closePath();
+  ctx.fillStyle = '#1A9FE0';
+  ctx.fill();
+  ctx.fillStyle = '#1A9FE0';
+  ctx.font = '10px Segoe UI';
+  ctx.fillText('v', vx + 33, vy + 4);
+
+  // Formula v = rω
+  ctx.fillStyle = '#555';
+  ctx.font = 'bold 11px Segoe UI';
+  ctx.fillText('v = rω', W - 54, H - 10);
+}
+
+/* ================================================
    HAMBURGER MENU
    ================================================ */
 $('hamburger').addEventListener('click', () => {
@@ -349,12 +495,14 @@ $('hamburger').addEventListener('click', () => {
 function initAll() {
   drawKinCard();
   drawProjCard();
+  drawAngVelCard();
 }
 
 window.addEventListener('load', initAll);
 window.addEventListener('resize', () => {
   drawKinCard();
   drawProjCard();
+  drawAngVelCard();
 });
 </script>
 </body>
