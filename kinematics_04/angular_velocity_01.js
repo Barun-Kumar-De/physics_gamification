@@ -16,6 +16,54 @@ const SCREENS = [1, 2, 3, 4, 6, 7, 8]; // screen section IDs in order (s5 remove
 
 let currentScreen = 1;
 
+// ─── Voice Narration ─────────────────────────────────────────────
+let voiceEnabled = localStorage.getItem('angVelVoice') !== 'false';
+
+const NARRATIONS = {
+  1: "Angular Displacement. Angular displacement is the angle rotated by a body about a fixed axis. It is measured in radians or degrees. Drag the radius on the canvas to explore. Watch how the arc length changes with the angle. Watch the values of angles both in radian and degree",
+  2: "Angular Velocity. Angular velocity, omega, is the rate of change of angular displacement with time. Average omega equals delta theta divided by delta t. Use the sliders to change delta theta and delta t and observe how omega changes.",
+  3: "Direction of Angular Velocity. Angular velocity is a vector. Its direction is given by the Right Hand Rule: curl your right-hand fingers in the direction of rotation, and your extended thumb points along the axis — giving the direction of the angular velocity vector.",
+  4: "The v equals r omega relationship. The linear velocity of a point on a rotating body equals r times omega, where r is its distance from the axis. Points farther from the axis move faster, even though all points share the same angular velocity.",
+  6: "Multiple Representations. A rotating disc can be described with position-time and velocity-time graphs. Study the animation, then match it to the correct theta-t and omega-t graphs in the challenges below.",
+  7: "JEE Main Question 1. A particle moves in a circle of radius 0.5 metres at 30 revolutions per minute. What is its linear speed in metres per second? Choose the correct option.",
+  8: "JEE Main Question 2. The angular position of a particle is given by theta equals 2t cubed minus 3t squared plus 4 radians. Find the angular velocity at t equals 2 seconds. Choose the correct option.",
+};
+
+const MCQ_FEEDBACK = {
+  s7: {
+    correct: "Correct! The angular velocity is 30 r.p.m. equals pi radians per second. Linear speed v equals r omega equals 0.5 times pi, which is approximately 1.57 metres per second.",
+    wrong:   "Not quite. Convert 30 r.p.m. to radians per second: omega equals 2 pi times 30 divided by 60 equals pi rad per second. Then v equals r omega equals 0.5 times pi, approximately 1.57 metres per second. Option B is correct.",
+  },
+  s8: {
+    correct: "Correct! Differentiating theta equals 2t cubed minus 3t squared plus 4 gives omega equals 6t squared minus 6t. At t equals 2: omega equals 6 times 4 minus 12 equals 12 radians per second.",
+    wrong:   "Not quite. Differentiate theta equals 2t cubed minus 3t squared plus 4 to get omega equals 6t squared minus 6t. Substituting t equals 2: omega equals 24 minus 12 equals 12 radians per second. Option C is correct.",
+  },
+};
+
+function narrate(text) {
+  if (!voiceEnabled) return;
+  window.speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.rate = 0.92;
+  utt.pitch = 1.0;
+  window.speechSynthesis.speak(utt);
+}
+
+function stopNarration() {
+  window.speechSynthesis.cancel();
+}
+
+function toggleVoice() {
+  voiceEnabled = !voiceEnabled;
+  localStorage.setItem('angVelVoice', voiceEnabled);
+  const btn = document.getElementById('voiceBtn');
+  btn.textContent = voiceEnabled ? '🔊' : '🔇';
+  btn.title = voiceEnabled ? 'Mute narration' : 'Unmute narration';
+  btn.classList.toggle('muted', !voiceEnabled);
+  if (!voiceEnabled) stopNarration();
+  else narrate(NARRATIONS[currentScreen]);
+}
+
 // ─── Navigation ──────────────────────────────────────────────────
 function goTo(n) {
   document.querySelector('.screen.active').classList.remove('active');
@@ -136,6 +184,7 @@ function s1Init() {
   c.ontouchstart = e => { e.preventDefault(); s1MouseDown(e.touches[0]); };
   c.ontouchmove  = e => { e.preventDefault(); s1MouseMove(e.touches[0]); };
   c.ontouchend   = s1MouseUp;
+  narrate(NARRATIONS[1]);
 }
 
 function s1GetAngle(e) {
@@ -262,11 +311,52 @@ const S2 = {
   lastTime: null,
   varOmega: 1.0,
   varDir: 1,
+  narrationTimeout: null,
 };
 
 function s2Init() {
   S2.lastTime = null;
   s2Update();
+
+  const box   = document.getElementById('s2-controls-box');
+  const units = document.getElementById('s2-units-section');
+  if (box)   box.classList.remove('narration-highlight');
+  if (units) units.classList.remove('narration-highlight');
+  if (S2.narrationTimeout) { clearTimeout(S2.narrationTimeout); S2.narrationTimeout = null; }
+
+  if (!voiceEnabled) return;
+  window.speechSynthesis.cancel();
+
+  const part1 = new SpeechSynthesisUtterance(
+    "Angular Velocity. Angular velocity, omega, is the rate of change of angular displacement with time. Average omega equals delta theta divided by delta t."
+  );
+  part1.rate = 0.92; part1.pitch = 1.0;
+
+  part1.onend = () => {
+    S2.narrationTimeout = setTimeout(() => {
+      S2.narrationTimeout = null;
+
+      const part2 = new SpeechSynthesisUtterance(
+        "You can view the angular velocity in radians per second, revolutions per minute, or degrees per second. Use the unit buttons to switch between them."
+      );
+      part2.rate = 0.92; part2.pitch = 1.0;
+      if (units) units.classList.add('narration-highlight');
+      part2.onend = () => {
+        if (units) units.classList.remove('narration-highlight');
+
+        const part3 = new SpeechSynthesisUtterance(
+          "Use the sliders to change delta theta and delta t and observe how omega changes."
+        );
+        part3.rate = 0.92; part3.pitch = 1.0;
+        if (box) box.classList.add('narration-highlight');
+        part3.onend = () => { if (box) box.classList.remove('narration-highlight'); };
+        window.speechSynthesis.speak(part3);
+      };
+      window.speechSynthesis.speak(part2);
+    }, 2000);
+  };
+
+  window.speechSynthesis.speak(part1);
 }
 
 function s2Update() {
@@ -373,6 +463,7 @@ const S3 = {
   view: '2d',
   angle: 0,
   animId: null,
+  narrationTimeout: null,
 };
 
 function s3Init() {
@@ -380,6 +471,31 @@ function s3Init() {
   S3.animId = null;
   s3DrawRHRBoth();
   s3Animate();
+
+  const view = document.getElementById('s3-view-box');
+  if (view) view.classList.remove('narration-highlight');
+  if (S3.narrationTimeout) { clearTimeout(S3.narrationTimeout); S3.narrationTimeout = null; }
+
+  if (!voiceEnabled) return;
+  window.speechSynthesis.cancel();
+
+  const part1 = new SpeechSynthesisUtterance(NARRATIONS[3]);
+  part1.rate = 0.92; part1.pitch = 1.0;
+
+  part1.onend = () => {
+    S3.narrationTimeout = setTimeout(() => {
+      S3.narrationTimeout = null;
+      const part2 = new SpeechSynthesisUtterance(
+        "You can view the rotation in 2D top view or 3D perspective. Use the View buttons to switch between them."
+      );
+      part2.rate = 0.92; part2.pitch = 1.0;
+      if (view) view.classList.add('narration-highlight');
+      part2.onend = () => { if (view) view.classList.remove('narration-highlight'); };
+      window.speechSynthesis.speak(part2);
+    }, 2000);
+  };
+
+  window.speechSynthesis.speak(part1);
 }
 
 function s3SetDir(d) {
@@ -592,11 +708,37 @@ const S4 = {
   r2: 0.45,
   angle: 0,
   animId: null,
+  narrationTimeout: null,
 };
 
 function s4Init() {
   s4Update();
   if (!S4.animId) s4Animate();
+
+  const box = document.getElementById('s4-controls-box');
+  if (box) box.classList.remove('narration-highlight');
+  if (S4.narrationTimeout) { clearTimeout(S4.narrationTimeout); S4.narrationTimeout = null; }
+
+  if (!voiceEnabled) return;
+  window.speechSynthesis.cancel();
+
+  const part1 = new SpeechSynthesisUtterance(NARRATIONS[4]);
+  part1.rate = 0.92; part1.pitch = 1.0;
+
+  part1.onend = () => {
+    S4.narrationTimeout = setTimeout(() => {
+      S4.narrationTimeout = null;
+      const part2 = new SpeechSynthesisUtterance(
+        "Use the sliders to change omega, r 1, and r 2. Observe how the linear velocity of each point changes as you vary its distance from the axis."
+      );
+      part2.rate = 0.92; part2.pitch = 1.0;
+      if (box) box.classList.add('narration-highlight');
+      part2.onend = () => { if (box) box.classList.remove('narration-highlight'); };
+      window.speechSynthesis.speak(part2);
+    }, 2000);
+  };
+
+  window.speechSynthesis.speak(part1);
 }
 
 function s4Update() {
@@ -704,12 +846,36 @@ const S6 = {
   chosenB: null,
 };
 
+function s6ClearHighlights() {
+  ['s6-challenge-a', 's6-challenge-b'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('narration-highlight');
+  });
+}
+
+function s6OnAnimStop() {
+  if (!voiceEnabled) return;
+  const panA = document.getElementById('s6-challenge-a');
+  const panB = document.getElementById('s6-challenge-b');
+  const utt = new SpeechSynthesisUtterance(
+    "The rotation has stopped. Now select the theta-time graph that matches the motion in Challenge A, and the omega-time graph in Challenge B."
+  );
+  utt.rate = 0.92; utt.pitch = 1.0;
+  utt.onstart = () => {
+    if (panA) panA.classList.add('narration-highlight');
+    if (panB) panB.classList.add('narration-highlight');
+  };
+  utt.onend = () => { s6ClearHighlights(); };
+  window.speechSynthesis.speak(utt);
+}
+
 function s6Init() {
   S6.motionIdx = 0;
   S6.time = 0;
   S6.angle = 0;
   S6.chosenA = null;
   S6.chosenB = null;
+  s6ClearHighlights();
   ['A', 'B', 'C', 'D'].forEach(x => {
     const ea = document.getElementById('s6ca-' + x);
     if (ea) ea.className = 'choice-item';
@@ -721,6 +887,7 @@ function s6Init() {
   s6DrawChoicesA();
   s6DrawChoicesB();
   s6Animate();
+  narrate(NARRATIONS[6]);
 }
 
 function s6GetOmega() {
@@ -741,6 +908,7 @@ function s6Animate() {
     if (!S6.animStartTs) S6.animStartTs = ts;
     if (ts - S6.animStartTs >= 5000) {
       S6.animId = null;
+      s6OnAnimStop();
       return;
     }
     S6.time += 1;
@@ -932,6 +1100,8 @@ function s6FeedbackB(isCorrect) {
 }
 
 function s6RotateAgain() {
+  stopNarration();
+  s6ClearHighlights();
   S6.motionIdx = (S6.motionIdx + 1) % S6_MOTIONS.length;
   S6.time = 0;
   S6.angle = 0;
@@ -959,11 +1129,13 @@ function s7Init() {
   const sol = document.getElementById('s7-solution');
   if (S7.answered) {
     if (sol) sol.style.display = '';
+    narrate(NARRATIONS[7]);
     return;
   }
   const btns = document.getElementById('s7-choices').querySelectorAll('.choice-btn');
   btns.forEach(b => { b.className = 'choice-btn'; b.disabled = false; b.querySelector('.checkmark').textContent = ''; });
   if (sol) sol.style.display = 'none';
+  narrate(NARRATIONS[7]);
 }
 
 function s7Choose(k) {
@@ -984,6 +1156,7 @@ function s7Choose(k) {
   });
   const sol = document.getElementById('s7-solution');
   if (sol) sol.style.display = '';
+  narrate(k === 'B' ? MCQ_FEEDBACK.s7.correct : MCQ_FEEDBACK.s7.wrong);
 }
 
 // ================================================================
@@ -995,11 +1168,13 @@ function s8Init() {
   const sol = document.getElementById('s8-solution');
   if (S8.answered) {
     if (sol) sol.style.display = '';
+    narrate(NARRATIONS[8]);
     return;
   }
   const btns = document.getElementById('s8-choices').querySelectorAll('.choice-btn');
   btns.forEach(b => { b.className = 'choice-btn'; b.disabled = false; b.querySelector('.checkmark').textContent = ''; });
   if (sol) sol.style.display = 'none';
+  narrate(NARRATIONS[8]);
 }
 
 function s8Choose(k) {
@@ -1020,6 +1195,7 @@ function s8Choose(k) {
   });
   const sol = document.getElementById('s8-solution');
   if (sol) sol.style.display = '';
+  narrate(k === 'C' ? MCQ_FEEDBACK.s8.correct : MCQ_FEEDBACK.s8.wrong);
 }
 
 // ================================================================
@@ -1028,15 +1204,36 @@ function s8Choose(k) {
 window.addEventListener('DOMContentLoaded', () => {
   updateDots();
   updateHeader();
-  s1Init();
+
+  // Sync voice button to persisted state before first narration
+  const btn = document.getElementById('voiceBtn');
+  if (!voiceEnabled) {
+    btn.textContent = '🔇';
+    btn.classList.add('muted');
+    btn.title = 'Unmute narration';
+  }
+
+  s1Init(); // also calls narrate(NARRATIONS[1])
 
   // Cleanup animIds on screen change so animations don't pile up
   const origGoTo = goTo;
   window.goTo = function(n) {
-    // Stop running animations by clearing their IDs
     [S2, S3, S4, S6].forEach(s => {
       if (s.animId) { cancelAnimationFrame(s.animId); s.animId = null; }
     });
+    if (S2.narrationTimeout) { clearTimeout(S2.narrationTimeout); S2.narrationTimeout = null; }
+    const s2box = document.getElementById('s2-controls-box');
+    if (s2box) s2box.classList.remove('narration-highlight');
+    const s2units = document.getElementById('s2-units-section');
+    if (s2units) s2units.classList.remove('narration-highlight');
+    if (S3.narrationTimeout) { clearTimeout(S3.narrationTimeout); S3.narrationTimeout = null; }
+    const s3view = document.getElementById('s3-view-box');
+    if (s3view) s3view.classList.remove('narration-highlight');
+    if (S4.narrationTimeout) { clearTimeout(S4.narrationTimeout); S4.narrationTimeout = null; }
+    const s4box = document.getElementById('s4-controls-box');
+    if (s4box) s4box.classList.remove('narration-highlight');
+    s6ClearHighlights();
+    stopNarration();
     origGoTo(n);
   };
 });
