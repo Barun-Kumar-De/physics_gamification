@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JEE Prep · Angular Velocity</title>
+  <link rel="stylesheet" href="angular_velocity_test_01.css" />
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SCREEN 1 — Question
+════════════════════════════════════════════════════════════ -->
+<div id="screen-1" class="screen active">
+  <div class="app-card">
+
+    <header class="app-header">
+      <div class="logo"><span class="logo-icon">J</span> JEE Prep</div>
+      <div class="header-right">
+        <span class="streak">🔥 12-day streak</span>
+        <span class="avatar">RS</span>
+      </div>
+    </header>
+
+    <div class="meta-bar">
+      <span class="meta-tag meta-exam">JEE Main 2026 · 8th April · Evening Shift</span>
+      <span class="meta-tag meta-type">MCQ · Single Correct</span>
+      <span class="meta-tag meta-marks">+4 / −1</span>
+      <span class="meta-qnum">Q 1 / 30</span>
+    </div>
+
+    <div class="question-body">
+      <p class="question-text">
+        A solid cylinder of radius <strong><em>R</em></strong> and length <strong><em>L</em></strong> is slipping on a rough horizontal plane. At time <em>t = 0</em> the cylinder has translational velocity <strong>v<sub>0</sub> = 49 m/s</strong> perpendicular to its axis and rotational velocity <strong>v<sub>0</sub> ⁄ 4R</strong> about the centre. The time taken by the cylinder to start rolling is ____ seconds. <em>(μ<sub>k</sub> = 0.25, g = 9.8 m/s²)</em>
+      </p>
+    </div>
+
+    <div class="options-list" id="options-q1">
+      <div class="option-card" data-option="A" tabindex="0">
+        <span class="option-letter">A</span>
+        <span class="option-text">15</span>
+        <span class="option-radio"></span>
+      </div>
+      <div class="option-card" data-option="B" tabindex="0">
+        <span class="option-letter">B</span>
+        <span class="option-text">5</span>
+        <span class="option-radio"></span>
+      </div>
+      <div class="option-card" data-option="C" tabindex="0">
+        <span class="option-letter">C</span>
+        <span class="option-text">10</span>
+        <span class="option-radio"></span>
+      </div>
+      <div class="option-card" data-option="D" tabindex="0">
+        <span class="option-letter">D</span>
+        <span class="option-text">7.5</span>
+        <span class="option-radio"></span>
+      </div>
+    </div>
+
+    <div class="footer-bar">
+      <div class="timer-display">
+        <span class="timer-icon">⏱</span>
+        <span id="elapsed-time">00:00</span> elapsed
+      </div>
+      <div class="footer-actions">
+        <button class="btn-primary disabled" id="submit-btn" disabled>Submit answer →</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SCREEN 2 — Result
+════════════════════════════════════════════════════════════ -->
+<div id="screen-2" class="screen">
+  <div class="app-card">
+
+    <header class="app-header">
+      <div class="logo"><span class="logo-icon">J</span> JEE Prep</div>
+      <div class="header-right">
+        <span class="streak">🔥 12-day streak</span>
+        <span class="avatar">RS</span>
+      </div>
+    </header>
+
+    <div id="result-banner" class="result-banner result-incorrect">
+      <div class="result-icon result-icon-wrong">✕</div>
+      <div class="result-details">
+        <div class="result-title">Incorrect</div>
+        <div class="result-sub">
+          Your answer <strong id="your-answer-label"></strong> · <span id="marks-label" class="marks-neg">−1 mark</span>
+        </div>
+      </div>
+      <div class="result-meta" id="result-meta-text">Solved in 00:00 · Difficulty: Hard</div>
+    </div>
+
+    <div class="section-label">Correct answer</div>
+
+    <div class="options-list result-options" id="result-options">
+      <div class="option-card result-card" data-option="A">
+        <span class="option-letter">A</span>
+        <span class="option-text">15</span>
+        <span class="result-chip" id="chip-A"></span>
+      </div>
+      <div class="option-card result-card" data-option="B">
+        <span class="option-letter">B</span>
+        <span class="option-text">5</span>
+        <span class="result-chip" id="chip-B"></span>
+      </div>
+      <div class="option-card result-card" data-option="C">
+        <span class="option-letter">C</span>
+        <span class="option-text">10</span>
+        <span class="result-chip" id="chip-C"></span>
+      </div>
+      <div class="option-card result-card" data-option="D">
+        <span class="option-letter">D</span>
+        <span class="option-text">7.5</span>
+        <span class="result-chip" id="chip-D"></span>
+      </div>
+    </div>
+
+    <div class="footer-bar">
+      <button class="btn-secondary" onclick="showScreen(1)">← Back</button>
+      <button class="btn-primary" onclick="showScreen(3)">View explanation →</button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SCREEN 3 — Explanation Step 1: Diagram
+════════════════════════════════════════════════════════════ -->
+<div id="screen-3" class="screen">
+  <div class="app-card">
+
+    <header class="app-header">
+      <div class="logo"><span class="logo-icon">J</span> JEE Prep</div>
+      <div class="header-right">
+        <span class="streak">🔥 12-day streak</span>
+        <span class="avatar">RS</span>
+      </div>
+    </header>
+
+    <div class="explain-header">
+      <span class="explain-label">EXPLANATION</span>
+      <div class="step-dots">
+        <span class="step-dot active"></span>
+        <span class="step-dot"></span>
+        <span class="step-dot"></span>
+      </div>
+      <span class="step-text">Step 1 of 3</span>
+    </div>
+
+    <h2 class="explain-title">Why is the answer 5 seconds?</h2>
+
+    <div class="concept-primer" id="concept-primer">
+      The cylinder is slipping, so <strong>v &gt; Rω</strong>. Friction at the contact point slows translation and speeds up rotation until <strong>v = Rω</strong>. Find that moment.
+    </div>
+
+    <div class="diagram-container">
+      <div class="diagram-header">
+        <span>Animated diagram — slipping → pure rolling</span>
+        <button class="btn-animate" id="anim-btn" onclick="toggleAnimation()">▶ ANIMATED</button>
+      </div>
+
+      <div class="diagram-content">
+        <!-- Initial cylinder -->
+        <div class="cylinder-state" id="initial-state">
+          <canvas id="canvas-initial" width="180" height="180"></canvas>
+          <div class="state-label"><strong>Initial state (t = 0)</strong></div>
+          <div class="state-sub">ω₀R = v₀/4 &lt; v₀ ⇒ slipping forward</div>
+        </div>
+
+        <!-- Transition -->
+        <div class="transition-block" id="transition-block">
+          <div class="friction-label">friction f<sub>k</sub><br>over time t</div>
+          <div class="dashed-arrow" id="dashed-arrow">- - - - →</div>
+          <div class="transition-caption" id="transition-cap">v ↓ &nbsp; ω ↑</div>
+        </div>
+
+        <!-- Final cylinder -->
+        <div class="cylinder-state" id="final-state">
+          <canvas id="canvas-final" width="180" height="180"></canvas>
+          <div class="state-label"><strong>Final state (t = 5 sec)</strong></div>
+          <div class="state-sub">v = Rω ⇒ pure rolling</div>
+        </div>
+      </div>
+
+      <!-- Scrub timeline -->
+      <div class="scrub-bar">
+        <span class="scrub-label">0 s</span>
+        <input type="range" id="scrub" min="0" max="100" value="0" class="scrub-slider" />
+        <span class="scrub-label">5 s</span>
+      </div>
+    </div>
+
+    <div class="voice-bar">
+      <button class="btn-voice" id="voice-ctrl-3" onclick="toggleVoiceScreen(3)">▶ Play Narration</button>
+      <button class="btn-voice-restart" id="voice-restart-3" onclick="restartVoiceScreen(3)">↺ Restart</button>
+    </div>
+
+    <div class="footer-bar">
+      <button class="btn-secondary" onclick="showScreen(2)">← Back</button>
+      <span class="page-counter">1 / 3</span>
+      <button class="btn-primary" onclick="showScreen(4)">Next: Equations →</button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SCREEN 4 — Explanation Step 2: Equations
+════════════════════════════════════════════════════════════ -->
+<div id="screen-4" class="screen">
+  <div class="app-card">
+
+    <header class="app-header">
+      <div class="logo"><span class="logo-icon">J</span> JEE Prep</div>
+      <div class="header-right">
+        <span class="streak">🔥 12-day streak</span>
+        <span class="avatar">RS</span>
+      </div>
+    </header>
+
+    <div class="explain-header">
+      <span class="explain-label">EXPLANATION</span>
+      <div class="step-dots">
+        <span class="step-dot active"></span>
+        <span class="step-dot active"></span>
+        <span class="step-dot"></span>
+      </div>
+      <span class="step-text">Step 2 of 3</span>
+    </div>
+
+    <h2 class="explain-title">Setting up the equations</h2>
+    <p class="explain-subtitle">Two coupled motions: linear retardation and angular acceleration.</p>
+
+    <div class="goal-callout">
+      <strong>Goal:</strong> find the time t when the rolling condition <em>v = ωR</em> is first satisfied.
+    </div>
+
+    <div class="equations-grid">
+      <!-- Linear -->
+      <div class="eq-column eq-linear">
+        <h3 class="eq-col-title">Linear motion</h3>
+        <div class="eq-card reveal-card" id="eq-card-1">
+          <div class="eq-label">Friction (kinetic):</div>
+          <div class="eq-formula"><em>f<sub>k</sub> = μ<sub>k</sub>N = μ<sub>k</sub>mg</em></div>
+        </div>
+        <div class="eq-card reveal-card" id="eq-card-2">
+          <div class="eq-label">Newton's 2nd law:</div>
+          <div class="eq-formula"><em>−μ<sub>k</sub>mg = ma &nbsp;⇒&nbsp; a = −μ<sub>k</sub>g</em></div>
+        </div>
+        <div class="eq-card reveal-card" id="eq-card-3">
+          <div class="eq-label">Velocity at time t:</div>
+          <div class="eq-formula"><em>v = v<sub>0</sub> − μ<sub>k</sub>g t</em></div>
+        </div>
+      </div>
+
+      <!-- Rotational -->
+      <div class="eq-column eq-rotational">
+        <h3 class="eq-col-title">Rotational motion</h3>
+        <div class="eq-card reveal-card" id="eq-card-4">
+          <div class="eq-label">Torque about center:</div>
+          <div class="eq-formula"><em>τ = f<sub>k</sub> · R = (μ<sub>k</sub>mg) R</em></div>
+        </div>
+        <div class="eq-card reveal-card" id="eq-card-5">
+          <div class="eq-label">I = ½mR² ⇒ τ = Iα:</div>
+          <div class="eq-formula"><em>α = 2μ<sub>k</sub>g / R</em></div>
+        </div>
+        <div class="eq-card reveal-card" id="eq-card-6">
+          <div class="eq-label">Angular velocity at t:</div>
+          <div class="eq-formula"><em>ω = v<sub>0</sub>/4R + (2μ<sub>k</sub>g/R) t</em></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="voice-bar">
+      <button class="btn-voice" id="voice-ctrl-4" onclick="toggleVoiceScreen(4)">⏸ Pause Narration</button>
+      <button class="btn-voice-restart" id="voice-restart-4" onclick="restartVoiceScreen(4)">↺ Restart</button>
+    </div>
+
+    <div class="footer-bar">
+      <button class="btn-secondary" onclick="showScreen(3)">← Diagram</button>
+      <span class="page-counter">2 / 3</span>
+      <button class="btn-primary" onclick="showScreen(5)">Next: Solve →</button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SCREEN 5 — Explanation Step 3: Solve
+════════════════════════════════════════════════════════════ -->
+<div id="screen-5" class="screen">
+  <div class="app-card">
+
+    <header class="app-header">
+      <div class="logo"><span class="logo-icon">J</span> JEE Prep</div>
+      <div class="header-right">
+        <span class="streak">🔥 12-day streak</span>
+        <span class="avatar">RS</span>
+      </div>
+    </header>
+
+    <div class="explain-header">
+      <span class="explain-label">EXPLANATION</span>
+      <div class="step-dots">
+        <span class="step-dot active"></span>
+        <span class="step-dot active"></span>
+        <span class="step-dot active"></span>
+      </div>
+      <span class="step-text">Step 3 of 3</span>
+    </div>
+
+    <h2 class="explain-title">Solving for the time t</h2>
+    <p class="explain-subtitle">Apply the rolling condition v = ωR to the equations from Step 2.</p>
+
+    <div class="solve-layout">
+      <!-- Algebra steps -->
+      <div class="algebra-col">
+        <div class="algebra-card reveal-card" data-step="1">
+          <span class="step-num">1</span>
+          <span class="step-eq">v<sub>0</sub> − μ<sub>k</sub>g t = ( v<sub>0</sub>/4R + (2μ<sub>k</sub>g/R) t ) · R</span>
+        </div>
+        <div class="algebra-card reveal-card" data-step="2">
+          <span class="step-num">2</span>
+          <span class="step-eq">v<sub>0</sub> − μ<sub>k</sub>g t = v<sub>0</sub>/4 + 2μ<sub>k</sub>g t</span>
+        </div>
+        <div class="algebra-card reveal-card" data-step="3">
+          <span class="step-num">3</span>
+          <span class="step-eq">v<sub>0</sub> − v<sub>0</sub>/4 = 2μ<sub>k</sub>g t + μ<sub>k</sub>g t</span>
+        </div>
+        <div class="algebra-card reveal-card" data-step="4">
+          <span class="step-num">4</span>
+          <span class="step-eq">3v<sub>0</sub>/4 = 3μ<sub>k</sub>g t</span>
+        </div>
+        <div class="algebra-card reveal-card" data-step="5">
+          <span class="step-num">5</span>
+          <span class="step-eq"><strong>t = v<sub>0</sub> / (4μ<sub>k</sub>g)</strong></span>
+        </div>
+      </div>
+
+      <!-- Substitution panel -->
+      <div class="sub-col">
+        <div class="sub-panel" id="sub-panel-s5">
+          <div class="sub-title">Substitute the values</div>
+          <div class="sub-values">v<sub>0</sub> = 49 m/s, &nbsp;μ<sub>k</sub> = 0.25, &nbsp;g = 9.8 m/s²</div>
+          <div class="sub-card reveal-card">t = 49 / (4 × 0.25 × 9.8)</div>
+          <div class="sub-card reveal-card">t = 49 / 9.8</div>
+        </div>
+        <div class="final-answer reveal-card">
+          <div class="final-label">FINAL ANSWER</div>
+          <div class="final-value"><em>t = 5 seconds</em></div>
+          <div class="final-match">matches Option B ✓</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="voice-bar">
+      <button class="btn-voice" id="voice-ctrl-5" onclick="toggleVoiceScreen(5)">⏸ Pause Narration</button>
+      <button class="btn-voice-restart" id="voice-restart-5" onclick="restartVoiceScreen(5)">↺ Restart</button>
+    </div>
+
+    <div class="footer-bar">
+      <button class="btn-secondary" onclick="showScreen(4)">← Equations</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Voice narration toggle -->
+<button id="voice-toggle" class="voice-toggle" title="Toggle voice narration">🔊</button>
+
+<script src="angular_velocity_test_01.js"></script>
+</body>
+</html>
