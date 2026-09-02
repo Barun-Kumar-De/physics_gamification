@@ -27,6 +27,59 @@ body {
   flex-direction: column;
 }
 
+/* ===== START OVERLAY ===== */
+#startOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, #1a2332 0%, #2b3f66 100%);
+}
+#startOverlay.hidden { display: none; }
+
+#startOverlay .start-card {
+  text-align: center;
+  padding: 40px 48px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 14px;
+  max-width: 90vw;
+}
+#startOverlay .start-title {
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+#startOverlay .start-sub {
+  color: #8fa4c8;
+  font-size: 0.9rem;
+  margin-top: 6px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+#startOverlay #startBtn {
+  margin-top: 26px;
+  padding: 14px 40px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--blue);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+#startOverlay #startBtn:hover { background: var(--blue-mid); }
+#startOverlay #startBtn:active { transform: scale(0.97); }
+#startOverlay .start-hint {
+  color: #8fa4c8;
+  font-size: 0.8rem;
+  margin-top: 16px;
+}
+
 /* ===== APP SHELL ===== */
 #app {
   display: flex;
