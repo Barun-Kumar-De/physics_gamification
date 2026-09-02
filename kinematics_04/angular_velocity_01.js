@@ -19,6 +19,17 @@ let currentScreen = 1;
 // ─── Voice Narration ─────────────────────────────────────────────
 let voiceEnabled = localStorage.getItem('angVelVoice') !== 'false';
 
+// Browsers block speechSynthesis.speak() until the page has a user gesture,
+// so the first narration on page load is silently dropped. We defer it until
+// the first pointer/key/touch interaction primes the speech engine.
+let speechPrimed = false;
+
+function primeSpeech() {
+  if (speechPrimed) return;
+  speechPrimed = true;
+  narrate(NARRATIONS[currentScreen]);
+}
+
 const NARRATIONS = {
   1: "Angular Displacement. Angular displacement is the angle rotated by a body about a fixed axis. It is measured in radians or degrees. Drag the radius on the canvas to explore. Watch how the arc length changes with the angle. Watch the values of angles both in radian and degree",
   2: "Angular Velocity. Angular velocity, omega, is the rate of change of angular displacement with time. Average omega equals delta theta divided by delta t. Use the sliders to change delta theta and delta t and observe how omega changes.",
@@ -184,7 +195,9 @@ function s1Init() {
   c.ontouchstart = e => { e.preventDefault(); s1MouseDown(e.touches[0]); };
   c.ontouchmove  = e => { e.preventDefault(); s1MouseMove(e.touches[0]); };
   c.ontouchend   = s1MouseUp;
-  narrate(NARRATIONS[1]);
+  // Only narrate here if speech is already primed (i.e. after a gesture).
+  // On initial load, primeSpeech() handles the first narration.
+  if (speechPrimed) narrate(NARRATIONS[1]);
 }
 
 function s1GetAngle(e) {
@@ -1213,7 +1226,29 @@ window.addEventListener('DOMContentLoaded', () => {
     btn.title = 'Unmute narration';
   }
 
-  s1Init(); // also calls narrate(NARRATIONS[1])
+  s1Init();
+
+  // Browsers block speechSynthesis until a user gesture. The Start overlay
+  // provides that one gesture; its click primes speech and narrates screen 1.
+  const startOverlay = document.getElementById('startOverlay');
+  const startBtn = document.getElementById('startBtn');
+  if (startBtn) {
+    startBtn.addEventListener('click', () => {
+      if (startOverlay) startOverlay.classList.add('hidden');
+      primeSpeech();
+    });
+  } else if (startOverlay) {
+    startOverlay.classList.add('hidden');
+  }
+  // Fallback: if the overlay is somehow dismissed another way, any first
+  // interaction still primes speech.
+  ['pointerdown', 'keydown', 'touchstart'].forEach(evt =>
+    window.addEventListener(evt, primeSpeech, { once: true })
+  );
+  // Voices load asynchronously in some browsers; nudge them along.
+  if (window.speechSynthesis && speechSynthesis.getVoices().length === 0) {
+    speechSynthesis.addEventListener('voiceschanged', () => {}, { once: true });
+  }
 
   // Cleanup animIds on screen change so animations don't pile up
   const origGoTo = goTo;
